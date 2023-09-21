@@ -567,6 +567,12 @@ private val propertyAccessorInlinerLoweringPhase = makeIrModulePhase(
     description = "[Optimization] Inline property accessors"
 )
 
+private val coroutineEventLoopLowering = makeIrModulePhase(
+    ::CoroutineEventLoopLowering,
+    name = "CoroutineEventLoopLowering",
+    description = "This pass needed to call coroutines event loop run after exported functions calls for WASI",
+)
+
 private val expressionBodyTransformer = makeIrModulePhase(
     ::ExpressionBodyTransformer,
     name = "ExpressionBodyTransformer",
@@ -674,6 +680,8 @@ val loweringList = listOf(
     addMainFunctionCallsLowering,
 
     unhandledExceptionLowering,
+
+    coroutineEventLoopLowering,
 
     tryCatchCanonicalization,
 
