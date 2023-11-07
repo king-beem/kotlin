@@ -21,12 +21,14 @@ import org.jetbrains.kotlin.analysis.test.framework.services.libraries.*
 import org.jetbrains.kotlin.analysis.test.framework.test.configurators.AnalysisApiTestConfigurator
 import org.jetbrains.kotlin.analysis.test.framework.test.configurators.AnalysisApiTestServiceRegistrar
 import org.jetbrains.kotlin.analysis.test.framework.test.configurators.FrontendKind
+import org.jetbrains.kotlin.platform.isMultiPlatform
 import org.jetbrains.kotlin.test.builders.TestConfigurationBuilder
 import org.jetbrains.kotlin.test.model.TestModule
 import org.jetbrains.kotlin.test.services.ServiceRegistrationData
 import org.jetbrains.kotlin.test.services.TestModuleStructure
 import org.jetbrains.kotlin.test.services.TestServices
 import org.jetbrains.kotlin.test.services.configuration.JvmEnvironmentConfigurator
+import org.junit.Assume
 import kotlin.contracts.contract
 import kotlin.test.assertNotNull
 
@@ -67,6 +69,8 @@ object AnalysisApiFirLibrarySourceTestConfigurator : AnalysisApiTestConfigurator
 
 private class KtLibrarySourceModuleFactory : KtModuleFactory {
     override fun createModule(testModule: TestModule, testServices: TestServices, project: Project): KtModuleWithFiles {
+        Assume.assumeFalse("Compilation of multi-platform libraries is not supported", testModule.targetPlatform.isMultiPlatform())
+
         val (libraryJar, librarySourcesJar) = testServices.compiledLibraryProvider.compileToLibrary(testModule)
 
         require(librarySourcesJar != null)
