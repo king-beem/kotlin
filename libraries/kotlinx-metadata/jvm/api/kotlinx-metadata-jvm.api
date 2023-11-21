@@ -480,6 +480,7 @@ public final class kotlinx/metadata/KmClass : kotlinx/metadata/KmClassVisitor, k
 	public field name Ljava/lang/String;
 	public fun <init> ()V
 	public final fun accept (Lkotlinx/metadata/KmClassVisitor;)V
+	public final fun getAnnotations ()Ljava/util/List;
 	public final fun getCompanionObject ()Ljava/lang/String;
 	public final fun getConstructors ()Ljava/util/List;
 	public final fun getContextReceiverTypes ()Ljava/util/List;
@@ -597,6 +598,7 @@ public final class kotlinx/metadata/KmConstructor : kotlinx/metadata/KmConstruct
 	public fun <init> ()V
 	public fun <init> (I)V
 	public final fun accept (Lkotlinx/metadata/KmConstructorVisitor;)V
+	public final fun getAnnotations ()Ljava/util/List;
 	public final fun getFlags ()I
 	public final fun getValueParameters ()Ljava/util/List;
 	public final fun getVersionRequirements ()Ljava/util/List;
@@ -758,6 +760,7 @@ public final class kotlinx/metadata/KmFunction : kotlinx/metadata/KmFunctionVisi
 	public fun <init> (ILjava/lang/String;)V
 	public fun <init> (Ljava/lang/String;)V
 	public final fun accept (Lkotlinx/metadata/KmFunctionVisitor;)V
+	public final fun getAnnotations ()Ljava/util/List;
 	public final fun getContextReceiverTypes ()Ljava/util/List;
 	public final fun getContract ()Lkotlinx/metadata/KmContract;
 	public final fun getFlags ()I
@@ -849,6 +852,7 @@ public final class kotlinx/metadata/KmProperty : kotlinx/metadata/KmPropertyVisi
 	public fun <init> (ILjava/lang/String;II)V
 	public fun <init> (Ljava/lang/String;)V
 	public final fun accept (Lkotlinx/metadata/KmPropertyVisitor;)V
+	public final fun getAnnotations ()Ljava/util/List;
 	public final fun getContextReceiverTypes ()Ljava/util/List;
 	public final fun getFlags ()I
 	public final fun getGetter ()Lkotlinx/metadata/KmPropertyAccessorAttributes;
@@ -880,6 +884,7 @@ public final class kotlinx/metadata/KmProperty : kotlinx/metadata/KmPropertyVisi
 
 public final class kotlinx/metadata/KmPropertyAccessorAttributes {
 	public fun <init> ()V
+	public final fun getAnnotations ()Ljava/util/List;
 }
 
 public abstract interface class kotlinx/metadata/KmPropertyExtensionVisitor : kotlinx/metadata/KmExtensionVisitor {
@@ -1040,6 +1045,7 @@ public final class kotlinx/metadata/KmValueParameter : kotlinx/metadata/KmValueP
 	public fun <init> (ILjava/lang/String;)V
 	public fun <init> (Ljava/lang/String;)V
 	public final fun accept (Lkotlinx/metadata/KmValueParameterVisitor;)V
+	public final fun getAnnotations ()Ljava/util/List;
 	public final fun getFlags ()I
 	public final fun getName ()Ljava/lang/String;
 	public final fun getType ()Lkotlinx/metadata/KmType;
