@@ -490,6 +490,7 @@ internal abstract class LLFirAbstractSessionFactory(protected val project: Proje
                 this,
                 components,
                 canContainKotlinPackage = true,
+                disregardSelfDeclarations = module.resolutionMode == DanglingFileResolutionMode.IGNORE_SELF,
                 declarationProviderFactory = { scope -> scope.createScopedDeclarationProviderForFile(module.file) }
             )
 
