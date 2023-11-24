@@ -12,6 +12,10 @@
 #include "ThreadData.hpp"
 #include "ThreadRegistry.hpp"
 
+#if __has_feature(thread_sanitizer)
+#include <sanitizer/tsan_interface.h>
+#endif
+
 using namespace kotlin;
 
 inline constexpr auto kTagBarriers = logging::Tag::kBarriers;
@@ -87,7 +91,7 @@ NO_INLINE void beforeHeapRefUpdateSlowPath(mm::DirectRefAccessor ref, ObjHeader*
         // TODO perhaps it would be better to path the thread data from outside
         auto& threadData = *mm::ThreadRegistry::Instance().CurrentThreadData();
         auto& markQueue = *threadData.gc().impl().gc().mark().markQueue();
-        gc::mark::ParallelMark::MarkTraits::tryEnqueue(markQueue, prev);
+        gc::mark::ConcurrentMark::MarkTraits::tryEnqueue(markQueue, prev);
         // No need to add the marked object in statistics here.
         // Objects will be counted on dequeue.
     }
