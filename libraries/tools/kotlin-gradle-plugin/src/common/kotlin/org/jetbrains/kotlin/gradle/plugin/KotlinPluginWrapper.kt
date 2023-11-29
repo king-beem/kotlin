@@ -233,7 +233,7 @@ abstract class DefaultKotlinBasePlugin : KotlinBasePlugin {
             CInteropCommonizerArtifactTypeAttribute.setupTransform(project)
         }
 
-        project.whenKotlinNativeToolchainEnabled {
+        if (project.kotlinNativeToolchainEnabled) {
             KotlinNativeCompilerAttribute.setupAttributesMatchingStrategy(this)
             KotlinNativeCompilerAttribute.setupTransform(project)
         }
