@@ -26,15 +26,26 @@ internal class LLFirFileBuilder(val moduleComponents: LLFirModuleResolveComponen
         val contextualModule = moduleComponents.module
         val actualFileModule = projectStructureProvider.getModule(ktFile, contextualModule)
 
-        checkWithAttachment(actualFileModule == contextualModule, { "Modules are inconsistent" }) {
-            withEntry("file", ktFile.name)
-            withEntry("file module", actualFileModule) {
-                it.toString()
+        checkWithAttachment(
+            actualFileModule == contextualModule,
+            message = {
+                buildString {
+                    append("Modules are inconsistent: expected ")
+                    append(contextualModule.javaClass.simpleName)
+                    append(", got ")
+                    append(actualFileModule.javaClass.simpleName)
+                }
+            },
+            buildAttachment = {
+                withEntry("file", ktFile.name)
+                withEntry("file module", actualFileModule) {
+                    it.toString()
+                }
+                withEntry("components module", contextualModule) {
+                    it.toString()
+                }
             }
-            withEntry("components module", contextualModule) {
-                it.toString()
-            }
-        }
+        )
 
         PsiRawFirBuilder(
             moduleComponents.session,
