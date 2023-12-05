@@ -8,7 +8,6 @@ package org.jetbrains.kotlin.fir.backend
 import org.jetbrains.kotlin.fir.declarations.getAnnotationsByClassId
 import org.jetbrains.kotlin.fir.expressions.FirAnnotation
 import org.jetbrains.kotlin.fir.expressions.unexpandedConeClassLikeType
-import org.jetbrains.kotlin.fir.languageVersionSettings
 import org.jetbrains.kotlin.fir.resolve.fullyExpandedType
 import org.jetbrains.kotlin.fir.resolve.substitution.AbstractConeSubstitutor
 import org.jetbrains.kotlin.fir.resolve.toSymbol
@@ -77,17 +76,6 @@ class Fir2IrTypeConverter(
 
     private val capturedTypeCache = mutableMapOf<ConeCapturedType, IrType>()
     private val errorTypeForCapturedTypeStub by lazy { createErrorType() }
-
-    private val typeApproximator = ConeTypeApproximator(session.typeContext, session.languageVersionSettings)
-
-    private val typeApproximatorConfiguration =
-        object : TypeApproximatorConfiguration.AllFlexibleSameValue() {
-            override val allFlexible: Boolean get() = true
-            override val errorType: Boolean get() = true
-            override val integerLiteralConstantType: Boolean get() = true
-            override val integerConstantOperatorType: Boolean get() = true
-            override val intersectionTypesInContravariantPositions: Boolean get() = true
-        }
 
     fun FirTypeRef.toIrType(typeOrigin: ConversionTypeOrigin = ConversionTypeOrigin.DEFAULT): IrType {
         capturedTypeCache.clear()
@@ -322,9 +310,7 @@ class Fir2IrTypeConverter(
                 } else null
             }
         }
-        return substitutor.substituteOrSelf(type).let {
-            typeApproximator.approximateToSuperType(it, typeApproximatorConfiguration) ?: it
-        }
+        return substitutor.substituteOrSelf(type).approximateForIrOrSelf()
     }
 }
 
