@@ -76,9 +76,9 @@ fun testArithmeticOperations() {
 fun testLogicOperations() {
     js("{ var a = ${<!JSCODE_ARGUMENT_NON_CONST_EXPRESSION!>!true<!>}; }")
     js("{ var a = ${<!JSCODE_ARGUMENT_NON_CONST_EXPRESSION!>true or false<!>}; }")
-    js("{ var a = ${true || false}; }")
+    js("{ var a = ${<!JSCODE_ARGUMENT_NON_CONST_EXPRESSION!>true || false<!>}; }")
     js("{ var a = ${<!JSCODE_ARGUMENT_NON_CONST_EXPRESSION!>true and false<!>}; }")
-    js("{ var a = ${true && false}; }")
+    js("{ var a = ${<!JSCODE_ARGUMENT_NON_CONST_EXPRESSION!>true && false<!>}; }")
 
     js("{ var a = ${TRUE && false}; }")
     js("{ var a = ${TRUE or false}; }")
@@ -109,13 +109,13 @@ fun testEq() {
 }
 
 fun testCmp() {
-    js("{ var a = ${1 < 1}; }")
-    js("{ var a = ${1 <= 1}; }")
-    js("{ var a = ${1 > 1}; }")
-    js("{ var a = ${1 >= 1}; }")
+    js("{ var a = ${<!JSCODE_ARGUMENT_NON_CONST_EXPRESSION!>1 < 1<!>}; }")
+    js("{ var a = ${<!JSCODE_ARGUMENT_NON_CONST_EXPRESSION!>1 <= 1<!>}; }")
+    js("{ var a = ${<!JSCODE_ARGUMENT_NON_CONST_EXPRESSION!>1 > 1<!>}; }")
+    js("{ var a = ${<!JSCODE_ARGUMENT_NON_CONST_EXPRESSION!>1 >= 1<!>}; }")
 
-    js("{ var a = ${"fo=" < "bar"}; }")
-    js("{ var a = ${'a' > 'c'}; }")
+    js("{ var a = ${<!JSCODE_ARGUMENT_NON_CONST_EXPRESSION!>"fo=" < "bar"<!>}; }")
+    js("{ var a = ${<!JSCODE_ARGUMENT_NON_CONST_EXPRESSION!>'a' > 'c'<!>}; }")
 
     js("{ var a = ${ONE > 1}; }")
     js("{ var a = ${STR <= "1"}; }")
