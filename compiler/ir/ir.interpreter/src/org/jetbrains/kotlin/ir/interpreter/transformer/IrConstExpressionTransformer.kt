@@ -51,6 +51,20 @@ internal abstract class IrConstExpressionTransformer(
         return super.visitCall(expression, data)
     }
 
+    // In K1 we are always inlining constant in property initializer if it is possible.
+    // See org.jetbrains.kotlin.resolve.BodyResolver.resolvePropertyInitializer
+    override fun visitProperty(declaration: IrProperty, data: Data): IrStatement {
+        val initializer = declaration.backingField?.initializer ?: return super.visitProperty(declaration, data)
+        val expression = initializer.expression
+
+        if (expression.canBeInterpreted()) {
+            initializer.expression = expression.interpret(failAsError = data.inConstantExpression)
+        }
+
+        return super.visitProperty(declaration, data)
+    }
+
+
     override fun visitField(declaration: IrField, data: Data): IrStatement {
         val initializer = declaration.initializer
         val expression = initializer?.expression ?: return declaration
