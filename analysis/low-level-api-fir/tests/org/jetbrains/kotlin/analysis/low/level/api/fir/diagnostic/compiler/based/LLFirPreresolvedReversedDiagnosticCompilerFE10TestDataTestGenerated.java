@@ -33205,6 +33205,12 @@ public class LLFirPreresolvedReversedDiagnosticCompilerFE10TestDataTestGenerated
             }
 
             @Test
+            @TestMetadata("ExhaustiveOnCaptured.kt")
+            public void testExhaustiveOnCaptured() throws Exception {
+                runTest("compiler/testData/diagnostics/tests/sealed/ExhaustiveOnCaptured.kt");
+            }
+
+            @Test
             @TestMetadata("ExhaustiveOnRoot.kt")
             public void testExhaustiveOnRoot() throws Exception {
                 runTest("compiler/testData/diagnostics/tests/sealed/ExhaustiveOnRoot.kt");

@@ -33205,6 +33205,12 @@ public class DiagnosticCompilerTestFE10TestdataTestGenerated extends AbstractDia
             }
 
             @Test
+            @TestMetadata("ExhaustiveOnCaptured.kt")
+            public void testExhaustiveOnCaptured() throws Exception {
+                runTest("compiler/testData/diagnostics/tests/sealed/ExhaustiveOnCaptured.kt");
+            }
+
+            @Test
             @TestMetadata("ExhaustiveOnRoot.kt")
             public void testExhaustiveOnRoot() throws Exception {
                 runTest("compiler/testData/diagnostics/tests/sealed/ExhaustiveOnRoot.kt");

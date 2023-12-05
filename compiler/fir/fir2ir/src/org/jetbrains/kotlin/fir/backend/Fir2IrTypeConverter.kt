@@ -204,11 +204,13 @@ class Fir2IrTypeConverter(
                 val cached = capturedTypeCache[this]
                 if (cached == null) {
                     capturedTypeCache[this] = errorTypeForCapturedTypeStub
-                    val supertypes = constructor.supertypes!!
-                    val approximation = supertypes.find {
-                        it == (constructor.projection as? ConeKotlinTypeProjection)?.type
-                    } ?: supertypes.first()
-                    val irType = approximation.toIrType(typeOrigin)
+                    val irType = this.approximateForIrOrSelf().toIrType(
+                        typeOrigin,
+                        annotations,
+                        hasFlexibleNullability = hasFlexibleNullability,
+                        hasFlexibleMutability = hasFlexibleMutability,
+                        addRawTypeAnnotation = addRawTypeAnnotation
+                    )
                     capturedTypeCache[this] = irType
                     irType
                 } else {

@@ -31127,6 +31127,12 @@ public class FirPsiOldFrontendDiagnosticsTestGenerated extends AbstractFirPsiDia
             }
 
             @Test
+            @TestMetadata("ExhaustiveOnCaptured.kt")
+            public void testExhaustiveOnCaptured() throws Exception {
+                runTest("compiler/testData/diagnostics/tests/sealed/ExhaustiveOnCaptured.kt");
+            }
+
+            @Test
             @TestMetadata("ExhaustiveOnRoot.kt")
             public void testExhaustiveOnRoot() throws Exception {
                 runTest("compiler/testData/diagnostics/tests/sealed/ExhaustiveOnRoot.kt");
