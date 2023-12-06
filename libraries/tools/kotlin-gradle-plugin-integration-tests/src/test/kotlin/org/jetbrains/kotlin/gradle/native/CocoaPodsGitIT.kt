@@ -507,7 +507,7 @@ class CocoaPodsGitIT : KGPBaseTest() {
                 add(listOf("mkdir", "-p", workingDir))
                 add(listOf("git", "--work-tree=$workingDir", "checkout", "--orphan", "master"))
                 add(listOf("git", "--work-tree=$workingDir", "add", "../$customPodLibraryName.zip"))
-                add(listOf("git", "--work-tree=$workingDir", "commit", "-m", "\"Initial commit\""))
+                add(listOf("git", "--work-tree=$workingDir", "commit", "-m", "Initial commit"))
             }
 
             //Add spec repo and publish version 0.1.0
@@ -522,7 +522,7 @@ class CocoaPodsGitIT : KGPBaseTest() {
             val podLibSpecs = projectPath.resolve(customPodLibraryName).relativeTo(privateSpecGit).pathString
             runShellCommands(privateSpecGit) {
                 add(listOf("git", "--work-tree=$workingDir", "add", podLibSpecs))
-                add(listOf("git", "--work-tree=$workingDir", "commit", "-m", "\"Bump to 0.2.0\""))
+                add(listOf("git", "--work-tree=$workingDir", "commit", "-m", "Bump to 0.2.0"))
             }
 
             podInstallSynthetic("0.2.0")
