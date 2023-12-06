@@ -213,7 +213,7 @@ constructor(
 
     private val cacheBuilderSettings by lazy {
         CacheBuilder.Settings.createWithProject(
-            kotlinNativeProvider.get().konanHome.get(),
+            kotlinNativeProvider.get().konanHome.getFile().absolutePath,
             kotlinNativeProvider.get().konanDataDir.getOrNull(),
             project,
             binary,
@@ -363,7 +363,7 @@ constructor(
     }
 
     private val runnerSettings = KotlinNativeCompilerRunner.Settings.of(
-        kotlinNativeProvider.get().konanHome.get(),
+        kotlinNativeProvider.get().konanHome.getFile().absolutePath,
         kotlinNativeProvider.get().konanDataDir.getOrNull(),
         project
     )
