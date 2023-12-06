@@ -1,0 +1,23 @@
+package
+
+public fun test(/*0*/ a: A?): kotlin.Unit
+public fun test2(/*0*/ a: A?): kotlin.Unit
+public fun test3(/*0*/ a: A?): kotlin.Unit
+
+public final class A {
+    public constructor A()
+    public final val b: kotlin.Int? = 1
+    public final val e: C?
+    public open override /*1*/ /*fake_override*/ fun equals(/*0*/ other: kotlin.Any?): kotlin.Boolean
+    public open override /*1*/ /*fake_override*/ fun hashCode(): kotlin.Int
+    public open override /*1*/ /*fake_override*/ fun toString(): kotlin.String
+}
+
+public final class C {
+    public constructor C()
+    public final val d: kotlin.Int? = 2
+    public open override /*1*/ /*fake_override*/ fun equals(/*0*/ other: kotlin.Any?): kotlin.Boolean
+    public open override /*1*/ /*fake_override*/ fun hashCode(): kotlin.Int
+    public open override /*1*/ /*fake_override*/ fun toString(): kotlin.String
+}
+

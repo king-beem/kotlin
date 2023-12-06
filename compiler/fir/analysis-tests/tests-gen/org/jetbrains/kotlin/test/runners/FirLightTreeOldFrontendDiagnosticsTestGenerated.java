@@ -32477,36 +32477,42 @@ public class FirLightTreeOldFrontendDiagnosticsTestGenerated extends AbstractFir
             }
 
             @Nested
-            @TestMetadata("compiler/testData/diagnostics/tests/smartCasts/lambdasWithCallInPlace")
+            @TestMetadata("compiler/testData/diagnostics/tests/smartCasts/lambdasWithContracts")
             @TestDataPath("$PROJECT_ROOT")
-            public class LambdasWithCallInPlace {
+            public class LambdasWithContracts {
                 @Test
-                public void testAllFilesPresentInLambdasWithCallInPlace() throws Exception {
-                    KtTestUtil.assertAllTestsPresentByMetadataWithExcluded(this.getClass(), new File("compiler/testData/diagnostics/tests/smartCasts/lambdasWithCallInPlace"), Pattern.compile("^(.+)\\.kt$"), Pattern.compile("^(.+)\\.(reversed|fir|ll)\\.kts?$"), true, "multiplatform");
+                public void testAllFilesPresentInLambdasWithContracts() throws Exception {
+                    KtTestUtil.assertAllTestsPresentByMetadataWithExcluded(this.getClass(), new File("compiler/testData/diagnostics/tests/smartCasts/lambdasWithContracts"), Pattern.compile("^(.+)\\.kt$"), Pattern.compile("^(.+)\\.(reversed|fir|ll)\\.kts?$"), true, "multiplatform");
                 }
 
                 @Test
                 @TestMetadata("lambdaWithCallInPlace.kt")
                 public void testLambdaWithCallInPlace() throws Exception {
-                    runTest("compiler/testData/diagnostics/tests/smartCasts/lambdasWithCallInPlace/lambdaWithCallInPlace.kt");
+                    runTest("compiler/testData/diagnostics/tests/smartCasts/lambdasWithContracts/lambdaWithCallInPlace.kt");
                 }
 
                 @Test
                 @TestMetadata("lambdaWithCallInPlaceAndBounds.kt")
                 public void testLambdaWithCallInPlaceAndBounds() throws Exception {
-                    runTest("compiler/testData/diagnostics/tests/smartCasts/lambdasWithCallInPlace/lambdaWithCallInPlaceAndBounds.kt");
+                    runTest("compiler/testData/diagnostics/tests/smartCasts/lambdasWithContracts/lambdaWithCallInPlaceAndBounds.kt");
                 }
 
                 @Test
                 @TestMetadata("lambdaWithCallInPlaceAndDelegate.kt")
                 public void testLambdaWithCallInPlaceAndDelegate() throws Exception {
-                    runTest("compiler/testData/diagnostics/tests/smartCasts/lambdasWithCallInPlace/lambdaWithCallInPlaceAndDelegate.kt");
+                    runTest("compiler/testData/diagnostics/tests/smartCasts/lambdasWithContracts/lambdaWithCallInPlaceAndDelegate.kt");
                 }
 
                 @Test
                 @TestMetadata("lambdaWithCallInPlaceAndOperators.kt")
                 public void testLambdaWithCallInPlaceAndOperators() throws Exception {
-                    runTest("compiler/testData/diagnostics/tests/smartCasts/lambdasWithCallInPlace/lambdaWithCallInPlaceAndOperators.kt");
+                    runTest("compiler/testData/diagnostics/tests/smartCasts/lambdasWithContracts/lambdaWithCallInPlaceAndOperators.kt");
+                }
+
+                @Test
+                @TestMetadata("lambdaWithImpliesContract.kt")
+                public void testLambdaWithImpliesContract() throws Exception {
+                    runTest("compiler/testData/diagnostics/tests/smartCasts/lambdasWithContracts/lambdaWithImpliesContract.kt");
                 }
             }
 
@@ -33027,6 +33033,12 @@ public class FirLightTreeOldFrontendDiagnosticsTestGenerated extends AbstractFir
                 @TestMetadata("chainMixedUnsafe.kt")
                 public void testChainMixedUnsafe() throws Exception {
                     runTest("compiler/testData/diagnostics/tests/smartCasts/safecalls/chainMixedUnsafe.kt");
+                }
+
+                @Test
+                @TestMetadata("childProperty.kt")
+                public void testChildProperty() throws Exception {
+                    runTest("compiler/testData/diagnostics/tests/smartCasts/safecalls/childProperty.kt");
                 }
 
                 @Test
