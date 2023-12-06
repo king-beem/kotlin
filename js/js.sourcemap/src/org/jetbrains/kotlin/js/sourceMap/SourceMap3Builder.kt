@@ -4,7 +4,7 @@
  */
 package org.jetbrains.kotlin.js.sourceMap
 
-import gnu.trove.TObjectIntHashMap
+import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap
 import org.jetbrains.kotlin.js.parser.sourcemaps.*
 import java.io.File
 import java.io.IOException
@@ -17,11 +17,8 @@ class SourceMap3Builder(
     private val pathPrefix: String
 ) : SourceMapBuilder {
 
-    private class ObjectIntHashMap<T> : TObjectIntHashMap<T>() {
-        override fun get(key: T): Int {
-            val index = index(key)
-            return if (index < 0) -1 else _values[index]
-        }
+    private class ObjectIntHashMap<T> : Object2IntOpenHashMap<T>() {
+        override fun defaultReturnValue() = -1
     }
 
     private val out = StringBuilder(8192)
@@ -98,7 +95,7 @@ class SourceMap3Builder(
 
     private fun getSourceIndex(source: String, fileIdentity: Any?, contentSupplier: Supplier<Reader?>): Int {
         val key = SourceKey(source, fileIdentity)
-        var sourceIndex = sources[key]
+        var sourceIndex = sources.getInt(key)
         if (sourceIndex == -1) {
             sourceIndex = orderedSources.size
             sources.put(key, sourceIndex)
@@ -109,7 +106,7 @@ class SourceMap3Builder(
     }
 
     private fun getNameIndex(name: String): Int {
-        var nameIndex = names[name]
+        var nameIndex = names.getInt(name)
         if (nameIndex == -1) {
             nameIndex = orderedNames.size
             names.put(name, nameIndex)
