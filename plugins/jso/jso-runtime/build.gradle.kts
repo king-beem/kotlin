@@ -15,7 +15,7 @@ repositories {
 }
 
 kotlin {
-    js() {
+    js {
         browser()
         nodejs()
     }
