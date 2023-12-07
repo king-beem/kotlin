@@ -51,7 +51,7 @@ internal class LLFirCombinedKotlinSymbolProvider private constructor(
     private val declarationProvider: KotlinDeclarationProvider,
     private val packageProvider: KotlinPackageProvider,
     private val packageProviderForKotlinPackages: KotlinPackageProvider?,
-) : LLFirSelectingCombinedSymbolProvider<LLFirKotlinSymbolProvider>(session, project, providers, KmpModulePrecedenceOracle) {
+) : LLFirSelectingCombinedSymbolProvider<LLFirKotlinSymbolProvider>(session, project, providers) {
     override val symbolNamesProvider: FirSymbolNamesProvider = FirCompositeCachedSymbolNamesProvider.fromSymbolProviders(session, providers)
 
     private val classifierCache = NullableCaffeineCache<ClassId, FirClassLikeSymbol<*>> { it.maximumSize(500) }

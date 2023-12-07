@@ -25,7 +25,6 @@ abstract class LLFirSelectingCombinedSymbolProvider<PROVIDER : FirSymbolProvider
     session: FirSession,
     project: Project,
     protected val providers: List<PROVIDER>,
-    private val modulePrecedenceOracle: LLFirModulePrecedenceOracle = KeepUnchangedModulePrecedenceOracle,
 ) : FirSymbolProvider(session) {
     protected val providersByKtModule: Map<KtModule, PROVIDER> =
         providers
@@ -36,9 +35,7 @@ abstract class LLFirSelectingCombinedSymbolProvider<PROVIDER : FirSymbolProvider
     /**
      * [KtModule] precedence must be checked in case of multiple candidates to preserve classpath order.
      */
-    private val modulePrecedenceMap: Map<KtModule, Int> = providers.map { it.session.llFirModuleData.ktModule }.let { modules ->
-        modulePrecedenceOracle.order(modules)
-    }.mapToIndex()
+    private val modulePrecedenceMap: Map<KtModule, Int> = providers.map { it.session.llFirModuleData.ktModule }.mapToIndex()
 
     /**
      * Cache [ProjectStructureProvider] to avoid service access when getting [KtModule]s.

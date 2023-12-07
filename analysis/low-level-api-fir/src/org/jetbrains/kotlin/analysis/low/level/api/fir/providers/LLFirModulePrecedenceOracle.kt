@@ -11,16 +11,12 @@ import com.intellij.util.graph.InboundSemiGraph
 import com.intellij.util.graph.OutboundSemiGraph
 import org.jetbrains.kotlin.analysis.project.structure.KtModule
 
-interface LLFirModulePrecedenceOracle {
-    fun order(modules: List<KtModule>): List<KtModule>
-}
-
-object KeepUnchangedModulePrecedenceOracle : LLFirModulePrecedenceOracle {
-    override fun order(modules: List<KtModule>): List<KtModule> = modules
-}
-
-object KmpModulePrecedenceOracle : LLFirModulePrecedenceOracle {
-    override fun order(modules: List<KtModule>): List<KtModule> {
+/**
+ * Changes positions of modules that belong to the same KMP project: (A dependsOn B) -> (A goes before B in the list).
+ * Allows giving actuals higher priority. Keeps positions of other modules unchanged.
+ */
+object KmpModulePrecedenceOracle {
+    fun order(modules: List<KtModule>): List<KtModule> {
         val groupsByModules = mutableMapOf<KtModule, KmpGroup>()
         registerModules(modules, groupsByModules)
         val sortedModules = sortModules(modules, groupsByModules)
