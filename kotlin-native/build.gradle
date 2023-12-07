@@ -564,7 +564,7 @@ void configurePackingLicensesToBundle(AbstractArchiveTask task, boolean contains
 tasks.named("bundleRegular").configure {
     configurePackingLicensesToBundle(it, /* containsPlatformLibraries = */ false)
     def checksumFile = file("${archiveBaseName.get()}-${archiveVersion.get()}.sha256")
-    outputs.file(checksumFile)
+    outputs.file(checksumFile).withPropertyName("checksumFile")
 }
 tasks.named("bundlePrebuilt").configure {
     configurePackingLicensesToBundle(it, /* containsPlatformLibraries = */ true)
