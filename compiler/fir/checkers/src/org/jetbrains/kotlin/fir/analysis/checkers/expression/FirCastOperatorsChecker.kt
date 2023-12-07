@@ -28,7 +28,7 @@ object FirCastOperatorsChecker : FirTypeOperatorCallChecker() {
         val firstArgument = expression.argumentList.arguments[0]
         val actualType = firstArgument.unwrapSmartcastExpression().resolvedType.fullyExpandedType(session).finalApproximationOrSelf(context)
         val conversionTypeRef = expression.conversionTypeRef
-        val targetType = conversionTypeRef.coneType.fullyExpandedType(session)
+        val targetType = conversionTypeRef.coneType.fullyExpandedType(session).finalApproximationOrSelf(context)
 
         if (expression.operation in FirOperation.TYPES && targetType is ConeDynamicType) {
             reporter.reportOn(conversionTypeRef.source, FirErrors.DYNAMIC_NOT_ALLOWED, context)
