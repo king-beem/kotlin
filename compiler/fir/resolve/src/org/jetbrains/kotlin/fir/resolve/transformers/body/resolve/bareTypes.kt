@@ -31,14 +31,12 @@ fun BodyResolveComponents.computeRepresentativeTypeForBareType(type: ConeClassLi
         return candidatesFromIntersectedTypes.firstOrNull()
     }
 
-    if (originalType !is ConeClassLikeType) {
-        return session.typeApproximator.approximateToSuperType(
-            originalType,
-            TypeApproximatorConfiguration.FinalApproximationAfterResolutionAndInference
-        )?.let { computeRepresentativeTypeForBareType(type, it) }
-    }
+    val originalTypeApproximated = session.typeApproximator.approximateToSuperType(
+        originalType,
+        TypeApproximatorConfiguration.FinalApproximationAfterResolutionAndInference
+    ) ?: originalType
 
-    val originalClassLookupTag = originalType.fullyExpandedType(session).lookupTag
+    val originalClassLookupTag = (originalTypeApproximated as? ConeClassLikeType)?.fullyExpandedType(session)?.lookupTag ?: return null
 
     val castTypeAlias = type.lookupTag.toSymbol(session)?.fir as? FirTypeAlias
     if (castTypeAlias != null && !canBeUsedAsBareType(castTypeAlias)) return null
@@ -52,7 +50,7 @@ fun BodyResolveComponents.computeRepresentativeTypeForBareType(type: ConeClassLi
             castClass.defaultType(), originalClassLookupTag,
         ).firstOrNull() as? ConeClassLikeType ?: return null
 
-        if (originalType.nullability.isNullable)
+        if (originalTypeApproximated.nullability.isNullable)
             correspondingSupertype.withNullability(nullable = true) as ConeClassLikeType
         else
             correspondingSupertype
@@ -60,7 +58,7 @@ fun BodyResolveComponents.computeRepresentativeTypeForBareType(type: ConeClassLi
 
     val substitution = mutableMapOf<FirTypeParameterSymbol, ConeTypeProjection>()
     val typeParameters = castClass.typeParameters.mapTo(mutableSetOf()) { it.symbol }
-    if (!session.doUnify(originalType, superTypeWithParameters, typeParameters, substitution)) return null
+    if (!session.doUnify(originalTypeApproximated, superTypeWithParameters, typeParameters, substitution)) return null
 
     val newArguments = castClass.typeParameters.map { substitution[it.symbol] ?: return@computeRepresentativeTypeForBareType null }
     return expandedCastType.withArguments(newArguments.toTypedArray())
