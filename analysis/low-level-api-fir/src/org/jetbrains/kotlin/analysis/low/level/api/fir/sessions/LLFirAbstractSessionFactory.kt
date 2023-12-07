@@ -584,7 +584,7 @@ internal abstract class LLFirAbstractSessionFactory(protected val project: Proje
             addAll(module.transitiveDependsOnDependencies)
         }
 
-        val orderedDependencyModules = KmpModulePrecedenceOracle.order(dependencyModules.toList())
+        val orderedDependencyModules = KmpModuleSorter.order(dependencyModules.toList())
 
         val dependencySessions = orderedDependencyModules.mapNotNull(::getOrCreateSessionForDependency)
         return computeFlattenedSymbolProviders(dependencySessions)
