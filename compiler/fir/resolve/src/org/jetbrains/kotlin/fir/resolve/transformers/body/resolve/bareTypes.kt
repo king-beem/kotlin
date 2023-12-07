@@ -18,6 +18,7 @@ import org.jetbrains.kotlin.fir.symbols.impl.FirTypeParameterSymbol
 import org.jetbrains.kotlin.fir.symbols.lazyResolveToPhase
 import org.jetbrains.kotlin.fir.types.*
 import org.jetbrains.kotlin.types.AbstractTypeChecker
+import org.jetbrains.kotlin.types.TypeApproximatorConfiguration
 
 fun BodyResolveComponents.computeRepresentativeTypeForBareType(type: ConeClassLikeType, originalType: ConeKotlinType): ConeKotlinType? {
     originalType.lowerBoundIfFlexible().fullyExpandedType(session).let {
@@ -30,7 +31,14 @@ fun BodyResolveComponents.computeRepresentativeTypeForBareType(type: ConeClassLi
         return candidatesFromIntersectedTypes.firstOrNull()
     }
 
-    val originalClassLookupTag = (originalType as? ConeClassLikeType)?.fullyExpandedType(session)?.lookupTag ?: return null
+    if (originalType !is ConeClassLikeType) {
+        return session.typeApproximator.approximateToSuperType(
+            originalType,
+            TypeApproximatorConfiguration.FinalApproximationAfterResolutionAndInference
+        )?.let { computeRepresentativeTypeForBareType(type, it) }
+    }
+
+    val originalClassLookupTag = originalType.fullyExpandedType(session).lookupTag
 
     val castTypeAlias = type.lookupTag.toSymbol(session)?.fir as? FirTypeAlias
     if (castTypeAlias != null && !canBeUsedAsBareType(castTypeAlias)) return null
