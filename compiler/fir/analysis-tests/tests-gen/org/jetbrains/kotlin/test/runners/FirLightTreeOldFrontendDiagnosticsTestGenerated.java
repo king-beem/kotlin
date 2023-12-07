@@ -17636,6 +17636,12 @@ public class FirLightTreeOldFrontendDiagnosticsTestGenerated extends AbstractFir
                 }
 
                 @Test
+                @TestMetadata("foo.kt")
+                public void testFoo() throws Exception {
+                    runTest("compiler/testData/diagnostics/tests/inference/capturedTypes/foo.kt");
+                }
+
+                @Test
                 @TestMetadata("invokeCallWithCapturedReceiver.kt")
                 public void testInvokeCallWithCapturedReceiver() throws Exception {
                     runTest("compiler/testData/diagnostics/tests/inference/capturedTypes/invokeCallWithCapturedReceiver.kt");
