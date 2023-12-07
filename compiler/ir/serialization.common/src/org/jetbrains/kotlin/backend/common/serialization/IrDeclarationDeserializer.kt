@@ -20,6 +20,7 @@ import org.jetbrains.kotlin.descriptors.Modality
 import org.jetbrains.kotlin.descriptors.MultiFieldValueClassRepresentation
 import org.jetbrains.kotlin.ir.IrBuiltIns
 import org.jetbrains.kotlin.ir.IrElement
+import org.jetbrains.kotlin.ir.IrImplementationDetail
 import org.jetbrains.kotlin.ir.declarations.*
 import org.jetbrains.kotlin.ir.declarations.impl.IrVariableImpl
 import org.jetbrains.kotlin.ir.expressions.*
@@ -65,6 +66,7 @@ import org.jetbrains.kotlin.backend.common.serialization.proto.IrTypeParameter a
 import org.jetbrains.kotlin.backend.common.serialization.proto.IrValueParameter as ProtoValueParameter
 import org.jetbrains.kotlin.backend.common.serialization.proto.IrVariable as ProtoVariable
 
+@OptIn(IrImplementationDetail::class)
 class IrDeclarationDeserializer(
     builtIns: IrBuiltIns,
     private val symbolTable: SymbolTable,

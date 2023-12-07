@@ -32,6 +32,7 @@ import org.jetbrains.kotlin.fir.symbols.impl.*
 import org.jetbrains.kotlin.fir.types.*
 import org.jetbrains.kotlin.fir.visitors.FirDefaultVisitor
 import org.jetbrains.kotlin.ir.IrElement
+import org.jetbrains.kotlin.ir.IrImplementationDetail
 import org.jetbrains.kotlin.ir.IrStatement
 import org.jetbrains.kotlin.ir.UNDEFINED_OFFSET
 import org.jetbrains.kotlin.ir.builders.*
@@ -500,7 +501,7 @@ class Fir2IrVisitor(
         val irProperty = declarationStorage.getCachedIrPropertySymbol(property, fakeOverrideOwnerLookupTag = null)?.owner
             ?: return IrErrorExpressionImpl(
                 UNDEFINED_OFFSET, UNDEFINED_OFFSET,
-                IrErrorTypeImpl(null, emptyList(), Variance.INVARIANT),
+                createErrorType(),
                 "Stub for Enum.entries"
             )
         return conversionScope.withProperty(irProperty, property) {
@@ -1531,6 +1532,7 @@ class Fir2IrVisitor(
         }
     }
 
+    @OptIn(IrImplementationDetail::class)
     override fun visitGetClassCall(getClassCall: FirGetClassCall, data: Any?): IrElement = whileAnalysing(session, getClassCall) {
         val argument = getClassCall.argument
         val irType = getClassCall.resolvedType.toIrType()

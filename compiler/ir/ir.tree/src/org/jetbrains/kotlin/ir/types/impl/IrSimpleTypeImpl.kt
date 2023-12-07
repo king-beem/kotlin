@@ -5,6 +5,7 @@
 
 package org.jetbrains.kotlin.ir.types.impl
 
+import org.jetbrains.kotlin.ir.IrImplementationDetail
 import org.jetbrains.kotlin.ir.expressions.IrConstructorCall
 import org.jetbrains.kotlin.ir.symbols.FqNameEqualityChecker
 import org.jetbrains.kotlin.ir.symbols.IrClassifierSymbol
@@ -166,6 +167,7 @@ class IrTypeProjectionImpl internal constructor(
         type.hashCode() * 31 + variance.hashCode()
 }
 
+@OptIn(IrImplementationDetail::class)
 fun makeTypeProjection(type: IrType, variance: Variance): IrTypeProjection =
     when {
         type is IrCapturedType -> IrTypeProjectionImpl(type, variance)

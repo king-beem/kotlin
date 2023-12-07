@@ -5,6 +5,7 @@
 
 package org.jetbrains.kotlin.ir.types.impl
 
+import org.jetbrains.kotlin.ir.IrImplementationDetail
 import org.jetbrains.kotlin.ir.declarations.IrFunction
 import org.jetbrains.kotlin.ir.declarations.IrTypeParameter
 import org.jetbrains.kotlin.ir.expressions.IrConstructorCall
@@ -21,6 +22,7 @@ abstract class IrTypeBase(val kotlinType: KotlinType?) : IrType(), IrTypeProject
     override val type: IrType get() = this
 }
 
+@IrImplementationDetail
 class IrErrorTypeImpl(
     kotlinType: KotlinType?,
     override val annotations: List<IrConstructorCall>,

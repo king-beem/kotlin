@@ -9,6 +9,7 @@ import org.jetbrains.kotlin.builtins.isKFunctionType
 import org.jetbrains.kotlin.config.LanguageFeature
 import org.jetbrains.kotlin.config.LanguageVersionSettings
 import org.jetbrains.kotlin.descriptors.*
+import org.jetbrains.kotlin.ir.IrImplementationDetail
 import org.jetbrains.kotlin.ir.ObsoleteDescriptorBasedAPI
 import org.jetbrains.kotlin.ir.UNDEFINED_OFFSET
 import org.jetbrains.kotlin.ir.declarations.IrConstructor
@@ -91,6 +92,7 @@ abstract class TypeTranslator(
         return translateType(kotlinType, Variance.INVARIANT).type
     }
 
+    @OptIn(IrImplementationDetail::class)
     private fun translateType(kotlinType: KotlinType, variance: Variance): IrTypeProjection {
         val approximatedType = approximate(kotlinType.unwrap())
 

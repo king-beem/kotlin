@@ -46,6 +46,7 @@ import org.jetbrains.kotlin.fir.symbols.FirBasedSymbol
 import org.jetbrains.kotlin.fir.symbols.impl.*
 import org.jetbrains.kotlin.fir.types.*
 import org.jetbrains.kotlin.ir.IrElement
+import org.jetbrains.kotlin.ir.IrImplementationDetail
 import org.jetbrains.kotlin.ir.UNDEFINED_OFFSET
 import org.jetbrains.kotlin.ir.builders.declarations.UNDEFINED_PARAMETER_INDEX
 import org.jetbrains.kotlin.ir.declarations.*
@@ -162,6 +163,7 @@ private fun isCompiledElement(element: PsiElement?): Boolean {
     return containingFile !is KtFile || containingFile.isCompiled
 }
 
+@OptIn(IrImplementationDetail::class)
 internal fun createErrorType(): IrErrorType = IrErrorTypeImpl(null, emptyList(), Variance.INVARIANT)
 
 enum class ConversionTypeOrigin(val forSetter: Boolean) {
