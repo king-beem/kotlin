@@ -12,11 +12,11 @@ import org.jetbrains.kotlin.utils.topologicalSort
  * Changes positions of modules that belong to the same KMP project: (A dependsOn B) -> (A goes before B in the list).
  * Allows giving actuals higher priority. Keeps positions of other non-KMP modules unchanged.
  */
-class KmpModuleSorter(private val modules: List<KtModule>) {
+class KmpModuleSorter private constructor(private val modules: List<KtModule>) {
     private val groupsByModules = mutableMapOf<KtModule, KmpGroup>()
     private val originalPositions = mutableMapOf<KtModule, Int>()
 
-    fun sort(): List<KtModule> {
+    private fun sort(): List<KtModule> {
         groupModules()
         return sortModules()
     }
