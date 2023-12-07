@@ -454,6 +454,10 @@ internal fun ConeTypeContext.captureFromExpressionInternal(type: ConeKotlinType)
         return type.substitute { captureFromExpressionInternal(it) }
     }
 
+    if (type is ConeDefinitelyNotNullType) {
+        return captureFromExpressionInternal(type.original)?.makeConeTypeDefinitelyNotNullOrNotNull(this)
+    }
+
     if (type !is ConeIntersectionType && type !is ConeFlexibleType) {
         return captureFromArgumentsInternal(type, CaptureStatus.FROM_EXPRESSION)
     }

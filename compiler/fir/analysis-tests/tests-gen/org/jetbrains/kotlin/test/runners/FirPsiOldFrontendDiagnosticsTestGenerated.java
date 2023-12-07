@@ -17618,6 +17618,12 @@ public class FirPsiOldFrontendDiagnosticsTestGenerated extends AbstractFirPsiDia
                 }
 
                 @Test
+                @TestMetadata("capturingOfDnn.kt")
+                public void testCapturingOfDnn() throws Exception {
+                    runTest("compiler/testData/diagnostics/tests/inference/capturedTypes/capturingOfDnn.kt");
+                }
+
+                @Test
                 @TestMetadata("differentCapturedTypes.kt")
                 public void testDifferentCapturedTypes() throws Exception {
                     runTest("compiler/testData/diagnostics/tests/inference/capturedTypes/differentCapturedTypes.kt");
