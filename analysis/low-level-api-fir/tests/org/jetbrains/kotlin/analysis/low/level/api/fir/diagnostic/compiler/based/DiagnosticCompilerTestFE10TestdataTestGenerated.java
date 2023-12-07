@@ -26048,6 +26048,18 @@ public class DiagnosticCompilerTestFE10TestdataTestGenerated extends AbstractDia
                 public void testParameterNames() throws Exception {
                     runTest("compiler/testData/diagnostics/tests/multiplatform/java/parameterNames.kt");
                 }
+
+                @Test
+                @TestMetadata("propertyAgainstJavaFieldAndMethodIncompatibleVisibility.kt")
+                public void testPropertyAgainstJavaFieldAndMethodIncompatibleVisibility() throws Exception {
+                    runTest("compiler/testData/diagnostics/tests/multiplatform/java/propertyAgainstJavaFieldAndMethodIncompatibleVisibility.kt");
+                }
+
+                @Test
+                @TestMetadata("propertyAgainstJavaMethod.kt")
+                public void testPropertyAgainstJavaMethod() throws Exception {
+                    runTest("compiler/testData/diagnostics/tests/multiplatform/java/propertyAgainstJavaMethod.kt");
+                }
             }
 
             @Nested
