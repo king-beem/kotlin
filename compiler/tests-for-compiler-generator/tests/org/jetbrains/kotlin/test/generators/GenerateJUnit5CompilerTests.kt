@@ -83,10 +83,6 @@ fun generateJUnit5CompilerTests(args: Array<String>, mainClassName: String?) {
                 model("codegen/box")
             }
 
-            testClass<AbstractSteppingTest> {
-                model("debug/stepping")
-            }
-
             testClass<AbstractIrSteppingWithBytecodeInlinerTest> {
                 model("debug/stepping")
             }
