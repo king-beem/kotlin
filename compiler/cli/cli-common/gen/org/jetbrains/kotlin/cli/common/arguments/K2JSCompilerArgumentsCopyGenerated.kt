@@ -69,6 +69,7 @@ fun copyK2JSCompilerArguments(from: K2JSCompilerArguments, to: K2JSCompilerArgum
     to.useEsClasses = from.useEsClasses
     to.wasm = from.wasm
     to.wasmDebug = from.wasmDebug
+    to.wasmDisableInitialization = from.wasmDisableInitialization
     to.wasmEnableArrayRangeChecks = from.wasmEnableArrayRangeChecks
     to.wasmEnableAsserts = from.wasmEnableAsserts
     to.wasmGenerateWat = from.wasmGenerateWat

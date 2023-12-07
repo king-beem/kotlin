@@ -37,7 +37,7 @@ import java.io.File
 class WasmCompilerResult(
     val wat: String?,
     val jsUninstantiatedWrapper: String?,
-    val jsWrapper: String,
+    val jsWrapper: String?,
     val wasm: ByteArray,
     val sourceMap: String?
 )
@@ -99,6 +99,7 @@ fun compileWasm(
     baseFileName: String,
     emitNameSection: Boolean = false,
     allowIncompleteImplementations: Boolean = false,
+    initialization: Boolean,
     generateWat: Boolean = false,
     generateSourceMaps: Boolean = false,
 ): WasmCompilerResult {
@@ -139,19 +140,23 @@ fun compileWasm(
 
     val byteArray = os.toByteArray()
     val jsUninstantiatedWrapper: String?
-    val jsWrapper: String
+    val jsWrapper: String?
     if (backendContext.configuration.get(JSConfigurationKeys.WASM_TARGET, WasmTarget.JS) == WasmTarget.JS) {
         jsUninstantiatedWrapper = compiledWasmModule.generateAsyncJsWrapper(
             "./$baseFileName.wasm",
             backendContext.jsModuleAndQualifierReferences
         )
-        jsWrapper = compiledWasmModule.generateEsmExportsWrapper(
-            "./$baseFileName.uninstantiated.mjs",
-            backendContext.jsModuleAndQualifierReferences
-        )
+        jsWrapper = if (initialization) {
+            compiledWasmModule.generateEsmExportsWrapper(
+                "./$baseFileName.uninstantiated.mjs",
+                backendContext.jsModuleAndQualifierReferences
+            )
+        } else null
     } else {
         jsUninstantiatedWrapper = null
-        jsWrapper = compiledWasmModule.generateAsyncWasiWrapper("./$baseFileName.wasm")
+        jsWrapper = if (initialization) {
+            compiledWasmModule.generateAsyncWasiWrapper("./$baseFileName.wasm")
+        } else null
     }
 
     return WasmCompilerResult(
@@ -416,10 +421,16 @@ fun writeCompilationResult(
     }
     File(dir, "$fileNameBase.wasm").writeBytes(result.wasm)
 
-    if (result.jsUninstantiatedWrapper != null) {
-        File(dir, "$fileNameBase.uninstantiated.mjs").writeText(result.jsUninstantiatedWrapper)
+    val uninstantiatedFileName = if (result.jsWrapper != null) {
+        File(dir, "$fileNameBase.mjs").writeText(result.jsWrapper)
+        "$fileNameBase.uninstantiated.mjs"
+    } else {
+        "$fileNameBase.mjs"
     }
-    File(dir, "$fileNameBase.mjs").writeText(result.jsWrapper)
+
+    if (result.jsUninstantiatedWrapper != null) {
+        File(dir, uninstantiatedFileName).writeText(result.jsUninstantiatedWrapper)
+    }
 
     if (result.sourceMap != null) {
         File(dir, "$fileNameBase.map").writeText(result.sourceMap)
