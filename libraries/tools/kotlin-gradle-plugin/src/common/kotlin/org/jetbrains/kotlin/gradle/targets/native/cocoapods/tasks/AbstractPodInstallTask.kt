@@ -13,6 +13,7 @@ import org.gradle.api.tasks.*
 import org.gradle.work.DisableCachingByDefault
 import org.jetbrains.kotlin.gradle.utils.onlyIfCompat
 import org.jetbrains.kotlin.gradle.utils.runCommand
+import org.jetbrains.kotlin.gradle.utils.runCommandWithFallback
 import java.io.File
 import java.io.IOException
 
@@ -60,23 +61,24 @@ abstract class AbstractPodInstallTask : CocoapodsTask() {
         // KT-60394
         val podInstallCommand = listOfNotNull("env", "pod", "install", if (updateRepo) "--repo-update" else null)
 
-        return runCommand(podInstallCommand,
-                          logger,
-                          fallback = { _, output ->
-                              if (output.contains("out-of-date source repos which you can update with `pod repo update` or with `pod install --repo-update`") && updateRepo.not()) {
-                                  runPodInstall(true)
-                              } else {
-                                  null
-                              }
-                          },
-                          errorHandler = { retCode, output, process ->
-                              sharedHandleError(podInstallCommand, retCode, output, process)
-                          },
-                          processConfiguration = {
-                              directory(workingDir.get())
-                              // CocoaPods requires to be run with Unicode external encoding
-                              environment().putIfAbsent("LC_ALL", "en_US.UTF-8")
-                          })
+        return runCommandWithFallback(podInstallCommand,
+                                      logger,
+                                      fallbackConfiguration = { retCode, output, process ->
+                                          if (output.contains("out-of-date source repos which you can update with `pod repo update` or with `pod install --repo-update`") && updateRepo.not()) {
+                                              performFallback {
+                                                  runPodInstall(true)
+                                              }
+                                          } else {
+                                              handleError {
+                                                  sharedHandleError(podInstallCommand, retCode, output, process)
+                                              }
+                                          }
+                                      },
+                                      processConfiguration = {
+                                          directory(workingDir.get())
+                                          // CocoaPods requires to be run with Unicode external encoding
+                                          environment().putIfAbsent("LC_ALL", "en_US.UTF-8")
+                                      })
     }
 
     private fun sharedHandleError(podInstallCommand: List<String>, retCode: Int, error: String, process: Process): String? {
