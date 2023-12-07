@@ -5,11 +5,8 @@
 
 package org.jetbrains.kotlin.analysis.low.level.api.fir.providers
 
-import com.intellij.util.graph.DFSTBuilder
-import com.intellij.util.graph.GraphGenerator
-import com.intellij.util.graph.InboundSemiGraph
-import com.intellij.util.graph.OutboundSemiGraph
 import org.jetbrains.kotlin.analysis.project.structure.KtModule
+import org.jetbrains.kotlin.utils.topologicalSort
 
 /**
  * Changes positions of modules that belong to the same KMP project: (A dependsOn B) -> (A goes before B in the list).
@@ -68,25 +65,17 @@ object KmpModulePrecedenceOracle {
  * Modules, corresponding to source sets of the same KMP project.
  */
 private class KmpGroup(private val originalPositions: Map<KtModule, Int>) {
-    private val inEdges = mutableMapOf<KtModule, MutableList<KtModule>>()
     private val registeredModules = mutableListOf<KtModule>()
     private val sortedModules by lazy {
-        val graph: OutboundSemiGraph<KtModule> = GraphGenerator.generate(DependsOnModuleGraph(inEdges))
-        DFSTBuilder(graph).sortedNodes.filterNotNull().also {
-            check(it.size == inEdges.size) { "The number of sorted modules doesn't match the amount of registered modules" }
+        topologicalSort(registeredModules) { directDependsOnDependencies }.also {
+            check(it.size == registeredModules.size) { "The number of sorted modules doesn't match the number of registered modules" }
         }
     }
-    private val zippedModules by lazy {
-        check(sortedModules.size == registeredModules.size) { "The number of sorted modules and registered modules doesn't match" }
-        sortedModules.zip(registeredModules).toMap()
-    }
+
+    private val zippedModules by lazy { sortedModules.zip(registeredModules).toMap() }
 
     fun registerDependsOnEdges(module: KtModule) {
         registeredModules.add(module)
-        inEdges.getOrPut(module) { mutableListOf() }
-        module.directDependsOnDependencies.forEach { dependency ->
-            inEdges.getOrPut(dependency) { mutableListOf() }.add(module)
-        }
     }
 
     fun getUpdatedIndexOf(module: KtModule): Int {
@@ -103,16 +92,5 @@ private class KmpGroup(private val originalPositions: Map<KtModule, Int>) {
         zippedModules.entries.joinToString(separator = "; ", prefix = "[", postfix = "]") { (old, new) ->
             "$old (${originalPositions[old]}) -> $new"
         }
-    }
-}
-
-private class DependsOnModuleGraph(private val inEdges: Map<KtModule, List<KtModule>>) : InboundSemiGraph<KtModule> {
-    override fun getNodes(): Collection<KtModule?> {
-        return inEdges.keys
-    }
-
-    override fun getIn(n: KtModule?): Iterator<KtModule?> {
-        if (n == null) return emptyList<KtModule>().iterator()
-        return inEdges[n]?.iterator() ?: emptyList<KtModule>().iterator()
     }
 }
