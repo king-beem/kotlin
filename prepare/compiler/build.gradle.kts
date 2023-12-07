@@ -455,7 +455,7 @@ inline fun <reified T : AbstractCopyTask> Project.distTask(
     name: String,
     crossinline block: T.() -> Unit
 ) = tasks.register<T>(name) {
-    duplicatesStrategy = DuplicatesStrategy.INCLUDE
+    duplicatesStrategy = DuplicatesStrategy.FAIL
     rename(quote("-$version"), "")
     rename(quote("-$bootstrapKotlinVersion"), "")
     block()
