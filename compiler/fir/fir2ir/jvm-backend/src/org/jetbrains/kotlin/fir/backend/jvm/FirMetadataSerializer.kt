@@ -51,7 +51,7 @@ fun makeFirMetadataSerializerForIrClass(
         (it.owner.metadata as? FirMetadataSource.Property)?.fir?.copyToFreeProperty(approximator)
     } ?: emptyList()
     val firSerializerExtension = FirJvmSerializerExtension(
-        session, serializationBindings, context.state, irClass.metadata, localDelegatedProperties,
+        session, serializationBindings, context.state, localDelegatedProperties,
         approximator, context.defaultTypeMapper, components
     )
     return FirMetadataSerializer(
@@ -86,7 +86,7 @@ fun makeLocalFirMetadataSerializerForMetadataSource(
     }
 
     val firSerializerExtension = FirJvmSerializerExtension(
-        session, serializationBindings, metadata, emptyList(), approximator, scopeSession,
+        session, serializationBindings, emptyList(), approximator, scopeSession,
         globalSerializationBindings,
         configuration.getBoolean(JVMConfigurationKeys.USE_TYPE_TABLE),
         targetId.name,

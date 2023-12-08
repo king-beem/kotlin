@@ -16,7 +16,6 @@ import org.jetbrains.kotlin.descriptors.Visibilities
 import org.jetbrains.kotlin.fir.FirSession
 import org.jetbrains.kotlin.fir.backend.ConstValueProviderImpl
 import org.jetbrains.kotlin.fir.backend.Fir2IrComponents
-import org.jetbrains.kotlin.fir.backend.FirMetadataSource
 import org.jetbrains.kotlin.fir.declarations.*
 import org.jetbrains.kotlin.fir.declarations.utils.*
 import org.jetbrains.kotlin.fir.expressions.FirAnnotation
@@ -27,7 +26,10 @@ import org.jetbrains.kotlin.fir.resolve.ScopeSession
 import org.jetbrains.kotlin.fir.resolve.providers.getRegularClassSymbolByClassId
 import org.jetbrains.kotlin.fir.resolve.providers.symbolProvider
 import org.jetbrains.kotlin.fir.resolve.toFirRegularClassSymbol
-import org.jetbrains.kotlin.fir.serialization.*
+import org.jetbrains.kotlin.fir.serialization.FirAdditionalMetadataProvider
+import org.jetbrains.kotlin.fir.serialization.FirElementAwareStringTable
+import org.jetbrains.kotlin.fir.serialization.FirElementSerializer
+import org.jetbrains.kotlin.fir.serialization.FirSerializerExtension
 import org.jetbrains.kotlin.fir.serialization.constant.ConstValueProvider
 import org.jetbrains.kotlin.fir.types.*
 import org.jetbrains.kotlin.ir.declarations.MetadataSource
@@ -50,7 +52,6 @@ import org.jetbrains.org.objectweb.asm.commons.Method
 class FirJvmSerializerExtension(
     override val session: FirSession,
     private val bindings: JvmSerializationBindings,
-    private val metadata: MetadataSource?,
     private val localDelegatedProperties: List<FirProperty>,
     private val approximator: AbstractTypeApproximator,
     private val scopeSession: ScopeSession,
@@ -72,13 +73,12 @@ class FirJvmSerializerExtension(
         session: FirSession,
         bindings: JvmSerializationBindings,
         state: GenerationState,
-        metadata: MetadataSource?,
         localDelegatedProperties: List<FirProperty>,
         approximator: AbstractTypeApproximator,
         typeMapper: IrTypeMapper,
         components: Fir2IrComponents
     ) : this(
-        session, bindings, metadata, localDelegatedProperties, approximator, components.scopeSession,
+        session, bindings, localDelegatedProperties, approximator, components.scopeSession,
         state.globalSerializationBindings, state.config.useTypeTableInSerializer, state.moduleName, state.classBuilderMode,
         state.config.isParamAssertionsDisabled, state.config.unifiedNullChecks, state.config.metadataVersion, state.jvmDefaultMode,
         FirJvmElementAwareStringTable(typeMapper, components), ConstValueProviderImpl(components),
@@ -93,7 +93,6 @@ class FirJvmSerializerExtension(
         versionRequirementTable: MutableVersionRequirementTable,
         childSerializer: FirElementSerializer
     ) {
-        assert((metadata as FirMetadataSource.Class).fir == klass)
         if (moduleName != JvmProtoBufUtil.DEFAULT_MODULE_NAME) {
             proto.setExtension(JvmProtoBuf.classModuleName, stringTable.getStringIndex(moduleName))
         }
@@ -120,7 +119,6 @@ class FirJvmSerializerExtension(
         versionRequirementTable: MutableVersionRequirementTable,
         childSerializer: FirElementSerializer
     ) {
-        assert((metadata as FirMetadataSource.Script).fir == script)
         if (moduleName != JvmProtoBufUtil.DEFAULT_MODULE_NAME) {
             proto.setExtension(JvmProtoBuf.classModuleName, stringTable.getStringIndex(moduleName))
         }
