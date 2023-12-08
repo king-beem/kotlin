@@ -36,14 +36,6 @@ internal actual inline fun uintCompare(v1: Int, v2: Int): Int = wasm_u32_compare
 internal actual inline fun ulongCompare(v1: Long, v2: Long): Int = wasm_u64_compareTo(v1, v2)
 
 @PublishedApi
-@WasmNoOpCast
-internal actual fun uintToInt(value: UInt): Int = implementedAsIntrinsic
-
-@PublishedApi
-@WasmNoOpCast
-internal actual fun intToUInt(value: Int): UInt = implementedAsIntrinsic
-
-@PublishedApi
 @WasmOp(WasmOp.I64_EXTEND_I32_U)
 internal actual fun uintToULong(value: Int): ULong = implementedAsIntrinsic
 
@@ -68,14 +60,6 @@ internal actual fun uintToDouble(value: Int): Double = implementedAsIntrinsic
 internal actual fun doubleToUInt(value: Double): UInt = implementedAsIntrinsic
 
 @PublishedApi
-@WasmNoOpCast
-internal actual fun ulongToLong(value: ULong): Long = implementedAsIntrinsic
-
-@PublishedApi
-@WasmNoOpCast
-internal actual fun longToULong(value: Long): ULong = implementedAsIntrinsic
-
-@PublishedApi
 @WasmOp(WasmOp.F32_CONVERT_I64_U)
 internal actual fun ulongToFloat(value: Long): Float = implementedAsIntrinsic
 
@@ -91,26 +75,53 @@ internal actual fun ulongToDouble(value: Long): Double = implementedAsIntrinsic
 @WasmOp(WasmOp.I64_TRUNC_SAT_F64_U)
 internal actual fun doubleToULong(value: Double): ULong = implementedAsIntrinsic
 
-@PublishedApi
-internal actual fun ulongToString(value: Long): String = utoa64(value.toULong(), 10)
+@InlineOnly
+internal actual inline fun uintToString(value: Int): String = utoa32(value.toUInt())
 
-@PublishedApi
-internal actual fun ulongToString(value: Long, base: Int): String {
+internal actual fun uintToString(value: Int, base: Int): String = numberToString(
+    value = value,
+    size = UInt.SIZE_BITS - 1,
+    base = base,
+    mod = { this % it },
+    div = { this / it },
+    contains = { it in this }
+)
+
+@InlineOnly
+internal actual inline fun ulongToString(value: Long): String = utoa64(value.toULong())
+
+internal actual fun ulongToString(value: Long, base: Int): String = numberToString(
+    value = value,
+    size = ULong.SIZE_BITS - 1,
+    base = base,
+    mod = { this % it },
+    div = { this / it },
+    contains = { it in this }
+)
+
+private inline fun <T : Number> numberToString(
+    value: T,
+    size: Int,
+    base: Int,
+    mod: T.(Int) -> T,
+    div: T.(Int) -> T,
+    contains: IntRange.(T) -> Boolean
+): String {
     checkRadix(base)
 
-    var unsignedValue = value.toULong()
+    var unsignedValue = value
 
     if (base == 10) return unsignedValue.toString()
-    if (value in 0 until base) return value.getChar().toString()
+    if ((0 until base).contains(value)) return value.getChar().toString()
 
-    val buffer = WasmCharArray(ULong.SIZE_BITS)
+    val buffer = WasmCharArray(size)
 
-    val ulongRadix = base.toULong()
-    var currentBufferIndex = ULong.SIZE_BITS - 1
+    val radix = base
+    var currentBufferIndex = size
 
-    while (unsignedValue != 0UL) {
-        buffer.set(currentBufferIndex, (unsignedValue % ulongRadix).toLong().getChar())
-        unsignedValue /= ulongRadix
+    while (unsignedValue != 0) {
+        buffer.set(currentBufferIndex, (unsignedValue.mod(radix)).getChar())
+        unsignedValue = unsignedValue.div(radix)
         currentBufferIndex--
     }
 

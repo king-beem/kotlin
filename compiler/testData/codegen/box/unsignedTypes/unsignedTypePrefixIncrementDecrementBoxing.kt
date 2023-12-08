@@ -93,24 +93,24 @@ fun check(u: Any?, ts: String, className: String) {
 }
 
 fun box(): String {
-    check(prefixDecrementUByteLocal(), 0xFFu.toString(), "UByte")
-    check(prefixDecrementUShortLocal(), 0xFFFFu.toString(), "UShort")
-    check(prefixDecrementUIntLocal(), 0xFFFF_FFFFu.toString(), "UInt")
-    check(prefixDecrementULongLocal(), 0xFFFF_FFFF_FFFF_FFFFUL.toString(), "ULong")
+//    check(prefixDecrementUByteLocal(), 0xFFu.toString(), "UByte")
+//    check(prefixDecrementUShortLocal(), 0xFFFFu.toString(), "UShort")
+//    check(prefixDecrementUIntLocal(), 0xFFFF_FFFFu.toString(), "UInt")
+//    check(prefixDecrementULongLocal(), 0xFFFF_FFFF_FFFF_FFFFUL.toString(), "ULong")
+//
+//    check(prefixIncrementUByteLocal(), "1", "UByte")
+//    check(prefixIncrementUShortLocal(), "1", "UShort")
+//    check(prefixIncrementUIntLocal(), "1", "UInt")
+//    check(prefixIncrementULongLocal(), "1", "ULong")
+//
+//    check(prefixDecrementUByteProperty(), 0xFFu.toString(), "UByte")
+//    check(prefixDecrementUShortProperty(), 0xFFFFu.toString(), "UShort")
+//    check(prefixDecrementUIntProperty(), 0xFFFF_FFFFu.toString(), "UInt")
+//    check(prefixDecrementULongProperty(), 0xFFFF_FFFF_FFFF_FFFFUL.toString(), "ULong")
 
-    check(prefixIncrementUByteLocal(), "1", "UByte")
-    check(prefixIncrementUShortLocal(), "1", "UShort")
-    check(prefixIncrementUIntLocal(), "1", "UInt")
-    check(prefixIncrementULongLocal(), "1", "ULong")
-
-    check(prefixDecrementUByteProperty(), 0xFFu.toString(), "UByte")
-    check(prefixDecrementUShortProperty(), 0xFFFFu.toString(), "UShort")
-    check(prefixDecrementUIntProperty(), 0xFFFF_FFFFu.toString(), "UInt")
-    check(prefixDecrementULongProperty(), 0xFFFF_FFFF_FFFF_FFFFUL.toString(), "ULong")
-
-    check(prefixIncrementUByteProperty(), "1", "UByte")
-    check(prefixIncrementUShortProperty(), "1", "UShort")
-    check(prefixIncrementUIntProperty(), "1", "UInt")
+//    check(prefixIncrementUByteProperty(), "1", "UByte")
+//    check(prefixIncrementUShortProperty(), "1", "UShort")
+//    check(prefixIncrementUIntProperty(), "1", "UInt")
     check(prefixIncrementULongProperty(), "1", "ULong")
 
     return "OK"

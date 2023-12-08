@@ -68,14 +68,6 @@ internal actual fun ulongCompare(v1: Long, v2: Long): Int = (v1 xor Long.MIN_VAL
 
 @PublishedApi
 @InlineOnly
-internal actual inline fun uintToInt(value: UInt): Int = value.data
-
-@PublishedApi
-@InlineOnly
-internal actual inline fun intToUInt(value: Int): UInt = UInt(value)
-
-@PublishedApi
-@InlineOnly
 internal actual inline fun uintToULong(value: Int): ULong = ULong(uintToLong(value))
 
 @PublishedApi
@@ -104,14 +96,6 @@ internal actual fun doubleToUInt(value: Double): UInt = when {
 
 @PublishedApi
 @InlineOnly
-internal actual inline fun ulongToLong(value: ULong): Long = value.data
-
-@PublishedApi
-@InlineOnly
-internal actual inline fun longToULong(value: Long): ULong = ULong(value)
-
-@PublishedApi
-@InlineOnly
 internal actual inline fun ulongToFloat(value: Long): Float = ulongToDouble(value).toFloat()
 
 @PublishedApi
@@ -132,10 +116,14 @@ internal actual fun doubleToULong(value: Double): ULong = when {
     else -> (value - 9223372036854775808.0).toLong().toULong() + 9223372036854775808uL      // Long.MAX_VALUE + 1 < v < ULong.MAX_VALUE
 }
 
-@PublishedApi
+@InlineOnly
+internal actual inline fun uintToString(value: Int): String = ulongToString(uintToLong(value), 10)
+
+@InlineOnly
+internal actual inline fun uintToString(value: Int, base: Int): String = ulongToString(uintToLong(value), base)
+
 internal actual fun ulongToString(value: Long): String = ulongToString(value, 10)
 
-@PublishedApi
 internal actual fun ulongToString(value: Long, base: Int): String {
     if (value >= 0) return value.toString(base)
 

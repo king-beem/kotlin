@@ -69,14 +69,10 @@ class WasmTypeTransformer(
             builtIns.byteType,
             builtIns.shortType,
             builtIns.intType,
-            builtIns.charType,
-            symbols.uByteType,
-            symbols.uShortType,
-            symbols.uIntType ->
+            builtIns.charType ->
                 WasmI32
 
-            builtIns.longType,
-            symbols.uLongType ->
+            builtIns.longType ->
                 WasmI64
 
             builtIns.floatType ->

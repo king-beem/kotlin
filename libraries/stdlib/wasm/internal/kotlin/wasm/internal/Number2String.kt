@@ -43,12 +43,7 @@ private fun digitToChar(input: Int): Char {
 }
 
 // Inspired by the AssemblyScript implementation
-internal fun itoa32(inputValue: Int, radix: Int): String {
-    checkRadix(radix)
-
-    if (radix != 10)
-        TODO("When we need it")
-
+internal fun itoa32(inputValue: Int): String {
     if (inputValue == 0) return "0"
     // We can't represent abs(Int.MIN_VALUE), so just hardcode it here
     if (inputValue == Int.MIN_VALUE) return "-2147483648"
@@ -66,10 +61,7 @@ internal fun itoa32(inputValue: Int, radix: Int): String {
     return buf.createString()
 }
 
-internal fun utoa32(inputValue: UInt, radix: Int): String {
-    checkRadix(radix)
-
-    if (radix != 10) TODO("When we need it")
+internal fun utoa32(inputValue: UInt): String {
     if (inputValue == 0U) return "0"
 
     val decimals = decimalCount32(inputValue)
@@ -132,19 +124,12 @@ private fun decimalCount32(value: UInt): Int {
     }
 }
 
-internal fun itoa64(inputValue: Long, radix: Int): String {
+internal fun itoa64(inputValue: Long): String {
     if (inputValue in Int.MIN_VALUE..Int.MAX_VALUE)
-        return itoa32(inputValue.toInt(), radix)
+        return itoa32(inputValue.toInt())
 
-    checkRadix(radix)
-
-    if (inputValue == 0L) return "0"
     // We can't represent abs(Long.MIN_VALUE), so just hardcode it here
     if (inputValue == Long.MIN_VALUE) return "-9223372036854775808"
-
-    if (radix != 10) {
-        TODO("When we need it")
-    }
 
     val sign = (inputValue ushr 63).toInt()
     assert(sign == 1 || sign == 0)
@@ -159,14 +144,8 @@ internal fun itoa64(inputValue: Long, radix: Int): String {
     return buf.createString()
 }
 
-internal fun utoa64(inputValue: ULong, radix: Int): String {
-    if (inputValue <= UInt.MAX_VALUE)
-        return utoa32(inputValue.toUInt(), radix)
-
-    checkRadix(radix)
-
-    if (inputValue == 0UL) return "0"
-    if (radix != 10) TODO("When we need it")
+internal fun utoa64(inputValue: ULong): String {
+    if (inputValue <= UInt.MAX_VALUE) return utoa32(inputValue.toUInt())
 
     val decimals = decimalCount64High(inputValue)
     val buf = WasmCharArray(decimals)

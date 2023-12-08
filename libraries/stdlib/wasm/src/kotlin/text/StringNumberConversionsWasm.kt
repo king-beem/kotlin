@@ -163,5 +163,5 @@ internal fun WasmCharArray.createStringStartingFrom(index: Int): String {
     return newChars.createString()
 }
 
-internal fun Long.getChar() = toInt().let { if (it < 10) '0' + it else 'a' + (it - 10) }
+internal fun Number.getChar() = toInt().let { if (it < 10) '0' + it else 'a' + (it - 10) }
 
