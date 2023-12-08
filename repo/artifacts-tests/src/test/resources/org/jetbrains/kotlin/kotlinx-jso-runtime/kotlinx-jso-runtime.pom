@@ -8,10 +8,10 @@
   <!-- do_not_remove: published-with-gradle-metadata -->
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.jetbrains.kotlin</groupId>
-  <artifactId>kotlinx-atomicfu-runtime</artifactId>
+  <artifactId>kotlinx-jso-runtime</artifactId>
   <version>ArtifactsTest.version</version>
   <packaging>klib</packaging>
-  <name>Kotlinx JSO Runtime</name>
+  <name>Kotlinx Jso Runtime</name>
   <description>Runtime library for the JSO compiler plugin</description>
   <url>https://kotlinlang.org/</url>
   <licenses>
