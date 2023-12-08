@@ -33483,6 +33483,12 @@ public class DiagnosticCompilerTestFE10TestdataTestGenerated extends AbstractDia
             }
 
             @Test
+            @TestMetadata("binaryOperatorsWithJumps.kt")
+            public void testBinaryOperatorsWithJumps() throws Exception {
+                runTest("compiler/testData/diagnostics/tests/smartCasts/binaryOperatorsWithJumps.kt");
+            }
+
+            @Test
             @TestMetadata("classObjectMember.kt")
             public void testClassObjectMember() throws Exception {
                 runTest("compiler/testData/diagnostics/tests/smartCasts/classObjectMember.kt");

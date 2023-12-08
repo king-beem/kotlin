@@ -1,0 +1,21 @@
+package
+
+public fun test1(/*0*/ foo: kotlin.String?): kotlin.Unit
+public fun test10(/*0*/ foo: kotlin.String?): kotlin.Unit
+public fun test11(/*0*/ foo: kotlin.String?): kotlin.Unit
+public fun test12(/*0*/ foo: kotlin.String?): kotlin.Unit
+public fun test13(/*0*/ foo: kotlin.String?): kotlin.Unit
+public fun test14(/*0*/ foo: kotlin.String?): kotlin.Unit
+public fun test15(/*0*/ foo: kotlin.String?): kotlin.Unit
+public fun test16(/*0*/ foo: kotlin.String?): kotlin.Unit
+public fun test17(/*0*/ foo: kotlin.Any?): kotlin.Unit
+public fun test18(/*0*/ foo: kotlin.Any?): kotlin.Unit
+public fun test19(/*0*/ foo: kotlin.Any?): kotlin.Unit
+public fun test2(/*0*/ foo: kotlin.String?): kotlin.Unit
+public fun test3(/*0*/ foo: kotlin.String?): kotlin.Unit
+public fun test4(/*0*/ foo: kotlin.String?): kotlin.Unit
+public fun test5(/*0*/ foo: kotlin.String?): kotlin.Unit
+public fun test6(/*0*/ foo: kotlin.String?): kotlin.Unit
+public fun test7(/*0*/ foo: kotlin.String?): kotlin.Unit
+public fun test8(/*0*/ foo: kotlin.String?): kotlin.Unit
+public fun test9(/*0*/ foo: kotlin.String?): kotlin.Unit
