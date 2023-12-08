@@ -6,6 +6,7 @@
 package org.jetbrains.kotlin.resolve.calls.mpp
 
 import org.jetbrains.kotlin.descriptors.ClassKind
+import org.jetbrains.kotlin.descriptors.Visibilities
 import org.jetbrains.kotlin.mpp.*
 import org.jetbrains.kotlin.resolve.multiplatform.ExpectActualMatchingCompatibility
 import org.jetbrains.kotlin.types.model.KotlinTypeMarker
@@ -211,7 +212,23 @@ object AbstractExpectActualMatcher {
     context(ExpectActualMatchingContext<*>)
     private fun chooseFromMatchedActuals(matchedActualDeclarations: Collection<DeclarationSymbolMarker>): DeclarationSymbolMarker {
         require(matchedActualDeclarations.isNotEmpty()) { "Expected non-empty actuals" }
-        return matchedActualDeclarations.first()
+
+        return matchedActualDeclarations.maxBy { getSortingPriorityForActual(it) }
+    }
+
+    /**
+     * If actual is Java class, there might be two matched properties with the same name:
+     * 1) from field;
+     * 2) from method, which overrides Kotlin property.
+     *
+     * The field must always take precedence, if it has compatible visibility (and in Java only `public` can be compatible),
+     * otherwise it must be deprioritized.
+     */
+    context(ExpectActualMatchingContext<*>)
+    private fun getSortingPriorityForActual(actual: DeclarationSymbolMarker): Int {
+        return if (actual is CallableSymbolMarker && actual.isJavaField) {
+            if (actual.visibility == Visibilities.Public) 1 else -1
+        } else 0
     }
 
     // ---------------------------------------- Utils ----------------------------------------

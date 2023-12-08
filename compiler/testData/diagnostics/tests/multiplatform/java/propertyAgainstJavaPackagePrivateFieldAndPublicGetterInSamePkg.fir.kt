@@ -10,7 +10,7 @@ expect class Foo {
 // FILE: jvm.kt
 package com.example
 
-actual typealias <!NO_ACTUAL_CLASS_MEMBER_FOR_EXPECTED_CLASS!>Foo<!> = JavaFoo
+actual typealias Foo = JavaFoo
 
 interface I {
     val foo: Int
