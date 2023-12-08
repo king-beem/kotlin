@@ -38,14 +38,15 @@ internal fun collectNewDirtySources(
     val globalSerializationBindings = JvmSerializationBindings()
 
     fun visitFirFiles(analyzedOutput: ModuleCompilerAnalyzedOutput) {
-        analyzedOutput.fir.forEach {
-            it.accept(object : FirVisitor<Unit, MutableList<MetadataSerializer>>() {
+        for (file in analyzedOutput.fir) {
+            file.accept(object : FirVisitor<Unit, MutableList<MetadataSerializer>>() {
                 inline fun withMetadataSerializer(
                     metadata: FirMetadataSource,
                     data: MutableList<MetadataSerializer>,
                     body: (MetadataSerializer) -> Unit
                 ) {
                     val serializer = makeLocalFirMetadataSerializerForMetadataSource(
+                        file,
                         metadata,
                         analyzedOutput.session,
                         analyzedOutput.scopeSession,

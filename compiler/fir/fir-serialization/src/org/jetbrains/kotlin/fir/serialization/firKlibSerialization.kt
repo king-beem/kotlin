@@ -55,7 +55,7 @@ fun serializeSingleFirFile(
             )
             val index = classSerializer.stringTable.getFqNameIndex(klass)
 
-            classesProto += classSerializer.classProto(klass).build() to index
+            classesProto += classSerializer.classProto(klass, file).build() to index
             classSerializer.computeNestedClassifiersForClass(symbol).filterIsInstance<FirClassSymbol<*>>().makeClassesProtoWithNested()
         }
     }

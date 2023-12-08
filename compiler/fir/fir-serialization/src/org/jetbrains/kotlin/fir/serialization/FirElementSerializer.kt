@@ -124,7 +124,12 @@ class FirElementSerializer private constructor(
         return builder
     }
 
-    fun classProto(klass: FirClass): ProtoBuf.Class.Builder = whileAnalysing(session, klass) {
+    fun classProto(klass: FirClass, containingFile: FirFile?): ProtoBuf.Class.Builder =
+        extension.processFile(containingFile ?: error("No containing file for: ${klass.render()}")) {
+            classProtoImpl(klass)
+        }
+
+    private fun classProtoImpl(klass: FirClass): ProtoBuf.Class.Builder = whileAnalysing(session, klass) {
         val builder = ProtoBuf.Class.newBuilder()
 
         val regularClass = klass as? FirRegularClass

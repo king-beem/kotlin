@@ -22,7 +22,7 @@ class Ir2FirManglerAdapter(private val delegate: FirMangler) : AbstractKotlinMan
     override val manglerName: String
         get() = delegate.manglerName
 
-    private fun IrDeclaration.fir(): FirDeclaration = ((this as IrMetadataSourceOwner).metadata as FirMetadataSource).fir!!
+    private fun IrDeclaration.fir(): FirDeclaration = ((this as IrMetadataSourceOwner).metadata as FirMetadataSource).fir
 
     override fun IrDeclaration.isExported(compatibleMode: Boolean): Boolean = delegate.run { fir().isExported(compatibleMode) }
 
