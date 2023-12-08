@@ -73,7 +73,7 @@ projectTest(parallel = true, jUnitMode = JUnitMode.JUnit5) {
     doFirst {
         systemProperty("jso.runtime.path", jsoIrRuntimeForTests.asPath)
     }
-    useJsIrBoxTests(version = version, buildDir = "$buildDir/")
+    useJsIrBoxTests(version = version, buildDir = layout.buildDirectory)
 }
 
 val generateTests by generator("org.jetbrains.kotlinx.jso.TestGeneratorKt")
