@@ -36,7 +36,7 @@ fun serializeSingleFirFile(
     // TODO: split package fragment (see klib serializer)
     // TODO: handle incremental/monolothic (see klib serializer) - maybe externally
 
-    val packageProto = packageSerializer.packagePartProto(file.packageFqName, listOf(file), actualizedExpectDeclarations).build()
+    val packageProto = packageSerializer.packagePartProto(file, actualizedExpectDeclarations).build()
 
     val classesProto = mutableListOf<Pair<ProtoBuf.Class, Int>>()
 
