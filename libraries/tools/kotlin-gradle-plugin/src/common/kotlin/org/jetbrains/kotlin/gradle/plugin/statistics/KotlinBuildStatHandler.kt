@@ -7,6 +7,8 @@ package org.jetbrains.kotlin.gradle.plugin.statistics
 
 import org.gradle.api.Project
 import org.gradle.api.artifacts.DependencySet
+import org.gradle.api.artifacts.ProjectDependency
+import org.gradle.api.invocation.Gradle
 import org.gradle.api.logging.Logging
 import org.jetbrains.kotlin.gradle.plugin.statistics.plugins.ObservablePlugins
 import org.jetbrains.kotlin.gradle.report.BuildReportType
@@ -49,9 +51,10 @@ class KotlinBuildStatHandler {
          * Collect general configuration metrics
          */
         internal fun collectGeneralConfigurationTimeMetrics(
-            project: Project,
+            gradle: Gradle,
             buildReportOutputs: List<BuildReportType>,
             pluginVersion: String,
+            isProjectIsolationEnabled: Boolean,
         ): MetricContainer {
             val configurationTimeMetrics = MetricContainer()
 
@@ -67,14 +70,15 @@ class KotlinBuildStatHandler {
                         BuildReportType.TRY_NEXT_CONSOLE -> {}//ignore
                     }
                 }
-                val gradle = project.gradle
                 configurationTimeMetrics.put(StringMetrics.PROJECT_PATH, gradle.rootProject.projectDir.absolutePath)
                 configurationTimeMetrics.put(StringMetrics.GRADLE_VERSION, gradle.gradleVersion)
 
                 //will be updated with KT-58266
-                gradle.taskGraph.whenReady { taskExecutionGraph ->
-                    val executedTaskNames = taskExecutionGraph.allTasks.map { it.name }.distinct()
-                    configurationTimeMetrics.put(BooleanMetrics.MAVEN_PUBLISH_EXECUTED, executedTaskNames.contains("install"))
+                if (!isProjectIsolationEnabled) {
+                    gradle.taskGraph.whenReady { taskExecutionGraph ->
+                        val executedTaskNames = taskExecutionGraph.allTasks.map { it.name }.distinct()
+                        configurationTimeMetrics.put(BooleanMetrics.MAVEN_PUBLISH_EXECUTED, executedTaskNames.contains("install"))
+                    }
                 }
 
             }
@@ -197,8 +201,11 @@ class KotlinBuildStatHandler {
             }
         }
 
-        private fun reportLibrariesVersions(configurationTimeMetrics: MetricContainer, dependencies: DependencySet?) {
-            dependencies?.forEach { dependency ->
+        private fun reportLibrariesVersions(
+            configurationTimeMetrics: MetricContainer,
+            dependencies: DependencySet?,
+        ) {
+            dependencies?.filter { it !is ProjectDependency }?.forEach { dependency ->
                 when {
                     dependency.group?.startsWith("org.springframework") ?: false -> configurationTimeMetrics.put(
                         StringMetrics.LIBRARY_SPRING_VERSION,

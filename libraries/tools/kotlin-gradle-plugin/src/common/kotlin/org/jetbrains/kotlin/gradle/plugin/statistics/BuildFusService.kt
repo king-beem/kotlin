@@ -24,11 +24,14 @@ import org.jetbrains.kotlin.build.report.metrics.GradleBuildPerformanceMetric
 import org.jetbrains.kotlin.gradle.logging.kotlinDebug
 import org.jetbrains.kotlin.gradle.plugin.BuildEventsListenerRegistryHolder
 import org.jetbrains.kotlin.gradle.plugin.StatisticsBuildFlowManager
+import org.jetbrains.kotlin.gradle.plugin.internal.isConfigurationCacheRequested
+import org.jetbrains.kotlin.gradle.plugin.internal.isProjectIsolationEnabled
 import org.jetbrains.kotlin.gradle.plugin.internal.state.TaskExecutionResults
 import org.jetbrains.kotlin.gradle.report.TaskExecutionResult
 import org.jetbrains.kotlin.gradle.report.reportingSettings
 import org.jetbrains.kotlin.gradle.tasks.withType
 import org.jetbrains.kotlin.gradle.utils.SingleActionPerProject
+import org.jetbrains.kotlin.gradle.utils.currentBuildId
 import org.jetbrains.kotlin.statistics.metrics.BooleanMetrics
 import org.jetbrains.kotlin.statistics.metrics.StatisticsValuesConsumer
 import org.jetbrains.kotlin.statistics.metrics.NumericalMetrics
@@ -82,6 +85,8 @@ abstract class BuildFusService : BuildService<BuildFusService.Parameters>, AutoC
             pluginVersion: String,
         ): Provider<BuildFusService> {
 
+            val isProjectIsolationEnabled = project.isProjectIsolationEnabled
+
             project.gradle.sharedServices.registrations.findByName(serviceName)?.let {
                 @Suppress("UNCHECKED_CAST")
                 return (it.service as Provider<BuildFusService>).also {
@@ -92,23 +97,24 @@ abstract class BuildFusService : BuildService<BuildFusService.Parameters>, AutoC
             }
 
             //init buildStatsService
-            KotlinBuildStatsService.getOrCreateInstance(project)
+            KotlinBuildStatsService.getOrCreateInstance(project)?.also {
+                it.recordProjectsEvaluated(project)
+            }
 
             val buildReportOutputs = reportingSettings(project).buildReportOutputs
+            val gradle = project.gradle
 
             //Workaround for known issues for Gradle 8+: https://github.com/gradle/gradle/issues/24887:
             // when this OperationCompletionListener is called services can be already closed for Gradle 8,
             // so there is a change that no VariantImplementationFactory will be found
-            return project.gradle.sharedServices.registerIfAbsent(serviceName, BuildFusService::class.java) { spec ->
-                KotlinBuildStatsService.getOrCreateInstance(project)?.also {
-                    it.recordProjectsEvaluated(project)
-                }
+            return gradle.sharedServices.registerIfAbsent(serviceName, BuildFusService::class.java) { spec ->
 
                 spec.parameters.configurationMetrics.add(project.provider {
                     KotlinBuildStatHandler.collectGeneralConfigurationTimeMetrics(
-                        project,
+                        gradle,
                         buildReportOutputs,
-                        pluginVersion
+                        pluginVersion,
+                        isProjectIsolationEnabled
                     )
                 })
 
@@ -117,7 +123,13 @@ abstract class BuildFusService : BuildService<BuildFusService.Parameters>, AutoC
                 })
                 spec.parameters.useBuildFinishFlowAction.set(GradleVersion.current().baseVersion >= GradleVersion.version("8.1"))
             }.also { buildService ->
-                BuildEventsListenerRegistryHolder.getInstance(project).listenerRegistry.onTaskCompletion(buildService)
+                @Suppress("DEPRECATION")
+                if (GradleVersion.current().baseVersion >= GradleVersion.version("7.4")
+                    || !project.isConfigurationCacheRequested
+                    || project.currentBuildId().name != "buildSrc"
+                ) {
+                    BuildEventsListenerRegistryHolder.getInstance(project).listenerRegistry.onTaskCompletion(buildService)
+                }
                 if (GradleVersion.current().baseVersion >= GradleVersion.version("8.1")) {
                     StatisticsBuildFlowManager.getInstance(project).subscribeForBuildResult()
                 }
