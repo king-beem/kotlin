@@ -365,7 +365,7 @@ public value class UByte @kotlin.internal.IntrinsicConstEvaluation @PublishedApi
 @SinceKotlin("1.5")
 @WasExperimental(ExperimentalUnsignedTypes::class)
 @kotlin.internal.InlineOnly
-public inline fun Byte.toUByte(): UByte = UByte(this.toByte())
+public inline fun Byte.toUByte(): UByte = UByte(this)
 /**
  * Converts this [Short] value to [UByte].
  *

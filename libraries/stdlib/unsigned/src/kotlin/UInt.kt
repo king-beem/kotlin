@@ -411,7 +411,7 @@ public inline fun Short.toUInt(): UInt = UInt(this.toInt())
 @SinceKotlin("1.5")
 @WasExperimental(ExperimentalUnsignedTypes::class)
 @kotlin.internal.InlineOnly
-public inline fun Int.toUInt(): UInt = UInt(this.toInt())
+public inline fun Int.toUInt(): UInt = UInt(this)
 /**
  * Converts this [Long] value to [UInt].
  *

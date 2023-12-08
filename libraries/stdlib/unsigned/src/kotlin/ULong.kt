@@ -426,7 +426,7 @@ public inline fun Int.toULong(): ULong = ULong(this.toLong())
 @SinceKotlin("1.5")
 @WasExperimental(ExperimentalUnsignedTypes::class)
 @kotlin.internal.InlineOnly
-public inline fun Long.toULong(): ULong = ULong(this.toLong())
+public inline fun Long.toULong(): ULong = ULong(this)
 
 /**
  * Converts this [Float] value to [ULong].

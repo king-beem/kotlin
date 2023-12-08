@@ -402,7 +402,10 @@ class UnsignedTypeGenerator(val type: UnsignedType, out: PrintWriter) : BuiltIns
             out.println("@WasExperimental(ExperimentalUnsignedTypes::class)")
             out.println("@kotlin.internal.InlineOnly")
             out.print("public inline fun $otherSigned.to$className(): $className = ")
-            out.println("$className(this.to$thisSigned())")
+            out.println(when {
+                otherType == type -> "$className(this)"
+                else -> "$className(this.to$thisSigned())"
+            })
         }
 
         if (type == UnsignedType.UBYTE || type == UnsignedType.USHORT)

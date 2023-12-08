@@ -378,7 +378,7 @@ public inline fun Byte.toUShort(): UShort = UShort(this.toShort())
 @SinceKotlin("1.5")
 @WasExperimental(ExperimentalUnsignedTypes::class)
 @kotlin.internal.InlineOnly
-public inline fun Short.toUShort(): UShort = UShort(this.toShort())
+public inline fun Short.toUShort(): UShort = UShort(this)
 /**
  * Converts this [Int] value to [UShort].
  *
