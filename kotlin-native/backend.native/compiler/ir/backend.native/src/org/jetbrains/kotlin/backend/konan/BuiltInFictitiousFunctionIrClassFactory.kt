@@ -322,7 +322,7 @@ internal class BuiltInFictitiousFunctionIrClassFactory(
 
     private fun IrFunction.createValueParameter(descriptor: ParameterDescriptor): IrValueParameter {
         val varargType = if (descriptor is ValueParameterDescriptor) descriptor.varargElementType else null
-        return IrFactoryImpl.createValueParameter(
+        return symbolTable.irFactory.createValueParameter(
                 startOffset = offset,
                 endOffset = offset,
                 origin = memberOrigin,
