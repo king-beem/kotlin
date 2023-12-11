@@ -20,10 +20,7 @@ import org.jetbrains.kotlin.ir.symbols.IrConstructorSymbol
 import org.jetbrains.kotlin.ir.symbols.IrFunctionSymbol
 import org.jetbrains.kotlin.ir.symbols.IrSimpleFunctionSymbol
 import org.jetbrains.kotlin.ir.symbols.IrValueSymbol
-import org.jetbrains.kotlin.ir.types.IrType
-import org.jetbrains.kotlin.ir.types.defaultType
-import org.jetbrains.kotlin.ir.types.isNullable
-import org.jetbrains.kotlin.ir.types.makeNullable
+import org.jetbrains.kotlin.ir.types.*
 import org.jetbrains.kotlin.ir.util.*
 import org.jetbrains.kotlin.ir.visitors.IrElementTransformerVoid
 import org.jetbrains.kotlin.ir.visitors.transformChildrenVoid
@@ -211,7 +208,7 @@ open class DefaultArgumentStubGenerator<TContext : CommonBackendContext>(
                 val paramType = irFunction.valueParameters[i].type
                 // The JVM backend doesn't introduce new variables, and hence may have incompatible types here.
                 val value = if (!paramType.isNullable() && variable.type.isNullable()) {
-                    irImplicitCast(irGet(variable), paramType)
+                    irImplicitCast(irGet(variable), variable.type.makeNotNull())
                 } else {
                     irGet(variable)
                 }
@@ -309,7 +306,7 @@ open class DefaultParameterInjector<TContext : CommonBackendContext>(
                 }
             }
 
-            +irCastIfNeeded(newCall, expression.type)
+            +newCall
         }.unwrapBlock()
     }
 
