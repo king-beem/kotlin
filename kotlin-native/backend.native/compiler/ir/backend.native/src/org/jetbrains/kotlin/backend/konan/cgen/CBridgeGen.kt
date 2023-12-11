@@ -574,7 +574,7 @@ private fun KotlinStubs.createFakeKotlinExternalFunction(
         cFunctionName: String,
         isObjCMethod: Boolean
 ): IrSimpleFunction {
-    val bridge = IrFactoryImpl.createSimpleFunction(
+    val bridge = irBuiltIns.irFactory.createSimpleFunction(
             UNDEFINED_OFFSET,
             UNDEFINED_OFFSET,
             IrDeclarationOrigin.DEFINED,
