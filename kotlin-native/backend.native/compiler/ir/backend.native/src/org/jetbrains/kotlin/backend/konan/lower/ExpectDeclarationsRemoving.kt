@@ -83,7 +83,7 @@ internal class ExpectToActualDefaultValueCopier(private val irModule: IrModuleFr
 
                 val actualForExpected = function.findActualForExpected()
                 actualForExpected.valueParameters[index].defaultValue =
-                        IrFactoryImpl.createExpressionBody(
+                        irModule.irBuiltins.irFactory.createExpressionBody(
                                 defaultValue.startOffset, defaultValue.endOffset,
                                 defaultValue.expression.remapExpectValueSymbols().patchDeclarationParents(actualForExpected)
                         )
