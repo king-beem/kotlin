@@ -7,6 +7,9 @@ package org.jetbrains.kotlin.konan.test.blackbox;
 
 import com.intellij.testFramework.TestDataPath;
 import org.jetbrains.kotlin.test.util.KtTestUtil;
+import org.junit.jupiter.api.Tag;
+import org.jetbrains.kotlin.konan.test.blackbox.support.EnforcedProperty;
+import org.jetbrains.kotlin.konan.test.blackbox.support.ClassLevelProperty;
 import org.jetbrains.kotlin.test.TestMetadata;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -18,6 +21,8 @@ import java.util.regex.Pattern;
 @SuppressWarnings("all")
 @TestMetadata("native/native.tests/testData/klib/dump-metadata")
 @TestDataPath("$PROJECT_ROOT")
+@Tag("standalone")
+@EnforcedProperty(property = ClassLevelProperty.TEST_KIND, propertyValue = "STANDALONE_NO_TR")
 public class NativeKlibDumpMetadataTestGenerated extends AbstractNativeKlibDumpMetadataTest {
     @Test
     @TestMetadata("Accessors.kt")
@@ -141,6 +146,8 @@ public class NativeKlibDumpMetadataTestGenerated extends AbstractNativeKlibDumpM
     @Nested
     @TestMetadata("native/native.tests/testData/klib/dump-metadata/builtinsSerializer")
     @TestDataPath("$PROJECT_ROOT")
+    @Tag("standalone")
+    @EnforcedProperty(property = ClassLevelProperty.TEST_KIND, propertyValue = "STANDALONE_NO_TR")
     public class BuiltinsSerializer {
         @Test
         public void testAllFilesPresentInBuiltinsSerializer() throws Exception {
@@ -210,6 +217,8 @@ public class NativeKlibDumpMetadataTestGenerated extends AbstractNativeKlibDumpM
         @Nested
         @TestMetadata("native/native.tests/testData/klib/dump-metadata/builtinsSerializer/annotationArguments")
         @TestDataPath("$PROJECT_ROOT")
+        @Tag("standalone")
+        @EnforcedProperty(property = ClassLevelProperty.TEST_KIND, propertyValue = "STANDALONE_NO_TR")
         public class AnnotationArguments {
             @Test
             public void testAllFilesPresentInAnnotationArguments() throws Exception {
@@ -257,6 +266,8 @@ public class NativeKlibDumpMetadataTestGenerated extends AbstractNativeKlibDumpM
     @Nested
     @TestMetadata("native/native.tests/testData/klib/dump-metadata/klib")
     @TestDataPath("$PROJECT_ROOT")
+    @Tag("standalone")
+    @EnforcedProperty(property = ClassLevelProperty.TEST_KIND, propertyValue = "STANDALONE_NO_TR")
     public class Klib {
         @Test
         public void testAllFilesPresentInKlib() throws Exception {
