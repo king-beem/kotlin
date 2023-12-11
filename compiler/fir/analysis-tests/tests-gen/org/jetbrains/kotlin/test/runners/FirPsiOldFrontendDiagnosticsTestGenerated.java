@@ -32047,6 +32047,12 @@ public class FirPsiOldFrontendDiagnosticsTestGenerated extends AbstractFirPsiDia
             }
 
             @Test
+            @TestMetadata("nullableLambda.kt")
+            public void testNullableLambda() throws Exception {
+                runTest("compiler/testData/diagnostics/tests/smartCasts/nullableLambda.kt");
+            }
+
+            @Test
             @TestMetadata("openInSealed.kt")
             public void testOpenInSealed() throws Exception {
                 runTest("compiler/testData/diagnostics/tests/smartCasts/openInSealed.kt");
