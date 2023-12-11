@@ -87,7 +87,7 @@ internal interface DescriptorToIrTranslationMixin {
     fun createConstructor(constructorDescriptor: ClassConstructorDescriptor): IrConstructor {
         val irConstructor = symbolTable.descriptorExtension.declareConstructor(constructorDescriptor) {
             with(constructorDescriptor) {
-                IrFactoryImpl.createConstructor(
+                symbolTable.irFactory.createConstructor(
                         SYNTHETIC_OFFSET,
                         SYNTHETIC_OFFSET,
                         IrDeclarationOrigin.IR_EXTERNAL_DECLARATION_STUB,
