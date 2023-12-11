@@ -75,6 +75,7 @@ abstract class IncrementalCompilerRunner<
     protected val withAbiSnapshot: Boolean = false,
     private val preciseCompilationResultsBackup: Boolean = false,
     private val keepIncrementalCompilationCachesInMemory: Boolean = false,
+    private val commonSources: Set<File> = emptySet()
 ) {
 
     protected val cacheDirectory = File(workingDir, cacheDirName)
@@ -454,6 +455,8 @@ abstract class IncrementalCompilerRunner<
         while (dirtySources.any() || runWithNoDirtyKotlinSources(caches)) {
             val complementaryFiles = caches.platformCache.getComplementaryFilesRecursive(dirtySources)
             dirtySources.addAll(complementaryFiles)
+            println("Workaround for KT-63837: marking all common sources as dirty: ${commonSources.joinToString()}")
+            dirtySources.addAll(commonSources)
             caches.platformCache.markDirty(dirtySources)
             caches.inputsCache.removeOutputForSourceFiles(dirtySources)
 

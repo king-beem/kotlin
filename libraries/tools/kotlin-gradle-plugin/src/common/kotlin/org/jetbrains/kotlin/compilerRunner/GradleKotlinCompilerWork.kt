@@ -331,7 +331,8 @@ internal class GradleKotlinCompilerWork @Inject constructor(
             kotlinScriptExtensions = kotlinScriptExtensions,
             withAbiSnapshot = icEnv.withAbiSnapshot,
             preciseCompilationResultsBackup = icEnv.preciseCompilationResultsBackup,
-            keepIncrementalCompilationCachesInMemory = icEnv.keepIncrementalCompilationCachesInMemory
+            keepIncrementalCompilationCachesInMemory = icEnv.keepIncrementalCompilationCachesInMemory,
+            commonSources = icEnv.commonSources,
         )
 
         log.info("Options for KOTLIN DAEMON: $compilationOptions")

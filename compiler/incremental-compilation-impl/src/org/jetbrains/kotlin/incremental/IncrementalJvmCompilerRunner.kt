@@ -71,6 +71,7 @@ open class IncrementalJvmCompilerRunner(
     withAbiSnapshot: Boolean = false,
     preciseCompilationResultsBackup: Boolean = false,
     keepIncrementalCompilationCachesInMemory: Boolean = false,
+    commonSources: Set<File> = emptySet()
 ) : IncrementalCompilerRunner<K2JVMCompilerArguments, IncrementalJvmCachesManager>(
     workingDir,
     "caches-jvm",
@@ -80,6 +81,7 @@ open class IncrementalJvmCompilerRunner(
     withAbiSnapshot = withAbiSnapshot,
     preciseCompilationResultsBackup = preciseCompilationResultsBackup,
     keepIncrementalCompilationCachesInMemory = keepIncrementalCompilationCachesInMemory,
+    commonSources = commonSources
 ) {
     override val shouldTrackChangesInLookupCache
         get() = classpathChanges is ClasspathChanges.ClasspathSnapshotEnabled.IncrementalRun
