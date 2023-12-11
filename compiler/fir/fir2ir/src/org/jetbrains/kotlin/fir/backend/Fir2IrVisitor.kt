@@ -1532,7 +1532,6 @@ class Fir2IrVisitor(
         }
     }
 
-    @OptIn(IrImplementationDetail::class)
     override fun visitGetClassCall(getClassCall: FirGetClassCall, data: Any?): IrElement = whileAnalysing(session, getClassCall) {
         val argument = getClassCall.argument
         val irType = getClassCall.resolvedType.toIrType()
@@ -1563,6 +1562,7 @@ class Fir2IrVisitor(
                 }
             }
             is FirClassReferenceExpression -> {
+                @OptIn(IrImplementationDetail::class)
                 (argument.classTypeRef.coneType.lowerBoundIfFlexible() as? ConeClassLikeType)?.toIrClassSymbol()
                 // A null value means we have some unresolved code, possibly in a binary dependency that's missing a transitive dependency,
                 // see KT-60181.
