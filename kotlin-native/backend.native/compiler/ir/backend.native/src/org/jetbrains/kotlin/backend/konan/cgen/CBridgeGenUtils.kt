@@ -80,7 +80,7 @@ internal class KotlinBridgeBuilder(
     fun addParameter(type: IrType): IrValueParameter {
         val index = counter++
 
-        return IrFactoryImpl.createValueParameter(
+        return irBuilder.context.irFactory.createValueParameter(
                 startOffset = bridge.startOffset,
                 endOffset = bridge.endOffset,
                 origin = bridge.origin,
