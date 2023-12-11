@@ -351,7 +351,7 @@ internal class BuiltInFictitiousFunctionIrClassFactory(
 
             val functionDeclare = { s: IrSimpleFunctionSymbol ->
                 descriptor.run {
-                    IrFactoryImpl.createSimpleFunction(
+                    symbolTable.irFactory.createSimpleFunction(
                             offset,
                             offset,
                             memberOrigin,
