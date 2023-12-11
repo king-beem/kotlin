@@ -263,7 +263,7 @@ internal class BuiltInFictitiousFunctionIrClassFactory(
                         ).apply {
                             parent = functionClass
                             valueParameters += invokeFunctionDescriptor.valueParameters.map {
-                                IrFactoryImpl.createValueParameter(
+                                symbolTable.irFactory.createValueParameter(
                                         startOffset = SYNTHETIC_OFFSET,
                                         endOffset = SYNTHETIC_OFFSET,
                                         origin = DECLARATION_ORIGIN_FUNCTION_CLASS,
