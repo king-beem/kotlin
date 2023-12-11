@@ -1,3 +1,4 @@
+import plugins.configureDefaultPublishing
 import plugins.configureKotlinPomAttributes
 import plugins.signLibraryPublication
 
@@ -29,8 +30,6 @@ kotlin {
     }
 }
 
-configureCommonPublicationSettingsForGradle(signLibraryPublication)
-
 val emptyJavadocJar by tasks.creating(Jar::class) {
     archiveClassifier.set("javadoc")
 }
@@ -46,3 +45,5 @@ publishing {
         }
     }
 }
+
+configureDefaultPublishing()

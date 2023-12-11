@@ -281,12 +281,13 @@ include ":kotlin-atomicfu-compiler-plugin",
         ":atomicfu"
 
 include ":kotlinx-jso-compiler-plugin",
+        ":kotlinx-jso-compiler-plugin-embeddable",
         ":kotlinx-jso-compiler-plugin.cli",
         ":kotlinx-jso-compiler-plugin.k2",
         ":kotlinx-jso-compiler-plugin.common",
         ":kotlinx-jso-compiler-plugin.backend",
         ":kotlinx-jso-runtime",
-        ":kotlinx-jso"
+        ":jso"
 
 include ":compiler:fir",
         ":compiler:fir:cones",
@@ -841,13 +842,14 @@ project(':kotlin-atomicfu-compiler-plugin-embeddable').projectDir = file("$rootD
 project(':kotlinx-atomicfu-runtime').projectDir = file("$rootDir/plugins/atomicfu/atomicfu-runtime")
 project(':atomicfu').projectDir = file("$rootDir/libraries/tools/atomicfu")
 
+project(':kotlinx-jso-compiler-plugin').projectDir = "$rootDir/plugins/jso/jso-compiler" as File
+project(':kotlinx-jso-compiler-plugin-embeddable').projectDir = "$rootDir/plugins/jso/jso-compiler-embeddable" as File
 project(':kotlinx-jso-compiler-plugin.backend').projectDir = "$rootDir/plugins/jso/jso-compiler/kotlinx-jso-compiler-plugin.backend" as File
 project(':kotlinx-jso-compiler-plugin.cli').projectDir = "$rootDir/plugins/jso/jso-compiler/kotlinx-jso-compiler-plugin.cli" as File
 project(':kotlinx-jso-compiler-plugin.k2').projectDir = "$rootDir/plugins/jso/jso-compiler/kotlinx-jso-compiler-plugin.k2" as File
 project(':kotlinx-jso-compiler-plugin.common').projectDir = "$rootDir/plugins/jso/jso-compiler/kotlinx-jso-compiler-plugin.common" as File
-project(':kotlinx-jso-compiler-plugin').projectDir = "$rootDir/plugins/jso/jso-compiler" as File
 project(':kotlinx-jso-runtime').projectDir = "$rootDir/plugins/jso/jso-runtime" as File
-project(':kotlinx-jso').projectDir = "$rootDir/plugins/jso" as File
+project(':jso').projectDir = file("$rootDir/libraries/tools/jso")
 
 project(':kotlin-scripting-ide-services-unshaded').projectDir = "$rootDir/plugins/scripting/scripting-ide-services" as File
 project(':kotlin-scripting-ide-services-test').projectDir = "$rootDir/plugins/scripting/scripting-ide-services-test" as File

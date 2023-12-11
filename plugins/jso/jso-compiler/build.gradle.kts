@@ -21,6 +21,7 @@ dependencies {
     embedded(project(":kotlinx-jso-compiler-plugin.common")) { isTransitive = false }
     embedded(project(":kotlinx-jso-compiler-plugin.k2")) { isTransitive = false }
     embedded(project(":kotlinx-jso-compiler-plugin.cli")) { isTransitive = false }
+    embedded(project(":kotlinx-jso-compiler-plugin.backend")) { isTransitive = false }
 
     testApi(project(":compiler:backend"))
     testApi(project(":compiler:cli"))
@@ -52,6 +53,8 @@ dependencies {
     testRuntimeOnly(project(":core:descriptors.runtime"))
 }
 
+optInToExperimentalCompilerApi()
+
 sourceSets {
     "main" { none() }
     "test" {
@@ -60,11 +63,12 @@ sourceSets {
     }
 }
 
+publish()
+
 runtimeJar()
 sourcesJar()
 javadocJar()
 testsJar()
-optInToExperimentalCompilerApi()
 
 projectTest(parallel = true, jUnitMode = JUnitMode.JUnit5) {
     useJUnitPlatform()

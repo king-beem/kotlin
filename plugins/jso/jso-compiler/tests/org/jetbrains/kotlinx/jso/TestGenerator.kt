@@ -13,8 +13,8 @@ fun main(args: Array<String>) {
 
     generateTestGroupSuiteWithJUnit5(args) {
         testGroup(
-            "plugins/jso/tests-gen",
-            "plugins/jso/testData"
+            "plugins/jso/jso-compiler/tests-gen",
+            "plugins/jso/jso-compiler/testData"
         ) {
             // ------------------------------- diagnostics -------------------------------
 //            testClass<AbstractJsObjectPluginDiagnosticTest>() {
