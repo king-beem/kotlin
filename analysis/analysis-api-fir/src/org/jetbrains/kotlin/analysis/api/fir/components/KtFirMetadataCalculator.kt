@@ -16,6 +16,7 @@ import org.jetbrains.kotlin.analysis.api.components.KtMetadataCalculator
 import org.jetbrains.kotlin.analysis.api.fir.KtFirAnalysisSession
 import org.jetbrains.kotlin.analysis.low.level.api.fir.api.getOrBuildFirFile
 import org.jetbrains.kotlin.analysis.low.level.api.fir.api.getOrBuildFirOfType
+import org.jetbrains.kotlin.analysis.low.level.api.fir.util.getContainingFile
 import org.jetbrains.kotlin.analysis.project.structure.KtSourceModule
 import org.jetbrains.kotlin.backend.jvm.JvmBackendExtension
 import org.jetbrains.kotlin.codegen.ClassBuilderMode
@@ -32,8 +33,8 @@ import org.jetbrains.kotlin.fir.declarations.utils.classId
 import org.jetbrains.kotlin.fir.declarations.utils.hasBackingField
 import org.jetbrains.kotlin.fir.languageVersionSettings
 import org.jetbrains.kotlin.fir.psi
+import org.jetbrains.kotlin.fir.render
 import org.jetbrains.kotlin.fir.resolve.ScopeSession
-import org.jetbrains.kotlin.fir.resolve.providers.firProvider
 import org.jetbrains.kotlin.fir.serialization.FirElementAwareStringTable
 import org.jetbrains.kotlin.fir.serialization.FirElementSerializer
 import org.jetbrains.kotlin.fir.symbols.lazyResolveToPhase
@@ -68,7 +69,7 @@ internal class KtFirMetadataCalculator(override val analysisSession: KtFirAnalys
 
     override fun calculateMetadata(ktClass: KtClassOrObject, mapping: Multimap<KtElement, PsiElement>): Metadata {
         val firClass = ktClass.getOrBuildFirOfType<FirRegularClass>(firResolveSession)
-        val firFile = firSession.firProvider.getFirClassifierContainerFile(firClass.symbol)
+        val firFile = firClass.getContainingFile() ?: error("No containing file for: ${firClass.render()}")
         val bindings = JvmSerializationBindings().also { collectBindings(firClass.declarations, mapping, it) }
         val (serializer, stringTable) = createTopLevelSerializer(bindings)
         val classProto = serializer.classProto(firClass, firFile)

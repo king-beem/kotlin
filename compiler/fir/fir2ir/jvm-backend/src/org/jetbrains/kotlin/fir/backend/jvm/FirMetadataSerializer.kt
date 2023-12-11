@@ -131,7 +131,9 @@ class FirMetadataSerializer(
 
     override fun serialize(metadata: MetadataSource): Pair<MessageLite, JvmStringTable>? {
         val message = when (metadata) {
-            is FirMetadataSource.Class -> serializer!!.classProto(metadata.fir, containingFile).build()
+            is FirMetadataSource.Class -> serializer!!.classProto(
+                metadata.fir, containingFile ?: error("No containing file for class: ${metadata.fir.render()}")
+            ).build()
             is FirMetadataSource.File -> serializer!!.packagePartProto(metadata.fir, actualizedExpectDeclarations).build()
             is FirMetadataSource.Function -> {
                 val withTypeParameters = metadata.fir.copyToFreeAnonymousFunction(approximator)
