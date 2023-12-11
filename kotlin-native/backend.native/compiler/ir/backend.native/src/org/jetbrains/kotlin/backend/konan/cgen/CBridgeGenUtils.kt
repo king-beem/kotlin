@@ -115,7 +115,7 @@ private fun createKotlinBridge(
         foreignExceptionMode: ForeignExceptionMode.Mode,
         origin: IrDeclarationOrigin
 ): IrFunction {
-    val bridge = IrFactoryImpl.createSimpleFunction(
+    val bridge = stubs.irBuiltIns.irFactory.createSimpleFunction(
             startOffset,
             endOffset,
             origin,
