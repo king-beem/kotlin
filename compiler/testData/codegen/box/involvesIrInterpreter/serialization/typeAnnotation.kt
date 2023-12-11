@@ -13,7 +13,7 @@ annotation class TypeAnnotation(val str: String)
 
 open class A
 interface B
-//class C : @TypeAnnotation("AClass" + "Anno") A(), @TypeAnnotation("BInterface" + "Anno") B
+class C : @TypeAnnotation(<!EVALUATED("AClassAnno")!>"AClass" + "Anno"<!>) A(), @TypeAnnotation(<!EVALUATED("BInterfaceAnno")!>"BInterface" + "Anno"<!>) B
 
 val a: @TypeAnnotation(<!EVALUATED("IntAnno")!>"Int" + "Anno"<!>) Int = 1
 var b: @TypeAnnotation(<!EVALUATED("ListAnno")!>"List" + "Anno"<!>) List<
@@ -54,7 +54,7 @@ fun withAnonymousObject() {
 
 class Outer {
     inner class Inner {
-//        fun foo(): @TypeAnnotation("InsideInner" + "Anno") Int = 0
+        fun foo(): @TypeAnnotation(<!EVALUATED("InsideInnerAnno")!>"InsideInner" + "Anno"<!>) Int = 0
     }
 }
 

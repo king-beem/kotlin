@@ -33,7 +33,6 @@ import org.jetbrains.kotlin.fir.declarations.utils.classId
 import org.jetbrains.kotlin.fir.declarations.utils.hasBackingField
 import org.jetbrains.kotlin.fir.languageVersionSettings
 import org.jetbrains.kotlin.fir.psi
-import org.jetbrains.kotlin.fir.render
 import org.jetbrains.kotlin.fir.resolve.ScopeSession
 import org.jetbrains.kotlin.fir.serialization.FirElementAwareStringTable
 import org.jetbrains.kotlin.fir.serialization.FirElementSerializer
@@ -69,10 +68,9 @@ internal class KtFirMetadataCalculator(override val analysisSession: KtFirAnalys
 
     override fun calculateMetadata(ktClass: KtClassOrObject, mapping: Multimap<KtElement, PsiElement>): Metadata {
         val firClass = ktClass.getOrBuildFirOfType<FirRegularClass>(firResolveSession)
-        val firFile = firClass.getContainingFile() ?: error("No containing file for: ${firClass.render()}")
         val bindings = JvmSerializationBindings().also { collectBindings(firClass.declarations, mapping, it) }
         val (serializer, stringTable) = createTopLevelSerializer(bindings)
-        val classProto = serializer.classProto(firClass, firFile)
+        val classProto = serializer.classProto(firClass, firClass.getContainingFile()!!)
         return generateAnnotation(classProto.build(), stringTable, KotlinClassHeader.Kind.CLASS)
     }
 
