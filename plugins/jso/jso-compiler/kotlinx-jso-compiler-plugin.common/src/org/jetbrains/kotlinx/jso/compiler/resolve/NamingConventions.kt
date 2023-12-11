@@ -6,6 +6,7 @@
 package org.jetbrains.kotlinx.jso.compiler.resolve;
 
 import org.jetbrains.kotlin.name.CallableId
+import org.jetbrains.kotlin.name.ClassId
 import org.jetbrains.kotlin.name.FqName
 import org.jetbrains.kotlin.name.Name
 
@@ -15,7 +16,8 @@ object StandardIds {
 }
 
 object JsObjectAnnotations {
-    val jsSimpleObjectAnnotationFqName = FqName("kotlinx.jso.JsSimpleObject")
+    val jsSimpleObjectAnnotationClassId = ClassId(FqName("kotlinx.jso"), Name.identifier("JsSimpleObject"))
+    val jsSimpleObjectAnnotationFqName = jsSimpleObjectAnnotationClassId.asSingleFqName()
 }
 
 object SpecialNames {

@@ -6,10 +6,12 @@
 package org.jetbrains.kotlinx.jso.compiler.fir
 
 import org.jetbrains.kotlin.fir.extensions.FirExtensionRegistrar
+import org.jetbrains.kotlinx.jso.compiler.fir.checkers.FirJsoCheckersComponent
 import org.jetbrains.kotlinx.jso.compiler.fir.services.JsSimpleObjectPropertiesProvider
 
 class JsObjectExtensionRegistrar : FirExtensionRegistrar() {
     override fun ExtensionRegistrarContext.configurePlugin() {
+        +::FirJsoCheckersComponent
         +::JsObjectFunctionsGenerator
         // services
         +::JsSimpleObjectPropertiesProvider

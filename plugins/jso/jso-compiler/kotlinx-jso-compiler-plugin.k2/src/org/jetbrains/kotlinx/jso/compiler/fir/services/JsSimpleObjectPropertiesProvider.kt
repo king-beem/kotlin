@@ -1,7 +1,11 @@
+/*
+ * Copyright 2010-2023 JetBrains s.r.o. and Kotlin Programming Language contributors.
+ * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
+ */
+
 package org.jetbrains.kotlinx.jso.compiler.fir.services
 
 import org.jetbrains.kotlin.descriptors.ClassKind
-import org.jetbrains.kotlin.descriptors.DescriptorVisibilities
 import org.jetbrains.kotlin.descriptors.Visibilities
 import org.jetbrains.kotlin.fir.FirSession
 import org.jetbrains.kotlin.fir.caches.FirCache
@@ -12,7 +16,6 @@ import org.jetbrains.kotlin.fir.declarations.hasAnnotation
 import org.jetbrains.kotlin.fir.declarations.utils.visibility
 import org.jetbrains.kotlin.fir.extensions.FirDeclarationPredicateRegistrar
 import org.jetbrains.kotlin.fir.extensions.FirExtensionSessionComponent
-import org.jetbrains.kotlin.fir.resolve.fqName
 import org.jetbrains.kotlin.fir.resolve.fullyExpandedType
 import org.jetbrains.kotlin.fir.scopes.impl.declaredMemberScope
 import org.jetbrains.kotlin.fir.scopes.processAllProperties
@@ -36,7 +39,7 @@ class JsSimpleObjectPropertiesProvider(session: FirSession) : FirExtensionSessio
     }
 
     private fun createJsSimpleObjectProperties(classSymbol: FirClassSymbol<*>): List<FirPropertySymbol> =
-        if (!classSymbol.annotations.any { it.fqName(session) == JsObjectAnnotations.jsSimpleObjectAnnotationFqName }) {
+        if (!classSymbol.hasAnnotation(JsObjectAnnotations.jsSimpleObjectAnnotationClassId, session)) {
             emptyList()
         } else {
             buildList {

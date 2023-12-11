@@ -33,12 +33,6 @@ abstract class AbstractSerializationFirPsiDiagnosticTest : AbstractFirPsiDiagnos
             forTestsMatching("*/diagnostics/*") {
                 configurationForClassicAndFirTestsAlongside()
             }
-
-            forTestsMatching("*/firMembers/*") {
-                defaultDirectives {
-                    +FIR_DUMP
-                }
-            }
         }
     }
 }

@@ -5,41 +5,30 @@
 
 package org.jetbrains.kotlinx.jso.runners
 
+import org.jetbrains.kotlin.platform.TargetPlatform
+import org.jetbrains.kotlin.platform.js.JsPlatforms
+import org.jetbrains.kotlin.test.TargetBackend
 import org.jetbrains.kotlin.test.builders.TestConfigurationBuilder
 import org.jetbrains.kotlin.test.directives.DiagnosticsDirectives.DIAGNOSTICS
-import org.jetbrains.kotlin.test.directives.FirDiagnosticsDirectives.FIR_DUMP
-import org.jetbrains.kotlin.test.runners.AbstractDiagnosticTest
+import org.jetbrains.kotlin.test.model.DependencyKind
+import org.jetbrains.kotlin.test.runners.AbstractFirPsiDiagnosticTest
 import org.jetbrains.kotlin.test.runners.configurationForClassicAndFirTestsAlongside
 
-abstract class AbstractJsObjectPluginDiagnosticTest : AbstractDiagnosticTest() {
+abstract class AbstractJsObjectPluginDiagnosticTest : AbstractFirPsiDiagnosticTest() {
     override fun configure(builder: TestConfigurationBuilder) {
         super.configure(builder)
         with(builder) {
+            globalDefaults {
+                targetPlatform = JsPlatforms.defaultJsPlatform
+                targetBackend = TargetBackend.JS_IR
+                dependencyKind = DependencyKind.Source
+            }
+
             configureForKotlinxJsObject()
             disableOptInErrors()
         }
     }
 }
-
-//abstract class AbstractJsObjectFirDiagnosticTest : AbstractFirDiagnosticTest() {
-//    override fun configure(builder: TestConfigurationBuilder) {
-//        super.configure(builder)
-//        with(builder) {
-//            configureForKotlinxSerialization()
-//            disableOptInErrors()
-//
-//            forTestsMatching("*/diagnostics/*") {
-//                configurationForClassicAndFirTestsAlongside()
-//            }
-//
-//            forTestsMatching("*/firMembers/*") {
-//                defaultDirectives {
-//                    +FIR_DUMP
-//                }
-//            }
-//        }
-//    }
-//}
 
 private fun TestConfigurationBuilder.disableOptInErrors() {
     defaultDirectives {
