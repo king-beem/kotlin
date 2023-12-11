@@ -79,6 +79,7 @@ class IncrementalCompilationOptions(
     val withAbiSnapshot: Boolean = false,
     val preciseCompilationResultsBackup: Boolean = false,
     val keepIncrementalCompilationCachesInMemory: Boolean = false,
+    val commonSources: Set<File> = emptySet()
 ) : CompilationOptions(
     compilerMode,
     targetPlatform,

@@ -23,6 +23,7 @@ internal class IncrementalCompilationEnvironment(
     val withAbiSnapshot: Boolean = false,
     val preciseCompilationResultsBackup: Boolean = false,
     val keepIncrementalCompilationCachesInMemory: Boolean = false,
+    val commonSources: Set<File> = emptySet()
 ) : Serializable {
     companion object {
         const val serialVersionUID: Long = 3

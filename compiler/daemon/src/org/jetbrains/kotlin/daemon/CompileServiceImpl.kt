@@ -686,6 +686,7 @@ abstract class CompileServiceImplBase(
             withAbiSnapshot = incrementalCompilationOptions.withAbiSnapshot,
             preciseCompilationResultsBackup = incrementalCompilationOptions.preciseCompilationResultsBackup,
             keepIncrementalCompilationCachesInMemory = incrementalCompilationOptions.keepIncrementalCompilationCachesInMemory,
+            commonSources = incrementalCompilationOptions.commonSources,
         )
         return try {
             compiler.compile(

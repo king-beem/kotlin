@@ -1,4 +1,4 @@
-/*
+ /*
  * Copyright 2010-2023 JetBrains s.r.o. and Kotlin Programming Language contributors.
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
@@ -22,6 +22,7 @@ import org.gradle.work.Incremental
 import org.gradle.work.InputChanges
 import org.gradle.work.NormalizeLineEndings
 import org.gradle.workers.WorkerExecutor
+import org.jetbrains.kotlin.buildtools.api.SourcesChanges
 import org.jetbrains.kotlin.cli.common.arguments.K2JVMCompilerArguments
 import org.jetbrains.kotlin.compilerRunner.GradleCompilerEnvironment
 import org.jetbrains.kotlin.compilerRunner.IncrementalCompilationEnvironment
@@ -329,6 +330,7 @@ abstract class KotlinCompile @Inject constructor(
                 withAbiSnapshot = useKotlinAbiSnapshot.get(),
                 preciseCompilationResultsBackup = preciseCompilationResultsBackup.get(),
                 keepIncrementalCompilationCachesInMemory = keepIncrementalCompilationCachesInMemory.get(),
+                commonSources = icCommonSources(multiplatformStructure)
             )
         } else null
 

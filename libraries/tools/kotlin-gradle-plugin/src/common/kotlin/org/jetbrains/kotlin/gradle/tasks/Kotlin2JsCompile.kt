@@ -267,6 +267,7 @@ abstract class Kotlin2JsCompile @Inject constructor(
                 multiModuleICSettings = multiModuleICSettings,
                 preciseCompilationResultsBackup = preciseCompilationResultsBackup.get(),
                 keepIncrementalCompilationCachesInMemory = keepIncrementalCompilationCachesInMemory.get(),
+                commonSources = icCommonSources(multiplatformStructure)
             )
         } else null
 

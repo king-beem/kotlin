@@ -26,6 +26,7 @@ import org.jetbrains.kotlin.compilerRunner.createGradleCompilerRunner
 import org.jetbrains.kotlin.daemon.common.MultiModuleICSettings
 import org.jetbrains.kotlin.gradle.dsl.ExplicitApiMode
 import org.jetbrains.kotlin.gradle.dsl.KotlinCommonCompilerOptions
+import org.jetbrains.kotlin.gradle.dsl.usesK2
 import org.jetbrains.kotlin.gradle.incremental.UsesIncrementalModuleInfoBuildService
 import org.jetbrains.kotlin.gradle.internal.UsesClassLoadersCachingBuildService
 import org.jetbrains.kotlin.gradle.internal.tasks.allOutputFiles
@@ -317,6 +318,24 @@ abstract class AbstractKotlinCompile<T : CommonCompilerArguments> @Inject constr
             inputChanges,
             taskOutputsBackup
         )
+    }
+
+    protected fun icCommonSources(
+        multiplatformStructure: K2MultiplatformStructure
+    ): Set<File> {
+        return if (multiPlatformEnabled.get()) {
+            return if (compilerOptions.usesK2.get()) {
+                multiplatformStructure.fragments.get()
+                    .flatMap {
+                        it.sources.asFileTree.matching(sourceFileFilter).files
+                    }
+                    .toSet()
+            } else {
+                commonSourceSet.asFileTree.files
+            }
+        } else {
+            emptySet()
+        }
     }
 
     protected fun getChangedFiles(
