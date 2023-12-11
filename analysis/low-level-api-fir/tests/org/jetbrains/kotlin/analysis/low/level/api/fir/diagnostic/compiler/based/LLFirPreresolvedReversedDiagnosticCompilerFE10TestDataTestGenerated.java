@@ -26050,15 +26050,63 @@ public class LLFirPreresolvedReversedDiagnosticCompilerFE10TestDataTestGenerated
                 }
 
                 @Test
-                @TestMetadata("propertyAgainstJavaFieldAndMethodIncompatibleVisibility.kt")
-                public void testPropertyAgainstJavaFieldAndMethodIncompatibleVisibility() throws Exception {
-                    runTest("compiler/testData/diagnostics/tests/multiplatform/java/propertyAgainstJavaFieldAndMethodIncompatibleVisibility.kt");
+                @TestMetadata("propertyAgainstFakeOverrideInJava.kt")
+                public void testPropertyAgainstFakeOverrideInJava() throws Exception {
+                    runTest("compiler/testData/diagnostics/tests/multiplatform/java/propertyAgainstFakeOverrideInJava.kt");
                 }
 
                 @Test
                 @TestMetadata("propertyAgainstJavaMethod.kt")
                 public void testPropertyAgainstJavaMethod() throws Exception {
                     runTest("compiler/testData/diagnostics/tests/multiplatform/java/propertyAgainstJavaMethod.kt");
+                }
+
+                @Test
+                @TestMetadata("propertyAgainstJavaPackagePrivateFieldAndPublicGetterInSamePkg.kt")
+                public void testPropertyAgainstJavaPackagePrivateFieldAndPublicGetterInSamePkg() throws Exception {
+                    runTest("compiler/testData/diagnostics/tests/multiplatform/java/propertyAgainstJavaPackagePrivateFieldAndPublicGetterInSamePkg.kt");
+                }
+
+                @Test
+                @TestMetadata("propertyAgainstJavaPrivateFieldAndPublicMethod.kt")
+                public void testPropertyAgainstJavaPrivateFieldAndPublicMethod() throws Exception {
+                    runTest("compiler/testData/diagnostics/tests/multiplatform/java/propertyAgainstJavaPrivateFieldAndPublicMethod.kt");
+                }
+
+                @Test
+                @TestMetadata("propertyAgainstJavaProtectedFieldAndPublicMethod.kt")
+                public void testPropertyAgainstJavaProtectedFieldAndPublicMethod() throws Exception {
+                    runTest("compiler/testData/diagnostics/tests/multiplatform/java/propertyAgainstJavaProtectedFieldAndPublicMethod.kt");
+                }
+
+                @Test
+                @TestMetadata("propertyAgainstJavaPublicFieldAndProtectedGetter.kt")
+                public void testPropertyAgainstJavaPublicFieldAndProtectedGetter() throws Exception {
+                    runTest("compiler/testData/diagnostics/tests/multiplatform/java/propertyAgainstJavaPublicFieldAndProtectedGetter.kt");
+                }
+
+                @Test
+                @TestMetadata("propertyAgainstValInJavaWithExtraSetter.kt")
+                public void testPropertyAgainstValInJavaWithExtraSetter() throws Exception {
+                    runTest("compiler/testData/diagnostics/tests/multiplatform/java/propertyAgainstValInJavaWithExtraSetter.kt");
+                }
+
+                @Test
+                @TestMetadata("protectedPropertyAgainstJavaPublicField.kt")
+                public void testProtectedPropertyAgainstJavaPublicField() throws Exception {
+                    runTest("compiler/testData/diagnostics/tests/multiplatform/java/protectedPropertyAgainstJavaPublicField.kt");
+                }
+
+                @Test
+                @TestMetadata("varPropertyAgainstJavaField.kt")
+                public void testVarPropertyAgainstJavaField() throws Exception {
+                    runTest("compiler/testData/diagnostics/tests/multiplatform/java/varPropertyAgainstJavaField.kt");
+                }
+
+                @Test
+                @TestMetadata("varPropertyAgainstJavaGetterAndNonFinalField.kt")
+                public void testVarPropertyAgainstJavaGetterAndNonFinalField() throws Exception {
+                    runTest("compiler/testData/diagnostics/tests/multiplatform/java/varPropertyAgainstJavaGetterAndNonFinalField.kt");
                 }
             }
 

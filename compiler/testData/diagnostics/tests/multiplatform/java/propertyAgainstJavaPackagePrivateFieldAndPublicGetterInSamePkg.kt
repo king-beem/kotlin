@@ -1,20 +1,25 @@
 // MODULE: m1-common
 // FILE: common.kt
-interface I {
-    val foo: Int
-}
+package com.example
 
-expect class Foo : I {
-    override val <!AMBIGUOUS_ACTUALS{JVM}!>foo<!>: Int
+expect class Foo {
+    val <!AMBIGUOUS_ACTUALS{JVM}!>foo<!>: Int
 }
 
 // MODULE: m2-jvm()()(m1-common)
 // FILE: jvm.kt
+package com.example
+
 actual typealias Foo = JavaFoo
 
+interface I {
+    val foo: Int
+}
 // FILE: JavaFoo.java
+package com.example;
+
 public class JavaFoo implements I {
-    private int foo = 1;
+    final int foo = 1;
 
     @Override
     public int getFoo() {

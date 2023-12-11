@@ -7,16 +7,13 @@ expect class Foo {
 
 // MODULE: m2-jvm()()(m1-common)
 // FILE: jvm.kt
-actual typealias Foo = JavaFoo
-
 interface I {
     val foo: Int
+        get() = 1
 }
+
+actual typealias Foo = JavaFoo
 
 // FILE: JavaFoo.java
 public class JavaFoo implements I {
-    @Override
-    public int getFoo() {
-        return 0;
-    }
 }
