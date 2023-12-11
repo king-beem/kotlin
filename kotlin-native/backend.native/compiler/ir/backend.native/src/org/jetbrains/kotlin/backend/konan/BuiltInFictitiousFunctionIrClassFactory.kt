@@ -386,7 +386,7 @@ internal class BuiltInFictitiousFunctionIrClassFactory(
 
         fun createFakeOverrideProperty(descriptor: PropertyDescriptor): IrProperty {
             val propertyDeclare = { s: IrPropertySymbol ->
-                IrFactoryImpl.createProperty(
+                symbolTable.irFactory.createProperty(
                         startOffset = offset,
                         endOffset = offset,
                         origin = memberOrigin,
