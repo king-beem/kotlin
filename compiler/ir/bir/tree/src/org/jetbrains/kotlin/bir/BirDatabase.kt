@@ -204,8 +204,8 @@ class BirDatabase : BirElementParent() {
             removeElementFromIndex(element)
         }
 
-        val recordedRef = backReferenceRecorder.recordedRef
-        recordedRef?.registerBackReference(element)
+        //val recordedRef = backReferenceRecorder.recordedRef
+        //recordedRef?.registerBackReference(element)
     }
 
     internal class BackReferenceRecorder() : BirElementBackReferenceRecorderScope {
