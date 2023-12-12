@@ -16504,6 +16504,11 @@ public class LightAnalysisModeTestGenerated extends AbstractLightAnalysisModeTes
             runTest("compiler/testData/codegen/box/fir/notFoundClasses.kt");
         }
 
+        @TestMetadata("publicMethodCallViaPackagePrivateCommon.kt")
+        public void testPublicMethodCallViaPackagePrivateCommon() throws Exception {
+            runTest("compiler/testData/codegen/box/fir/publicMethodCallViaPackagePrivateCommon.kt");
+        }
+
         @TestMetadata("SamWithReceiverMavenProjectImportHandler.kt")
         public void testSamWithReceiverMavenProjectImportHandler() throws Exception {
             runTest("compiler/testData/codegen/box/fir/SamWithReceiverMavenProjectImportHandler.kt");
