@@ -117,7 +117,7 @@ internal actual fun doubleToULong(value: Double): ULong = when {
 }
 
 @InlineOnly
-internal actual inline fun uintToString(value: Int): String = ulongToString(uintToLong(value), 10)
+internal actual inline fun uintToString(value: Int): String = uintToLong(value).toString()
 
 @InlineOnly
 internal actual inline fun uintToString(value: Int, base: Int): String = ulongToString(uintToLong(value), base)

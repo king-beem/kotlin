@@ -6,6 +6,7 @@
 package kotlin
 
 import kotlin.internal.InlineOnly
+import kotlin.math.abs
 import kotlin.wasm.internal.*
 import kotlin.wasm.internal.WasmOp
 import kotlin.wasm.internal.implementedAsIntrinsic
@@ -78,52 +79,61 @@ internal actual fun doubleToULong(value: Double): ULong = implementedAsIntrinsic
 @InlineOnly
 internal actual inline fun uintToString(value: Int): String = utoa32(value.toUInt())
 
-internal actual fun uintToString(value: Int, base: Int): String = numberToString(
-    value = value,
-    size = UInt.SIZE_BITS - 1,
-    base = base,
-    mod = { this % it },
-    div = { this / it },
-    contains = { it in this }
-)
-
-@InlineOnly
-internal actual inline fun ulongToString(value: Long): String = utoa64(value.toULong())
-
-internal actual fun ulongToString(value: Long, base: Int): String = numberToString(
-    value = value,
-    size = ULong.SIZE_BITS - 1,
-    base = base,
-    mod = { this % it },
-    div = { this / it },
-    contains = { it in this }
-)
-
-private inline fun <T : Number> numberToString(
-    value: T,
-    size: Int,
-    base: Int,
-    mod: T.(Int) -> T,
-    div: T.(Int) -> T,
-    contains: IntRange.(T) -> Boolean
-): String {
+internal actual fun uintToString(value: Int, base: Int): String {
     checkRadix(base)
 
-    var unsignedValue = value
+    var unsignedValue = value.toUInt()
 
     if (base == 10) return unsignedValue.toString()
-    if ((0 until base).contains(value)) return value.getChar().toString()
+    if (value in 0 until base) return value.getChar().toString()
 
-    val buffer = WasmCharArray(size)
+    val buffer = WasmCharArray(UInt.SIZE_BITS)
 
-    val radix = base
-    var currentBufferIndex = size
+    val ulongRadix = base.toUInt()
+    var currentBufferIndex = UInt.SIZE_BITS - 1
 
-    while (unsignedValue != 0) {
-        buffer.set(currentBufferIndex, (unsignedValue.mod(radix)).getChar())
-        unsignedValue = unsignedValue.div(radix)
+    while (unsignedValue != 0U) {
+        buffer.set(currentBufferIndex, (unsignedValue % ulongRadix).toLong().getChar())
+        unsignedValue /= ulongRadix
         currentBufferIndex--
     }
 
     return buffer.createStringStartingFrom(currentBufferIndex + 1)
 }
+
+@InlineOnly
+internal actual inline fun ulongToString(value: Long): String = utoa64(value.toULong())
+
+internal actual fun ulongToString(value: Long, base: Int): String {
+    checkRadix(base)
+
+    var unsignedValue = value.toULong()
+
+    if (base == 10) return unsignedValue.toString()
+    if (value in 0 until base) return value.getChar().toString()
+
+    val buffer = WasmCharArray(ULong.SIZE_BITS)
+
+    val ulongRadix = base.toULong()
+    var currentBufferIndex = ULong.SIZE_BITS - 1
+
+    while (unsignedValue != 0UL) {
+        buffer.set(currentBufferIndex, (unsignedValue % ulongRadix).toLong().getChar())
+        unsignedValue /= ulongRadix
+        currentBufferIndex--
+    }
+
+    return buffer.createStringStartingFrom(currentBufferIndex + 1)
+}
+
+internal fun WasmCharArray.createStringStartingFrom(index: Int): String {
+    if (index == 0) return createString()
+    val newLength = this.len() - index
+    if (newLength == 0) return ""
+    val newChars = WasmCharArray(newLength)
+    copyWasmArray(this, newChars, index, 0, newLength)
+    return newChars.createString()
+}
+
+internal fun Number.getChar() = toInt().let { if (it < 10) '0' + it else 'a' + (it - 10) }
+

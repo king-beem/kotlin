@@ -139,11 +139,6 @@ class WasmSymbols(
 
     private val consumeAnyIntoVoid = getInternalFunction("consumeAnyIntoVoid")
 
-    val uByteType by lazy { getIrClass(FqName("kotlin.UByte")).defaultType }
-    val uShortType by lazy { getIrClass(FqName("kotlin.UShort")).defaultType }
-    val uIntType by lazy { getIrClass(FqName("kotlin.UInt")).defaultType }
-    val uLongType by lazy { getIrClass(FqName("kotlin.ULong")).defaultType }
-
     private val consumePrimitiveIntoVoid = mapOf(
         context.irBuiltIns.booleanType to getInternalFunction("consumeBooleanIntoVoid"),
         context.irBuiltIns.byteType to getInternalFunction("consumeByteIntoVoid"),

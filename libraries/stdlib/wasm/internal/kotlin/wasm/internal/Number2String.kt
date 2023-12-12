@@ -48,17 +48,11 @@ internal fun itoa32(inputValue: Int): String {
     // We can't represent abs(Int.MIN_VALUE), so just hardcode it here
     if (inputValue == Int.MIN_VALUE) return "-2147483648"
 
-    val sign = inputValue ushr 31
-    assert(sign == 1 || sign == 0)
-    val absValue = (if (sign == 1) -inputValue else inputValue).toUInt()
+    val isNegative = inputValue < 0
+    val absValue = if (isNegative) -inputValue else inputValue
+    val absValueString = utoa32(absValue.toUInt())
 
-    val decimals = decimalCount32(absValue) + sign
-    val buf = WasmCharArray(decimals)
-    utoaDecSimple(buf, absValue, decimals)
-    if (sign == 1)
-        buf.set(0, CharCodes.MINUS.code.toChar())
-
-    return buf.createString()
+    return if (isNegative) "-$absValueString" else absValueString
 }
 
 internal fun utoa32(inputValue: UInt): String {
@@ -131,17 +125,11 @@ internal fun itoa64(inputValue: Long): String {
     // We can't represent abs(Long.MIN_VALUE), so just hardcode it here
     if (inputValue == Long.MIN_VALUE) return "-9223372036854775808"
 
-    val sign = (inputValue ushr 63).toInt()
-    assert(sign == 1 || sign == 0)
-    val absValue = (if (sign == 1) -inputValue else inputValue).toULong()
+    val isNegative = inputValue < 0
+    val absValue = if (isNegative) -inputValue else inputValue
+    val absValueString = utoa64(absValue.toULong())
 
-    val decimals = decimalCount64High(absValue) + sign
-    val buf = WasmCharArray(decimals)
-    utoaDecSimple64(buf, absValue, decimals)
-    if (sign == 1)
-        buf.set(0, CharCodes.MINUS.code.toChar())
-
-    return buf.createString()
+    return if (isNegative) "-$absValueString" else absValueString
 }
 
 internal fun utoa64(inputValue: ULong): String {
