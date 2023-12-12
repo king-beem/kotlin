@@ -68,33 +68,6 @@ open class FirDesignation(
 }
 
 private fun collectDesignationPath(target: FirElementWithResolveState): List<FirRegularClass>? {
-    val path = collectRealDesignationPath(target) ?: return null
-    return patchDesignationPathForCopy(target, path) ?: path
-}
-
-private fun patchDesignationPathForCopy(target: FirElementWithResolveState, targetPath: List<FirRegularClass>): List<FirRegularClass>? {
-    val targetModule = target.llFirModuleData.ktModule
-
-    if (targetModule is KtDanglingFileModule && targetModule.resolutionMode == DanglingFileResolutionMode.IGNORE_SELF) {
-        val targetPsiFile = targetModule.file ?: return null
-
-        val contextModule = targetModule.contextModule
-        val contextResolveSession = contextModule.getFirResolveSession(contextModule.project)
-
-        return buildList {
-            for (targetPathClass in targetPath) {
-                val targetPathPsi = targetPathClass.psi as? KtDeclaration ?: return null
-                val originalPathPsi = targetPathPsi.unwrapCopy(targetPsiFile) ?: return null
-                val originalPathClass = originalPathPsi.getOrBuildFirSafe<FirRegularClass>(contextResolveSession) ?: return null
-                add(originalPathClass)
-            }
-        }
-    }
-
-    return null
-}
-
-private fun collectRealDesignationPath(target: FirElementWithResolveState): List<FirRegularClass>? {
     when (target) {
         is FirSimpleFunction,
         is FirProperty,
@@ -212,14 +185,16 @@ private fun collectDesignationPathWithContainingClass(target: FirDeclaration, co
     if (chunks.any { it.shortClassName.isSpecial }) {
         val fallbackResult = collectDesignationPathWithTreeTraversal(target)
         if (fallbackResult != null) {
-            return fallbackResult
+            return patchDesignationPathIfNeeded(target, fallbackResult)
         }
     }
 
-    return chunks
+    val result = chunks
         .dropWhile { it.shortClassName.isSpecial }
         .map { resolveChunk(it) }
         .asReversed()
+
+    return patchDesignationPathIfNeeded(target, result)
 }
 
 /*
@@ -338,4 +313,30 @@ private fun FirDeclaration.scriptDesignation(): FirDesignationWithFile? {
         }
         else -> null
     }
+}
+
+internal fun patchDesignationPathIfNeeded(target: FirElementWithResolveState, targetPath: List<FirRegularClass>): List<FirRegularClass> {
+    return patchDesignationPathForCopy(target, targetPath) ?: targetPath
+}
+
+private fun patchDesignationPathForCopy(target: FirElementWithResolveState, targetPath: List<FirRegularClass>): List<FirRegularClass>? {
+    val targetModule = target.llFirModuleData.ktModule
+
+    if (targetModule is KtDanglingFileModule && targetModule.resolutionMode == DanglingFileResolutionMode.IGNORE_SELF) {
+        val targetPsiFile = targetModule.file ?: return null
+
+        val contextModule = targetModule.contextModule
+        val contextResolveSession = contextModule.getFirResolveSession(contextModule.project)
+
+        return buildList {
+            for (targetPathClass in targetPath) {
+                val targetPathPsi = targetPathClass.psi as? KtDeclaration ?: return null
+                val originalPathPsi = targetPathPsi.unwrapCopy(targetPsiFile) ?: return null
+                val originalPathClass = originalPathPsi.getOrBuildFirSafe<FirRegularClass>(contextResolveSession) ?: return null
+                add(originalPathClass)
+            }
+        }
+    }
+
+    return targetPath
 }

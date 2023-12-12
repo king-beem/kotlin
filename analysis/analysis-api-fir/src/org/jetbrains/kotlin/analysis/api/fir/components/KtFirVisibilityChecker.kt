@@ -69,7 +69,7 @@ internal class KtFirVisibilityChecker(
             else -> firResolveSession.getSessionFor(positionModule)
         }
 
-        val effectiveContainers = collectUseSiteContainers(position, firResolveSession, shouldUnwrapCopy).orEmpty()
+        val effectiveContainers = collectUseSiteContainers(position, firResolveSession).orEmpty()
 
         return effectiveSession.visibilityChecker.isVisible(
             candidateDeclaration,
