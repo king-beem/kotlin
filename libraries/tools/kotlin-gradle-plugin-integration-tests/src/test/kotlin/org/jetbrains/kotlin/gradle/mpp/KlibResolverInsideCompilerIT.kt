@@ -44,7 +44,7 @@ class KlibResolverInsideCompilerIT : KGPBaseTest() {
     fun testKlibsWithDuplicatedUniqueNameNotDiscriminated1(gradleVersion: GradleVersion, @TempDir tempDir: Path) {
         buildLibraryAndCompositeProjectForKT63573(
             baseDir = "mpp-klib-resolver-inside-compiler/klibs-with-duplicated-unique_name-library-and-composite-build",
-            languageVersion = "1.9",
+            languageVersion = EnforcedLanguageVersion.K1,
             tempDir, gradleVersion
         )
     }
@@ -54,7 +54,7 @@ class KlibResolverInsideCompilerIT : KGPBaseTest() {
     fun testKlibsWithDuplicatedUniqueNameNotDiscriminated2(gradleVersion: GradleVersion, @TempDir tempDir: Path) {
         buildLibraryAndCompositeProjectForKT63573(
             baseDir = "mpp-klib-resolver-inside-compiler/klibs-with-duplicated-unique_name-library-and-composite-build",
-            languageVersion = "2.0",
+            languageVersion = EnforcedLanguageVersion.K2,
             tempDir, gradleVersion
         )
     }
@@ -64,7 +64,7 @@ class KlibResolverInsideCompilerIT : KGPBaseTest() {
     fun testKlibsWithDuplicatedUniqueNameNotDiscriminated3(gradleVersion: GradleVersion, @TempDir tempDir: Path) {
         buildTwoLibrariesAndAppForKT63573(
             baseDir = "mpp-klib-resolver-inside-compiler/klibs-with-duplicated-unique_name-library-x2-and-app",
-            languageVersion = "1.9",
+            languageVersion = EnforcedLanguageVersion.K1,
             tempDir, gradleVersion
         )
     }
@@ -74,7 +74,7 @@ class KlibResolverInsideCompilerIT : KGPBaseTest() {
     fun testKlibsWithDuplicatedUniqueNameNotDiscriminated4(gradleVersion: GradleVersion, @TempDir tempDir: Path) {
         buildTwoLibrariesAndAppForKT63573(
             baseDir = "mpp-klib-resolver-inside-compiler/klibs-with-duplicated-unique_name-library-x2-and-app",
-            languageVersion = "2.0",
+            languageVersion = EnforcedLanguageVersion.K2,
             tempDir, gradleVersion
         )
     }
@@ -85,16 +85,22 @@ class KlibResolverInsideCompilerIT : KGPBaseTest() {
         return localRepo
     }
 
+    private enum class EnforcedLanguageVersion { K1, K2 }
+
     private fun buildProject(
         baseDir: String,
         projectName: String,
         gradleVersion: GradleVersion,
         localRepoDir: Path,
-        languageVersion: String? = null,
+        languageVersion: EnforcedLanguageVersion? = null,
         buildTask: String = "build",
     ) {
         val buildOptions = with(defaultBuildOptions) {
-            if (languageVersion != null) copy(languageVersion = languageVersion) else this
+            when (languageVersion) {
+                EnforcedLanguageVersion.K1 -> copyEnsuringK1()
+                EnforcedLanguageVersion.K2 -> copyEnsuringK2()
+                else -> this
+            }
         }
 
         project("$baseDir/$projectName", gradleVersion, buildOptions, localRepoDir = localRepoDir) {
@@ -147,7 +153,7 @@ class KlibResolverInsideCompilerIT : KGPBaseTest() {
 
     private fun buildLibraryAndCompositeProjectForKT63573(
         baseDir: String,
-        languageVersion: String,
+        languageVersion: EnforcedLanguageVersion,
         tempDir: Path,
         gradleVersion: GradleVersion,
     ) {
@@ -159,7 +165,7 @@ class KlibResolverInsideCompilerIT : KGPBaseTest() {
 
     private fun buildTwoLibrariesAndAppForKT63573(
         baseDir: String,
-        languageVersion: String,
+        languageVersion: EnforcedLanguageVersion,
         tempDir: Path,
         gradleVersion: GradleVersion,
     ) {
