@@ -176,7 +176,7 @@ abstract class BirImplElementBase : BirElementBase() {
         if (classifiedElement === this) {
             observedPropertiesBitSet = observedPropertiesBitSet or (1 shl propertyId).toShort()
         } else {
-            registerDependentElement(classifiedElement)
+            //registerDependentElement(classifiedElement)
         }
     }
 
