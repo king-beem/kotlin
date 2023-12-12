@@ -14063,6 +14063,12 @@ public class DiagnosticCompilerTestFE10TestdataTestGenerated extends AbstractDia
             }
 
             @Test
+            @TestMetadata("explicitAnonymousFunctionReturnType.kt")
+            public void testExplicitAnonymousFunctionReturnType() throws Exception {
+                runTest("compiler/testData/diagnostics/tests/functionLiterals/explicitAnonymousFunctionReturnType.kt");
+            }
+
+            @Test
             @TestMetadata("functionExpressionAsLastExpressionInBlock.kt")
             public void testFunctionExpressionAsLastExpressionInBlock() throws Exception {
                 runTest("compiler/testData/diagnostics/tests/functionLiterals/functionExpressionAsLastExpressionInBlock.kt");
@@ -14156,12 +14162,6 @@ public class DiagnosticCompilerTestFE10TestdataTestGenerated extends AbstractDia
             @TestMetadata("kt56138.kt")
             public void testKt56138() throws Exception {
                 runTest("compiler/testData/diagnostics/tests/functionLiterals/kt56138.kt");
-            }
-
-            @Test
-            @TestMetadata("kt63563.kt")
-            public void testKt63563() throws Exception {
-                runTest("compiler/testData/diagnostics/tests/functionLiterals/kt63563.kt");
             }
 
             @Test

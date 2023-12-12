@@ -117,24 +117,21 @@ object FirFunctionReturnTypeMismatchChecker : FirReturnExpressionChecker() {
 
     private fun shouldCheckMismatchForAnonymousFunction(targetElement: FirFunction, expression: FirReturnExpression, context: CheckerContext): Boolean {
         if (targetElement !is FirAnonymousFunction || !targetElement.isLambda) return true
-        val cfgNodes = targetElement.controlFlowGraphReference?.controlFlowGraph?.exitNode?.previousCfgNodes ?: return true
-        val functionCall = context.callsOrAssignments.lastOrNull() as? FirFunctionCall
-        if (functionCall != null) {
-            val argumentList = functionCall.argumentList
-            if (argumentList is FirResolvedArgumentList) {
-                for ((key, value) in argumentList.mapping) {
-                    val anonymousFunction = when (key) {
-                        is FirAnonymousFunctionExpression -> key.anonymousFunction
-                        is FirLambdaArgumentExpression -> (key.expression as? FirAnonymousFunctionExpression)?.anonymousFunction
-                        else -> null
-                    } ?: continue
-                    if (anonymousFunction == targetElement && value.returnTypeRef.coneType.returnType(context.session) !is ConeTypeParameterType) {
-                        return true
-                    }
+
+        // Check types if return type of enclosing function is not generic
+        val currentCallArgs = (context.callsOrAssignments.lastOrNull() as? FirFunctionCall)?.argumentList
+        if (currentCallArgs is FirResolvedArgumentList) {
+            for ((key, value) in currentCallArgs.mapping) {
+                val anonymousFunction = key.unwrapAnonymousFunctionExpression() ?: continue
+                if (anonymousFunction == targetElement &&
+                    value.returnTypeRef.coneType.returnType(context.session) !is ConeTypeParameterType
+                ) {
+                    return true
                 }
             }
         }
 
+        val cfgNodes = targetElement.controlFlowGraphReference?.controlFlowGraph?.exitNode?.previousCfgNodes ?: return true
         // Check if any return expression other than the current is explicit and not Unit
         return cfgNodes.any {
             val fir = it.fir
