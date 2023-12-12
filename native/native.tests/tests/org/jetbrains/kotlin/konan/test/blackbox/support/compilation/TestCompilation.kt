@@ -59,7 +59,9 @@ internal abstract class BasicCompilation<A : TestCompilationArtifact>(
             "-enable-assertions",
             "-Xverify-ir=error"
         )
-        add("-Xllvm-variant=dev")  // FileCheck utility is provided in `LLVM dev`, not `LLVM user`
+        // We use dev distribution for tests as it provides a full set of testing utilities,
+        // which might not be available in user distribution.
+        add("-Xllvm-variant=dev")
         addFlattened(binaryOptions.entries) { (name, value) -> listOf("-Xbinary=$name=$value") }
     }
 
