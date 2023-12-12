@@ -34,3 +34,5 @@ internal inline suspend fun getCoroutineContext(): CoroutineContext = getContinu
 @PublishedApi
 internal inline suspend fun <T> suspendCoroutineUninterceptedOrReturnJS(block: (Continuation<T>) -> Any?): T =
     returnIfSuspended<T>(block(getContinuation<T>()))
+
+
