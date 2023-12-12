@@ -51,9 +51,10 @@ internal sealed interface TestCompilationArtifact {
         /**
          * Might not exist if the library was compiled without a header.
          */
-        val headerFile: File? get() {
-            val expectedFile = libraryFile.resolveSibling("${libraryFile.nameWithoutExtension}_api.h")
-            return if (expectedFile.exists()) expectedFile else null
-        }
+        val headerFile: File?
+            get() {
+                val expectedFile = libraryFile.resolveSibling("${libraryFile.nameWithoutExtension}_api.h")
+                return expectedFile.takeIf { it.exists() }
+            }
     }
 }
