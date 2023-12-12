@@ -373,6 +373,7 @@
 /plugins/kapt4/ "Kotlin JVM"
 /plugins/kotlinx-serialization/ Sergey.Shanshin Leonid.Startsev
 /plugins/jso/ "Kotlin JS"
+/libraries/tools/jso "Kotlin JS"
 /plugins/lombok/ "Kotlin Compiler Core"
 /plugins/noarg/ "Kotlin Compiler Core"
 /plugins/parcelize/ "Kotlin Compiler Core"
