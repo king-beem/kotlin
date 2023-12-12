@@ -13,7 +13,6 @@ import org.jetbrains.kotlin.test.TestJdkKind
 import org.jetbrains.kotlin.test.backend.handlers.*
 import org.jetbrains.kotlin.test.backend.ir.IrActualizerAndPluginsFacade
 import org.jetbrains.kotlin.test.backend.ir.IrBackendInput
-import org.jetbrains.kotlin.test.bind
 import org.jetbrains.kotlin.test.builders.*
 import org.jetbrains.kotlin.test.directives.CodegenTestDirectives
 import org.jetbrains.kotlin.test.directives.CodegenTestDirectives.DUMP_SMAP
@@ -102,7 +101,7 @@ fun TestConfigurationBuilder.useIrInliner() {
 
 fun TestConfigurationBuilder.useInlineScopesNumbers() {
     defaultDirectives {
-        +LanguageSettingsDirectives.ENABLE_INLINE_SCOPES_NUMBERS
+        +LanguageSettingsDirectives.USE_INLINE_SCOPES_NUMBERS
     }
 }
 
