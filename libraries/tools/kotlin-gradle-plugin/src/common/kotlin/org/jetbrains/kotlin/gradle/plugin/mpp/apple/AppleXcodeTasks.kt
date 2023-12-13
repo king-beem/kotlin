@@ -186,23 +186,28 @@ private fun fireSandboxException(frameworkTaskName: String) {
     )
 }
 
-private fun buildProductsDirAccessible(): Boolean {
-    val userScriptSandboxingEnabled = XcodeEnvironment.userScriptSandboxingEnabled
+private enum class DirAccessibility {
+    ACCESSIBLE,
+    NOT_ACCESSIBLE,
+    DOES_NOT_EXIST
+}
+
+private fun buildProductsDirAccessibility(): DirAccessibility {
     val buildProductsDir = XcodeEnvironment.buildProductsDir
 
-    return if (buildProductsDir != null && userScriptSandboxingEnabled.not()) {
+    return if (buildProductsDir != null) {
         try {
             Files.createDirectories(buildProductsDir.toPath())
             val tempFile = File.createTempFile("sandbox", ".tmp", buildProductsDir)
             if (tempFile.exists()) {
                 tempFile.delete()
             }
-            true
+            DirAccessibility.ACCESSIBLE
         } catch (e: IOException) {
-            false
+            DirAccessibility.NOT_ACCESSIBLE
         }
     } else {
-        false
+        DirAccessibility.DOES_NOT_EXIST
     }
 }
 
@@ -235,9 +240,14 @@ internal fun Project.registerEmbedAndSignAppleFrameworkTask(framework: Framework
         task.group = BasePlugin.BUILD_GROUP
         task.description = "Check BUILT_PRODUCTS_DIR accessible and ENABLE_USER_SCRIPT_SANDBOXING not enabled"
         task.doFirst {
-            val dirAccessible = buildProductsDirAccessible()
-            if (dirAccessible.not() || userScriptSandboxingEnabled) {
-                fireSandboxException(frameworkTaskName)
+            val dirAccessible = buildProductsDirAccessibility()
+            when (dirAccessible) {
+                DirAccessibility.NOT_ACCESSIBLE -> fireSandboxException(frameworkTaskName)
+                DirAccessibility.DOES_NOT_EXIST,
+                DirAccessibility.ACCESSIBLE
+                -> if (userScriptSandboxingEnabled) {
+                    fireSandboxException(frameworkTaskName)
+                }
             }
         }
     }
