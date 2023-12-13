@@ -7,9 +7,11 @@
 // TARGET_PLATFORM: Common
 // FILE: expect.kt
 
+import kotlin.jvm.JvmInline
+
 class Session<T>(val value: T)
 
-@kotlin.jvm.JvmInline
+@JvmInline
 value class SessionMutex<T> private constructor(
     private val currentSessionHolder: AtomicReference<Session<T>?>
 ) {
@@ -27,7 +29,6 @@ expect class AtomicReference<V>(value: V) {
 }
 
 // MODULE: main()()(common)
-// TARGET_PLATFORM: JVM
 // FILE: actual.kt
 
 internal actual typealias AtomicReference<V> = java.util.concurrent.atomic.AtomicReference<V>
