@@ -31963,6 +31963,12 @@ public class FirLightTreeOldFrontendDiagnosticsTestGenerated extends AbstractFir
             }
 
             @Test
+            @TestMetadata("savedSmartcastResult.kt")
+            public void testSavedSmartcastResult() throws Exception {
+                runTest("compiler/testData/diagnostics/tests/smartCasts/savedSmartcastResult.kt");
+            }
+
+            @Test
             @TestMetadata("severalSmartCastsOnReified.kt")
             public void testSeveralSmartCastsOnReified() throws Exception {
                 runTest("compiler/testData/diagnostics/tests/smartCasts/severalSmartCastsOnReified.kt");
