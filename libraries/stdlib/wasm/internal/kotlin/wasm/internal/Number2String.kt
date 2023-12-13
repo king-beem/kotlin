@@ -4,6 +4,8 @@
  */
 package kotlin.wasm.internal
 
+// Based on the AssemblyScript implementation [https://github.com/AssemblyScript/assemblyscript/blob/1e0466ef94fa5cacd0984e4f31a0087de51538a8/std/assembly/util/number.ts]
+
 private enum class CharCodes(val code: Int) {
 //  PERCENT(0x25),
     PLUS(0x2B),
@@ -42,7 +44,6 @@ private fun digitToChar(input: Int): Char {
     return (CharCodes._0.code + input).toChar()
 }
 
-// Inspired by the AssemblyScript implementation
 internal fun itoa32(inputValue: Int): String {
     if (inputValue == 0) return "0"
     // We can't represent abs(Int.MIN_VALUE), so just hardcode it here
