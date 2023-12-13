@@ -2,7 +2,7 @@ import org.jetbrains.kotlin.gradle.plugin.KotlinPlatformType
 import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinUsages
 import org.jetbrains.kotlin.gradle.targets.js.KotlinJsCompilerAttribute
 
-description = "Kotlin JavaScript Object Compiler Plugin"
+description = "JavaScript Object Compiler Plugin"
 
 plugins {
     kotlin("jvm")
