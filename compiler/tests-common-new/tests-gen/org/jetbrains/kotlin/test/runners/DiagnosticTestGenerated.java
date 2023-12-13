@@ -21627,6 +21627,12 @@ public class DiagnosticTestGenerated extends AbstractDiagnosticTest {
             }
 
             @Test
+            @TestMetadata("javaSupertypeNameDisambiguation.kt")
+            public void testJavaSupertypeNameDisambiguation() throws Exception {
+                runTest("compiler/testData/diagnostics/tests/j+k/javaSupertypeNameDisambiguation.kt");
+            }
+
+            @Test
             @TestMetadata("KJKInheritance.kt")
             public void testKJKInheritance() throws Exception {
                 runTest("compiler/testData/diagnostics/tests/j+k/KJKInheritance.kt");

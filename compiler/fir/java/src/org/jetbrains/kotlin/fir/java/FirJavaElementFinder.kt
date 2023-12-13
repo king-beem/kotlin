@@ -270,10 +270,15 @@ private fun collectAllDependentSourceSessionsTo(destination: MutableList<FirSess
 }
 
 private fun FirRegularClass.packFlags(): Int {
+    // Java resolving subsystem requires calculated visibility for correct disambiguation of some types.
+    // But visibility remains `Unknown` during supertypes resolving because `STATUS` resolve phase is performed after `SUPER_TYPES` phase.
+    // That's why `Unknown` visibility should be treated as `Public` for Kotlin supertypes to disambiguate cases like KT-64127.
+    // It's not relevant to kotlin subsystem since it resolves all super types even `private` ones but report errors like `INVISIBLE_REFERENCE`.
     var flags = when (visibility) {
         Visibilities.Private -> ModifierFlags.PRIVATE_MASK
         Visibilities.Protected -> ModifierFlags.PROTECTED_MASK
-        Visibilities.Public -> ModifierFlags.PUBLIC_MASK
+        Visibilities.Public,
+        Visibilities.Unknown -> ModifierFlags.PUBLIC_MASK
         else -> ModifierFlags.PACKAGE_LOCAL_MASK
     }
 
