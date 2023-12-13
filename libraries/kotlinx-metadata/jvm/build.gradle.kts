@@ -104,6 +104,10 @@ tasks.dokkaHtml.configure {
     }
 }
 
+tasks.check {
+    dependsOn(tasks.dokkaHtml)
+}
+
 sourcesJar()
 
 javadocJar()
