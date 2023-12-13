@@ -20,6 +20,7 @@ import org.jetbrains.kotlin.fir.scopes.impl.typeAliasForConstructor
 import org.jetbrains.kotlin.fir.symbols.FirBasedSymbol
 import org.jetbrains.kotlin.fir.symbols.impl.*
 import org.jetbrains.kotlin.name.ClassId
+import org.jetbrains.kotlin.name.SpecialNames
 import org.jetbrains.kotlin.utils.SmartSet
 
 object FirConflictsDeclarationChecker : FirBasicDeclarationChecker() {
@@ -41,12 +42,23 @@ object FirConflictsDeclarationChecker : FirBasicDeclarationChecker() {
             else -> {
                 if (declaration.source?.kind !is KtFakeSourceElementKind && declaration is FirTypeParameterRefsOwner) {
                     if (declaration is FirFunction) {
-                        checkForLocalRedeclarations(declaration.valueParameters, context, reporter)
+                        val destructuredParameters = getDestructuredParameters(declaration)
+                        checkForLocalRedeclarations(destructuredParameters, context, reporter)
                     }
                     checkForLocalRedeclarations(declaration.typeParameters, context, reporter)
                 }
             }
         }
+    }
+
+    private fun getDestructuredParameters(function: FirFunction): List<FirVariable> {
+        if (function.valueParameters.none { it.name == SpecialNames.DESTRUCT }) return function.valueParameters
+        val destructuredParametersBoxes = function.valueParameters.filterTo(mutableSetOf()) { it.name == SpecialNames.DESTRUCT }
+        val destructuredParameters = function.body?.statements.orEmpty().mapNotNull {
+            val destructuredParameter = getDestructuredParameter(it)
+            if (destructuredParameter != null && destructuredParameter in destructuredParametersBoxes) it else null
+        }
+        return function.valueParameters + destructuredParameters
     }
 
     private fun reportConflicts(

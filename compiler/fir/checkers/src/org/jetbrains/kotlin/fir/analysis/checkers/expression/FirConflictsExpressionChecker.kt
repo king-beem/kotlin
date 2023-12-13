@@ -10,12 +10,13 @@ import org.jetbrains.kotlin.diagnostics.reportOn
 import org.jetbrains.kotlin.fir.analysis.checkers.checkForLocalRedeclarations
 import org.jetbrains.kotlin.fir.analysis.checkers.collectConflictingLocalFunctionsFrom
 import org.jetbrains.kotlin.fir.analysis.checkers.context.CheckerContext
+import org.jetbrains.kotlin.fir.analysis.checkers.getDestructuredParameter
 import org.jetbrains.kotlin.fir.analysis.diagnostics.FirErrors
 import org.jetbrains.kotlin.fir.expressions.FirBlock
 
 object FirConflictsExpressionChecker : FirBlockChecker() {
     override fun check(expression: FirBlock, context: CheckerContext, reporter: DiagnosticReporter) {
-        checkForLocalRedeclarations(expression.statements, context, reporter)
+        checkForLocalRedeclarations(expression.statements.filter { getDestructuredParameter(it) == null }, context, reporter)
         checkForLocalConflictingFunctions(expression, context, reporter)
     }
 
