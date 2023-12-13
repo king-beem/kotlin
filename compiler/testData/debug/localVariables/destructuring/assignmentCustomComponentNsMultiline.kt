@@ -24,7 +24,7 @@ fun box(): String {
     return o + k
 }
 
-// EXPECTATIONS JVM JVM_IR
+// EXPECTATIONS JVM JVM_IR JVM_IR +USE_INLINE_SCOPES_NUMBERS
 // test.kt:15 box:
 // test.kt:4 <init>: x:java.lang.String="X":java.lang.String, y:java.lang.String="Y":java.lang.String
 // test.kt:15 box:
@@ -34,9 +34,9 @@ fun box(): String {
 // test.kt:10 component2:
 // EXPECTATIONS JVM
 // test.kt:20 box: p:MyPair=MyPair
-// EXPECTATIONS JVM_IR
+// EXPECTATIONS JVM_IR JVM_IR +USE_INLINE_SCOPES_NUMBERS
 // test.kt:20 box: p:MyPair=MyPair, o:java.lang.String="O":java.lang.String
-// EXPECTATIONS JVM JVM_IR
+// EXPECTATIONS JVM JVM_IR JVM_IR +USE_INLINE_SCOPES_NUMBERS
 // test.kt:24 box: p:MyPair=MyPair, o:java.lang.String="O":java.lang.String, k:java.lang.String="K":java.lang.String
 
 // EXPECTATIONS JS_IR

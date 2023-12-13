@@ -34,17 +34,17 @@ fun box() {
 // of each of the conditions, but goes directly to the right body.
 // JVM_IR stepping behavior here is the same as for `whenMultiLineSubject.kt`.
 
-// EXPECTATIONS JVM JVM_IR
+// EXPECTATIONS JVM JVM_IR JVM_IR +USE_INLINE_SCOPES_NUMBERS
 // test.kt:27 box
 // test.kt:5 foo
 // EXPECTATIONS JVM
 // test.kt:6 foo
-// EXPECTATIONS JVM JVM_IR
+// EXPECTATIONS JVM JVM_IR JVM_IR +USE_INLINE_SCOPES_NUMBERS
 // test.kt:7 foo
 // test.kt:14 foo
 // EXPECTATIONS JVM
 // test.kt:15 foo
-// EXPECTATIONS JVM JVM_IR
+// EXPECTATIONS JVM JVM_IR JVM_IR +USE_INLINE_SCOPES_NUMBERS
 // test.kt:16 foo
 // test.kt:14 foo
 // test.kt:23 foo
@@ -54,13 +54,13 @@ fun box() {
 // EXPECTATIONS JVM
 // test.kt:6 foo
 // test.kt:8 foo
-// EXPECTATIONS JVM JVM_IR
+// EXPECTATIONS JVM JVM_IR JVM_IR +USE_INLINE_SCOPES_NUMBERS
 // test.kt:9 foo
 // test.kt:14 foo
 // EXPECTATIONS JVM
 // test.kt:15 foo
 // test.kt:17 foo
-// EXPECTATIONS JVM JVM_IR
+// EXPECTATIONS JVM JVM_IR JVM_IR +USE_INLINE_SCOPES_NUMBERS
 // test.kt:18 foo
 // test.kt:14 foo
 // test.kt:23 foo
@@ -70,13 +70,13 @@ fun box() {
 // EXPECTATIONS JVM
 // test.kt:6 foo
 // test.kt:8 foo
-// EXPECTATIONS JVM JVM_IR
+// EXPECTATIONS JVM JVM_IR JVM_IR +USE_INLINE_SCOPES_NUMBERS
 // test.kt:11 foo
 // test.kt:14 foo
 // EXPECTATIONS JVM
 // test.kt:15 foo
 // test.kt:17 foo
-// EXPECTATIONS JVM JVM_IR
+// EXPECTATIONS JVM JVM_IR JVM_IR +USE_INLINE_SCOPES_NUMBERS
 // test.kt:20 foo
 // test.kt:14 foo
 // test.kt:23 foo

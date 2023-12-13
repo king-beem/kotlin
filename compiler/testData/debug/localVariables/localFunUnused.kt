@@ -24,7 +24,7 @@ fun box() {
 // test.kt:7 foo: $fun$bar$1:TestKt$foo$1=TestKt$foo$1
 // test.kt:11 box:
 
-// EXPECTATIONS JVM_IR JS_IR
+// EXPECTATIONS JVM_IR JVM_IR +USE_INLINE_SCOPES_NUMBERS JS_IR
 // test.kt:10 box:
 // test.kt:7 foo:
 // test.kt:11 box:

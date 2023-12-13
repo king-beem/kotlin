@@ -205,12 +205,12 @@ fun generateJUnit5CompilerTests(args: Array<String>, mainClassName: String?) {
                 model("debug/stepping")
             }
 
-            testClass<AbstractModularIrLocalVariableBytecodeInlinerTestWithInlineScopes> {
-                model("inlineScopes")
+            testClass<AbstractIrLocalVariableBytecodeInlinerTest>("ModularIrLocalVariableBytecodeInlinerTestWithInlineScopesGenerated") {
+                model("debug/inlineScopes")
             }
 
-            testClass<AbstractModularIrLocalVariableBytecodeInlinerTestWithInlineScopesAndFlagEnabled> {
-                model("inlineScopes")
+            testClass<AbstractIrLocalVariableBytecodeInlinerTestWithInlineScopes>("ModularIrLocalVariableBytecodeInlinerTestWithInlineScopesAndFlagEnabledGenerated") {
+                model("debug/inlineScopes")
             }
 
             testClass<AbstractIrSteppingWithBytecodeInlinerTestWithInlineScopes> {
@@ -229,31 +229,11 @@ fun generateJUnit5CompilerTests(args: Array<String>, mainClassName: String?) {
                 model("debug/localVariables")
             }
 
-            testClass<AbstractIrBlackBoxCodegenTestWithInlineScopes>("IrBlackBoxModernJdkCodegenTestGeneratedWithInlineScopes") {
-                model("codegen/boxModernJdk")
-            }
-
-            testClass<AbstractJvmIrAgainstOldBoxTestWithInlineScopes> {
-                model("codegen/box/compileKotlinAgainstKotlin")
-            }
-
-            testClass<AbstractJvmOldAgainstIrBoxTestWithInlineScopes> {
-                model("codegen/box/compileKotlinAgainstKotlin")
-            }
-
-            testClass<AbstractIrBytecodeTextTestWithInlineScopes> {
-                model("codegen/bytecodeText")
-            }
-
-            testClass<AbstractIrBlackBoxInlineCodegenWithBytecodeInlinerTestWithInlineScopes> {
+            testClass<AbstractIrBlackBoxCodegenTestWithInlineScopes> {
                 model("codegen/boxInline")
             }
 
             testClass<AbstractIrBlackBoxInlineCodegenWithIrInlinerTestWithInlineScopes> {
-                model("codegen/boxInline")
-            }
-
-            testClass<AbstractCompileKotlinAgainstInlineKotlinTestWithInlineScopes> {
                 model("codegen/boxInline")
             }
 
@@ -262,14 +242,6 @@ fun generateJUnit5CompilerTests(args: Array<String>, mainClassName: String?) {
             }
 
             testClass<AbstractIrSerializeCompileKotlinAgainstInlineKotlinTestWithInlineScopes> {
-                model("codegen/boxInline")
-            }
-
-            testClass<AbstractJvmIrAgainstOldBoxInlineTestWithInlineScopes> {
-                model("codegen/boxInline")
-            }
-
-            testClass<AbstractJvmOldAgainstIrBoxInlineTestWithInlineScopes> {
                 model("codegen/boxInline")
             }
 

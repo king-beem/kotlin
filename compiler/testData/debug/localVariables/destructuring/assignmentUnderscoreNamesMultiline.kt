@@ -19,15 +19,15 @@ fun box(): String {
     return o + k
 }
 
-// EXPECTATIONS JVM JVM_IR
+// EXPECTATIONS JVM JVM_IR JVM_IR +USE_INLINE_SCOPES_NUMBERS
 // test.kt:6 box:
 // test.kt:17 box: p:kotlin.Triple=kotlin.Triple
 // test.kt:12 box: p:kotlin.Triple=kotlin.Triple
 // EXPECTATIONS JVM
 // test.kt:14 box: p:kotlin.Triple=kotlin.Triple
-// EXPECTATIONS JVM_IR
+// EXPECTATIONS JVM_IR JVM_IR +USE_INLINE_SCOPES_NUMBERS
 // test.kt:14 box: p:kotlin.Triple=kotlin.Triple, o:java.lang.String="O":java.lang.String
-// EXPECTATIONS JVM JVM_IR
+// EXPECTATIONS JVM JVM_IR JVM_IR +USE_INLINE_SCOPES_NUMBERS
 // test.kt:19 box: p:kotlin.Triple=kotlin.Triple, o:java.lang.String="O":java.lang.String, k:java.lang.String="K":java.lang.String
 
 // EXPECTATIONS JS_IR

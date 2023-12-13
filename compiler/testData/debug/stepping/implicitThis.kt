@@ -28,7 +28,7 @@ class A {
     }
 }
 
-// EXPECTATIONS JVM JVM_IR
+// EXPECTATIONS JVM JVM_IR JVM_IR +USE_INLINE_SCOPES_NUMBERS
 // test.kt:5 box
 // test.kt:21 <clinit>
 // test.kt:16 <init>

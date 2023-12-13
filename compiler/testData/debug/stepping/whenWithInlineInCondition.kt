@@ -30,21 +30,21 @@ fun nop() {}
 
 // JVM_IR generates an additional line number for the end of the condition, which is necessary for the correct "step over" behavior.
 
-// EXPECTATIONS JVM JVM_IR
+// EXPECTATIONS JVM JVM_IR JVM_IR +USE_INLINE_SCOPES_NUMBERS
 // test.kt:4 box
 // test.kt:20 value
 // test.kt:4 box
 // test.kt:5 box
 // test.kt:6 box
 // test.kt:21 box
-// EXPECTATIONS JVM_IR
+// EXPECTATIONS JVM_IR JVM_IR +USE_INLINE_SCOPES_NUMBERS
 // test.kt:6 box
-// EXPECTATIONS JVM JVM_IR
+// EXPECTATIONS JVM JVM_IR JVM_IR +USE_INLINE_SCOPES_NUMBERS
 // test.kt:7 box
 // test.kt:22 box
-// EXPECTATIONS JVM_IR
+// EXPECTATIONS JVM_IR JVM_IR +USE_INLINE_SCOPES_NUMBERS
 // test.kt:7 box
-// EXPECTATIONS JVM JVM_IR
+// EXPECTATIONS JVM JVM_IR JVM_IR +USE_INLINE_SCOPES_NUMBERS
 // test.kt:8 box
 // test.kt:23 box
 // test.kt:8 box
@@ -59,9 +59,9 @@ fun nop() {}
 // test.kt:21 box
 // test.kt:14 box
 // test.kt:27 box
-// EXPECTATIONS JVM_IR
+// EXPECTATIONS JVM_IR JVM_IR +USE_INLINE_SCOPES_NUMBERS
 // test.kt:14 box
-// EXPECTATIONS JVM JVM_IR
+// EXPECTATIONS JVM JVM_IR JVM_IR +USE_INLINE_SCOPES_NUMBERS
 // test.kt:15 box
 // test.kt:22 box
 // test.kt:15 box

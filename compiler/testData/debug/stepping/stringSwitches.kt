@@ -42,7 +42,7 @@ fun box() {
 // does not. So on JVM there are steps on each condition evaluation for
 // the first `when`.
 
-// EXPECTATIONS JVM JVM_IR
+// EXPECTATIONS JVM JVM_IR JVM_IR +USE_INLINE_SCOPES_NUMBERS
 // test.kt:30 box
 // test.kt:5 stringSwitch
 // test.kt:6 stringSwitch
@@ -51,9 +51,9 @@ fun box() {
 // test.kt:13 stringSwitch
 // test.kt:12 stringSwitch
 // test.kt:20 stringSwitch
-// EXPECTATIONS JVM_IR
+// EXPECTATIONS JVM_IR JVM_IR +USE_INLINE_SCOPES_NUMBERS
 // test.kt:19 stringSwitch
-// EXPECTATIONS JVM JVM_IR
+// EXPECTATIONS JVM JVM_IR JVM_IR +USE_INLINE_SCOPES_NUMBERS
 // test.kt:22 stringSwitch
 // test.kt:19 stringSwitch
 // test.kt:27 stringSwitch
@@ -61,16 +61,16 @@ fun box() {
 // test.kt:5 stringSwitch
 // EXPECTATIONS JVM
 // test.kt:6 stringSwitch
-// EXPECTATIONS JVM JVM_IR
+// EXPECTATIONS JVM JVM_IR JVM_IR +USE_INLINE_SCOPES_NUMBERS
 // test.kt:7 stringSwitch
 // test.kt:5 stringSwitch
 // test.kt:12 stringSwitch
 // test.kt:14 stringSwitch
 // test.kt:12 stringSwitch
 // test.kt:20 stringSwitch
-// EXPECTATIONS JVM_IR
+// EXPECTATIONS JVM_IR JVM_IR +USE_INLINE_SCOPES_NUMBERS
 // test.kt:19 stringSwitch
-// EXPECTATIONS JVM JVM_IR
+// EXPECTATIONS JVM JVM_IR JVM_IR +USE_INLINE_SCOPES_NUMBERS
 // test.kt:23 stringSwitch
 // test.kt:19 stringSwitch
 // test.kt:27 stringSwitch
@@ -79,16 +79,16 @@ fun box() {
 // EXPECTATIONS JVM
 // test.kt:6 stringSwitch
 // test.kt:7 stringSwitch
-// EXPECTATIONS JVM JVM_IR
+// EXPECTATIONS JVM JVM_IR JVM_IR +USE_INLINE_SCOPES_NUMBERS
 // test.kt:8 stringSwitch
 // test.kt:5 stringSwitch
 // test.kt:12 stringSwitch
 // test.kt:15 stringSwitch
 // test.kt:12 stringSwitch
 // test.kt:20 stringSwitch
-// EXPECTATIONS JVM_IR
+// EXPECTATIONS JVM_IR JVM_IR +USE_INLINE_SCOPES_NUMBERS
 // test.kt:19 stringSwitch
-// EXPECTATIONS JVM JVM_IR
+// EXPECTATIONS JVM JVM_IR JVM_IR +USE_INLINE_SCOPES_NUMBERS
 // test.kt:24 stringSwitch
 // test.kt:19 stringSwitch
 // test.kt:27 stringSwitch
@@ -98,16 +98,16 @@ fun box() {
 // test.kt:6 stringSwitch
 // test.kt:7 stringSwitch
 // test.kt:8 stringSwitch
-// EXPECTATIONS JVM JVM_IR
+// EXPECTATIONS JVM JVM_IR JVM_IR +USE_INLINE_SCOPES_NUMBERS
 // test.kt:9 stringSwitch
 // test.kt:5 stringSwitch
 // test.kt:12 stringSwitch
 // test.kt:16 stringSwitch
 // test.kt:12 stringSwitch
 // test.kt:20 stringSwitch
-// EXPECTATIONS JVM_IR
+// EXPECTATIONS JVM_IR JVM_IR +USE_INLINE_SCOPES_NUMBERS
 // test.kt:19 stringSwitch
-// EXPECTATIONS JVM JVM_IR
+// EXPECTATIONS JVM JVM_IR JVM_IR +USE_INLINE_SCOPES_NUMBERS
 // test.kt:25 stringSwitch
 // test.kt:19 stringSwitch
 // test.kt:27 stringSwitch

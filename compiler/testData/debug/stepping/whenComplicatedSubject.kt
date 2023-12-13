@@ -22,7 +22,7 @@ fun box() {
 // The JVM_IR backend optimizes the inner when to a switch and therefore goes directly to the
 // right case without stepping through evaluation of each condition.
 
-// EXPECTATIONS JVM JVM_IR
+// EXPECTATIONS JVM JVM_IR JVM_IR +USE_INLINE_SCOPES_NUMBERS
 // test.kt:17 box
 // test.kt:6 foo
 // test.kt:7 foo
@@ -33,7 +33,7 @@ fun box() {
 // test.kt:6 foo
 // EXPECTATIONS JVM
 // test.kt:7 foo
-// EXPECTATIONS JVM JVM_IR
+// EXPECTATIONS JVM JVM_IR JVM_IR +USE_INLINE_SCOPES_NUMBERS
 // test.kt:8 foo
 // test.kt:5 foo
 // test.kt:14 foo
@@ -42,7 +42,7 @@ fun box() {
 // EXPECTATIONS JVM
 // test.kt:7 foo
 // test.kt:8 foo
-// EXPECTATIONS JVM JVM_IR
+// EXPECTATIONS JVM JVM_IR JVM_IR +USE_INLINE_SCOPES_NUMBERS
 // test.kt:9 foo
 // test.kt:5 foo
 // test.kt:11 foo

@@ -34,14 +34,14 @@ fun box() {
 }
 
 
-// EXPECTATIONS JVM JVM_IR
+// EXPECTATIONS JVM JVM_IR JVM_IR +USE_INLINE_SCOPES_NUMBERS
 // test.kt:31 box
 // test.kt:16 <init>
 // test.kt:18 <init>
 // test.kt:21 <init>
-// EXPECTATIONS JVM_IR
+// EXPECTATIONS JVM_IR JVM_IR +USE_INLINE_SCOPES_NUMBERS
 // test.kt:16 <init>
-// EXPECTATIONS JVM JVM_IR
+// EXPECTATIONS JVM JVM_IR JVM_IR +USE_INLINE_SCOPES_NUMBERS
 // test.kt:31 box
 // test.kt:32 box
 // test.kt:16 testPropertyInInterface

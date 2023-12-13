@@ -38,7 +38,7 @@ fun box() {
 // does not. So on JVM there are direct jumps to the right branch for the
 // last two whens.
 
-// EXPECTATIONS JVM JVM_IR
+// EXPECTATIONS JVM JVM_IR JVM_IR +USE_INLINE_SCOPES_NUMBERS
 // test.kt:27 box
 // test.kt:5 stringSwitch
 // test.kt:6 stringSwitch
@@ -47,9 +47,9 @@ fun box() {
 // test.kt:12 stringSwitch
 // test.kt:11 stringSwitch
 // test.kt:18 stringSwitch
-// EXPECTATIONS JVM_IR
+// EXPECTATIONS JVM_IR JVM_IR +USE_INLINE_SCOPES_NUMBERS
 // test.kt:17 stringSwitch
-// EXPECTATIONS JVM JVM_IR
+// EXPECTATIONS JVM JVM_IR JVM_IR +USE_INLINE_SCOPES_NUMBERS
 // test.kt:20 stringSwitch
 // test.kt:17 stringSwitch
 // test.kt:24 stringSwitch
@@ -59,16 +59,16 @@ fun box() {
 // test.kt:7 stringSwitch
 // test.kt:5 stringSwitch
 // test.kt:11 stringSwitch
-// EXPECTATIONS JVM_IR
+// EXPECTATIONS JVM_IR JVM_IR +USE_INLINE_SCOPES_NUMBERS
 // test.kt:12 stringSwitch
-// EXPECTATIONS JVM JVM_IR
+// EXPECTATIONS JVM JVM_IR JVM_IR +USE_INLINE_SCOPES_NUMBERS
 // test.kt:13 stringSwitch
 // test.kt:11 stringSwitch
 // test.kt:18 stringSwitch
-// EXPECTATIONS JVM_IR
+// EXPECTATIONS JVM_IR JVM_IR +USE_INLINE_SCOPES_NUMBERS
 // test.kt:17 stringSwitch
 // test.kt:20 stringSwitch
-// EXPECTATIONS JVM JVM_IR
+// EXPECTATIONS JVM JVM_IR JVM_IR +USE_INLINE_SCOPES_NUMBERS
 // test.kt:21 stringSwitch
 // test.kt:17 stringSwitch
 // test.kt:24 stringSwitch
@@ -79,18 +79,18 @@ fun box() {
 // test.kt:8 stringSwitch
 // test.kt:5 stringSwitch
 // test.kt:11 stringSwitch
-// EXPECTATIONS JVM_IR
+// EXPECTATIONS JVM_IR JVM_IR +USE_INLINE_SCOPES_NUMBERS
 // test.kt:12 stringSwitch
 // test.kt:13 stringSwitch
-// EXPECTATIONS JVM JVM_IR
+// EXPECTATIONS JVM JVM_IR JVM_IR +USE_INLINE_SCOPES_NUMBERS
 // test.kt:14 stringSwitch
 // test.kt:11 stringSwitch
 // test.kt:18 stringSwitch
-// EXPECTATIONS JVM_IR
+// EXPECTATIONS JVM_IR JVM_IR +USE_INLINE_SCOPES_NUMBERS
 // test.kt:17 stringSwitch
 // test.kt:20 stringSwitch
 // test.kt:21 stringSwitch
-// EXPECTATIONS JVM JVM_IR
+// EXPECTATIONS JVM JVM_IR JVM_IR +USE_INLINE_SCOPES_NUMBERS
 // test.kt:22 stringSwitch
 // test.kt:17 stringSwitch
 // test.kt:24 stringSwitch

@@ -21,7 +21,7 @@ fun bar(x: Int) =
         foo(x)
     }
 
-// EXPECTATIONS JVM JVM_IR
+// EXPECTATIONS JVM JVM_IR JVM_IR +USE_INLINE_SCOPES_NUMBERS
 // test.kt:14 box
 // foo.kt:5 foo
 // foo.kt:8 foo

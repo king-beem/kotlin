@@ -28,13 +28,13 @@ fun box(): String {
 // for the inline function are only used for instructions covered by
 // the `$i$f$alsoInline` variable life time.
 
-// EXPECTATIONS JVM JVM_IR
+// EXPECTATIONS JVM JVM_IR JVM_IR +USE_INLINE_SCOPES_NUMBERS
 // test.kt:11 box
 // test.kt:6 box
 // test.kt:4 box
-// EXPECTATIONS JVM_IR
+// EXPECTATIONS JVM_IR JVM_IR +USE_INLINE_SCOPES_NUMBERS
 // test.kt:6 box
-// EXPECTATIONS JVM JVM_IR
+// EXPECTATIONS JVM JVM_IR JVM_IR +USE_INLINE_SCOPES_NUMBERS
 // test.kt:7 box
 // test.kt:11 box
 

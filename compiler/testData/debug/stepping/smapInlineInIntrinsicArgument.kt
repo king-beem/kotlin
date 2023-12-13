@@ -22,7 +22,7 @@ fun fail() : String {
 // arguments as being on line 5 and 8. That seems incorrect
 // and the JVM_IR stepping is more correct.
 
-// EXPECTATIONS JVM JVM_IR
+// EXPECTATIONS JVM JVM_IR JVM_IR +USE_INLINE_SCOPES_NUMBERS
 // test.kt:5 box
 // test.kt:13 box
 // test.kt:5 box

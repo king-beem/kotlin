@@ -9,7 +9,7 @@ fun box() {
     main(arrayOf("OK"))
 }
 
-// EXPECTATIONS JVM JVM_IR
+// EXPECTATIONS JVM JVM_IR JVM_IR +USE_INLINE_SCOPES_NUMBERS
 // test.kt:9 box
 // test.kt:5 main
 // test.kt:6 main

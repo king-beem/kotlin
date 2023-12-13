@@ -13,7 +13,7 @@ fun box(): String {
     return o + k
 }
 
-// EXPECTATIONS JVM JVM_IR
+// EXPECTATIONS JVM JVM_IR JVM_IR +USE_INLINE_SCOPES_NUMBERS
 // test.kt:8 box:
 // test.kt:6 box:
 // test.kt:11 box: o:java.lang.String="O":java.lang.String

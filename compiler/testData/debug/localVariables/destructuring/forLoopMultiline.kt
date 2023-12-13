@@ -29,7 +29,7 @@ fun box() {
 // test.kt:7 box: map:java.util.Map=java.util.Collections$SingletonMap
 // test.kt:20 box: map:java.util.Map=java.util.Collections$SingletonMap
 
-// EXPECTATIONS JVM_IR
+// EXPECTATIONS JVM_IR JVM_IR +USE_INLINE_SCOPES_NUMBERS
 // test.kt:6 box:
 // test.kt:16 box: map:java.util.Map=java.util.Collections$SingletonMap
 // test.kt:11 box: map:java.util.Map=java.util.Collections$SingletonMap
