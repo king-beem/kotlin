@@ -129,6 +129,7 @@ internal open class FirElementsRecorder : FirVisitor<Unit, MutableMap<KtElement,
                         it.kind == KtFakeSourceElementKind.DesugaredPostfixNameReference ||
                         it.kind == KtFakeSourceElementKind.SmartCastExpression ||
                         it.kind == KtFakeSourceElementKind.DanglingModifierList ||
+                        it.isSourceForArrayAugmentedAssign(element) ||
                         it.isSourceForCompoundAccess(element)
             }.psi as? KtElement
             ?: return
@@ -153,6 +154,18 @@ internal open class FirElementsRecorder : FirVisitor<Unit, MutableMap<KtElement,
             parentPsi is KtUnaryExpression && psi == parentPsi.baseExpression -> fir.isReadInCompoundCall()
             else -> false
         }
+    }
+
+    private fun KtSourceElement.isSourceForArrayAugmentedAssign(fir: FirElement): Boolean {
+        val kind = kind
+        return (kind == KtFakeSourceElementKind.DesugaredArrayPlusAssign ||
+                kind == KtFakeSourceElementKind.DesugaredArrayMinusAssign ||
+                kind == KtFakeSourceElementKind.DesugaredArrayTimesAssign ||
+                kind == KtFakeSourceElementKind.DesugaredArrayDivAssign ||
+                kind == KtFakeSourceElementKind.DesugaredArrayRemAssign)
+                // after desugaring, we also have FirBlock with the same source element.
+                // We need to filter it out to map this source element to set/plusAssign call.
+                && fir is FirFunctionCall
     }
 
     private fun FirElement.isReadInCompoundCall(): Boolean {

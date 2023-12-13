@@ -544,6 +544,11 @@ internal fun FirReference.statementOrigin(): IrStatementOrigin? = when (this) {
                 else -> null
             }
 
+            source?.kind is KtFakeSourceElementKind.DesugaredArrayPlusAssign -> IrStatementOrigin.PLUSEQ
+            source?.kind is KtFakeSourceElementKind.DesugaredArrayMinusAssign -> IrStatementOrigin.MINUSEQ
+            source?.kind is KtFakeSourceElementKind.DesugaredArrayTimesAssign -> IrStatementOrigin.MULTEQ
+            source?.kind is KtFakeSourceElementKind.DesugaredArrayDivAssign -> IrStatementOrigin.DIVEQ
+
             else ->
                 null
         }
@@ -640,7 +645,7 @@ fun Fir2IrComponents.createTemporaryVariable(
 
 fun Fir2IrComponents.createTemporaryVariableForSafeCallConstruction(
     receiverExpression: IrExpression,
-    conversionScope: Fir2IrConversionScope
+    conversionScope: Fir2IrConversionScope,
 ): Pair<IrVariable, IrValueSymbol> =
     createTemporaryVariable(receiverExpression, conversionScope, "safe_receiver")
 
@@ -697,7 +702,7 @@ fun FirSession.createFilesWithGeneratedDeclarations(): List<FirFile> {
 fun FirDeclaration?.computeIrOrigin(
     predefinedOrigin: IrDeclarationOrigin? = null,
     parentOrigin: IrDeclarationOrigin? = null,
-    fakeOverrideOwnerLookupTag: ConeClassLikeLookupTag? = null
+    fakeOverrideOwnerLookupTag: ConeClassLikeLookupTag? = null,
 ): IrDeclarationOrigin {
     if (this == null) {
         return predefinedOrigin ?: parentOrigin ?: IrDeclarationOrigin.DEFINED
