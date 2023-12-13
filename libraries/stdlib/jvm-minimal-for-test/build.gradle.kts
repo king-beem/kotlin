@@ -44,9 +44,7 @@ val copySources by task<Sync> {
 
 sourceSets {
     "main" {
-        java.apply {
-            srcDir(copySources)
-        }
+        java.srcDir(copySources)
     }
     "test" {}
 }

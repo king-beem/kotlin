@@ -55,7 +55,7 @@ sourceSets {
     "main" {
         projectDefault()
         java.srcDirs(generateCheckersComponents.map {
-            //This is required because that task is generating all the platforms too
+            // This is required because that task is generating all the platforms too
             generationRoot
         })
     }
