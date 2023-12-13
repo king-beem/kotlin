@@ -30,6 +30,7 @@ import org.jetbrains.kotlin.resolve.calls.inference.ConstraintSystemOperation
 import org.jetbrains.kotlin.resolve.calls.inference.runTransaction
 import org.jetbrains.kotlin.resolve.calls.tower.isSuccess
 import org.jetbrains.kotlin.types.AbstractTypeChecker
+import org.jetbrains.kotlin.types.TypeApproximatorConfiguration
 import org.jetbrains.kotlin.types.expressions.CoercionStrategy
 import org.jetbrains.kotlin.utils.addToStdlib.shouldNotBeCalled
 import org.jetbrains.kotlin.utils.exceptions.errorWithAttachment
@@ -175,7 +176,17 @@ private fun buildResultingTypeAndAdaptation(
                 contextReceivers = fir.contextReceivers.map { it.typeRef.coneType }
             ) to callableReferenceAdaptation
         }
-        is FirVariable -> createKPropertyType(fir, receiverType, returnTypeRef, candidate) to null
+        is FirVariable -> {
+            var returnType = returnTypeRef.type
+            if (returnType.hasCapture()) {
+                val approximated = context.inferenceComponents.resultTypeResolver.typeApproximator
+                    .approximateToSuperType(returnType, TypeApproximatorConfiguration.InternalTypesApproximation) as? ConeKotlinType
+                if (approximated != null) {
+                    returnType = approximated
+                }
+            }
+            createKPropertyType(fir, receiverType, returnType, candidate) to null
+        }
         else -> ConeErrorType(ConeUnsupportedCallableReferenceTarget(candidate)) to null
     }
 }
@@ -485,16 +496,13 @@ fun ConeKotlinType.isKCallableType(): Boolean {
 private fun createKPropertyType(
     propertyOrField: FirVariable,
     receiverType: ConeKotlinType?,
-    returnTypeRef: FirResolvedTypeRef,
+    propertyType: ConeKotlinType,
     candidate: Candidate,
-): ConeKotlinType {
-    val propertyType = returnTypeRef.type
-    return org.jetbrains.kotlin.fir.resolve.createKPropertyType(
-        receiverType,
-        propertyType,
-        isMutable = propertyOrField.canBeMutableReference(candidate)
-    )
-}
+): ConeKotlinType = createKPropertyType(
+    receiverType,
+    propertyType,
+    isMutable = propertyOrField.canBeMutableReference(candidate)
+)
 
 private fun FirVariable.canBeMutableReference(candidate: Candidate): Boolean {
     if (!isVar) return false
