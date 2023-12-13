@@ -67,24 +67,6 @@ abstract class AbstractFir2IrNonJvmResultsConverter(
             }
         }
 
-    private fun createFir2IrConfiguration(
-        module: TestModule,
-        configuration: CompilerConfiguration,
-        diagnosticReporter: BaseDiagnosticsCollector
-    ): Fir2IrConfiguration {
-        return Fir2IrConfiguration(
-            languageVersionSettings = configuration.languageVersionSettings,
-            diagnosticReporter = diagnosticReporter,
-            linkViaSignatures = true,
-            evaluatedConstTracker = configuration
-                .putIfAbsent(CommonConfigurationKeys.EVALUATED_CONST_TRACKER, EvaluatedConstTracker.create()),
-            inlineConstTracker = null,
-            expectActualTracker = configuration[CommonConfigurationKeys.EXPECT_ACTUAL_TRACKER],
-            allowNonCachedDeclarations = false,
-            useIrFakeOverrideBuilder = module.shouldUseIrFakeOverrideBuilder()
-        )
-    }
-
     private fun transformInternal(
         module: TestModule,
         inputArtifact: FirOutputArtifact
@@ -99,7 +81,7 @@ abstract class AbstractFir2IrNonJvmResultsConverter(
         val libraries = resolveLibraries(module, compilerConfiguration)
         val (dependencies, builtIns) = loadResolvedLibraries(libraries, compilerConfiguration.languageVersionSettings, testServices)
 
-        val fir2IrConfiguration = createFir2IrConfiguration(module, compilerConfiguration, diagnosticReporter)
+        val fir2IrConfiguration = Fir2IrConfiguration.forKlibCompilation(compilerConfiguration, diagnosticReporter)
         val fir2irResult = inputArtifact.toFirResult().convertToIrAndActualize(
             Fir2IrExtensions.Default,
             fir2IrConfiguration,
