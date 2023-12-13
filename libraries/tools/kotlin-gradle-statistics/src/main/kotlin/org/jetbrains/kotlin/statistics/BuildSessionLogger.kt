@@ -5,11 +5,12 @@
 
 package org.jetbrains.kotlin.statistics
 
-import org.jetbrains.kotlin.statistics.fileloggers.FileRecordLogger
-import org.jetbrains.kotlin.statistics.fileloggers.FileRecordLogger.Companion.PROFILE_FILE_NAME_SUFFIX
 import org.jetbrains.kotlin.statistics.fileloggers.MetricsContainer
 import org.jetbrains.kotlin.statistics.metrics.*
 import java.io.File
+import java.io.FileOutputStream
+import java.io.IOException
+import java.nio.file.Files
 
 class BuildSessionLogger(
     rootPath: File,
@@ -19,15 +20,16 @@ class BuildSessionLogger(
 ) : StatisticsValuesConsumer {
 
     companion object {
+        const val PROFILE_FILE_NAME_SUFFIX = ".profile"
         const val STATISTICS_FOLDER_NAME = "kotlin-profile"
         const val STATISTICS_FILE_NAME_PATTERN = "[\\w-]*$PROFILE_FILE_NAME_SUFFIX"
 
         private const val DEFAULT_MAX_PROFILE_FILES = 1_000
         private const val DEFAULT_MAX_FILE_AGE = 30 * 24 * 3600 * 1000L //30 days
 
-        fun listProfileFiles(statisticsFolder: File): List<File>? {
-            return statisticsFolder.listFiles()?.filterTo(ArrayList()) { it.name.matches(STATISTICS_FILE_NAME_PATTERN.toRegex()) }
-                ?.sortedBy { it.lastModified() }
+        fun listProfileFiles(statisticsFolder: File): List<File> {
+            return Files.newDirectoryStream(statisticsFolder.toPath()).filter { it.fileName.endsWith(PROFILE_FILE_NAME_SUFFIX) }
+                .map { it.toFile() }.sortedBy { it.lastModified() }
         }
     }
 
@@ -57,25 +59,32 @@ class BuildSessionLogger(
      * - any other process can add metrics to the file during build
      * - files with age (current time - last modified) more than maxFileAge should be deleted (if we trust lastModified returned by FS)
      */
-    @Synchronized
-    fun storeMetricsIntoFile(buildId: String) {
-        val trackingFile = FileRecordLogger(statisticsFolder, buildId)
-        trackingFile.let {
-            metricsContainer.flush(it)
-            it.close()
+    private fun storeMetricsIntoFile(buildId: String) {
+        try {
+            statisticsFolder.mkdirs()
+            val file = File(statisticsFolder, buildId + PROFILE_FILE_NAME_SUFFIX)
+
+            FileOutputStream(file, true).bufferedWriter().use {
+                metricsContainer.flush(it)
+            }
+        } catch (_: IOException) {
+            //ignore io exception
         }
     }
 
     private fun clearOldFiles() {
         // Get list of existing files. Try to create folder if possible, return from function if failed to create folder
-        val fileCandidates = listProfileFiles(statisticsFolder) ?: return
+        val fileCandidates = listProfileFiles(statisticsFolder)
 
         for ((index, file) in fileCandidates.withIndex()) {
-            if (index < fileCandidates.size - maxProfileFiles) {
-                file.delete()
-            } else {
+            val toDelete = if (index < fileCandidates.size - maxProfileFiles)
+                true
+            else {
                 val lastModified = file.lastModified()
                 (lastModified > 0) && (System.currentTimeMillis() - maxFileAge > lastModified)
+            }
+            if (toDelete) {
+                file.delete()
             }
         }
     }
@@ -99,8 +108,8 @@ class BuildSessionLogger(
                 report(NumericalMetrics.BUILD_FINISH_TIME, finishTime)
                 report(BooleanMetrics.BUILD_FAILED, buildFailed)
             }
-            buildSession = null
         } finally {
+            buildSession = null
             storeMetricsIntoFile(buildId)
             clearOldFiles()
         }

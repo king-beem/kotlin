@@ -12,7 +12,6 @@ import org.jetbrains.kotlin.gradle.util.replaceText
 import org.junit.jupiter.api.DisplayName
 import java.nio.file.Files
 import java.nio.file.Path
-import kotlin.io.path.readText
 import kotlin.streams.toList
 
 @DisplayName("FUS statistic")
@@ -104,11 +103,8 @@ class FusStatisticsIT : KGPDaemonsBaseTest() {
             enableGradleDebug = true
         ) {
             build("compileKotlin", "-Pkotlin.session.logger.root.path=$projectPath") {
-                val statistics = Files.list(projectPath.resolve("kotlin-profile")).toList().joinToString(separator = "\n") {
-                    it.readText()
-                }
-                assertTextContains(
-                    statistics,
+                assertFilesCombinedContains(
+                    Files.list(projectPath.resolve("kotlin-profile")).toList(),
                     *expectedMetrics,
                     "BUILD_SRC_EXISTS=true"
                 )
@@ -204,8 +200,10 @@ class FusStatisticsIT : KGPDaemonsBaseTest() {
             "incrementalMultiproject", gradleVersion,
         ) {
             //Collect metrics from BuildMetricsService also
-            build("compileKotlin", "-Pkotlin.session.logger.root.path=$projectPath",
-                  buildOptions = defaultBuildOptions.copy(buildReport = listOf(BuildReportType.FILE))) {
+            build(
+                "compileKotlin", "-Pkotlin.session.logger.root.path=$projectPath",
+                buildOptions = defaultBuildOptions.copy(buildReport = listOf(BuildReportType.FILE))
+            ) {
                 assertFileContains(
                     fusStatisticsPath,
                     "CONFIGURATION_IMPLEMENTATION_COUNT=2",
@@ -239,7 +237,11 @@ class FusStatisticsIT : KGPDaemonsBaseTest() {
         project(
             "simpleProject",
             gradleVersion,
-            buildOptions = defaultBuildOptions.copy(configurationCache = true, projectIsolation = isProjectIsolationEnabled, buildReport = listOf(BuildReportType.FILE)),
+            buildOptions = defaultBuildOptions.copy(
+                configurationCache = true,
+                projectIsolation = isProjectIsolationEnabled,
+                buildReport = listOf(BuildReportType.FILE)
+            ),
         ) {
             build(
                 "compileKotlin",

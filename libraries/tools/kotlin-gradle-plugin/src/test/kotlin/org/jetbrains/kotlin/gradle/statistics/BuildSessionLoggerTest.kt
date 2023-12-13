@@ -6,7 +6,6 @@
 package org.jetbrains.kotlin.gradle.statistics
 
 import org.jetbrains.kotlin.statistics.BuildSessionLogger
-import org.jetbrains.kotlin.statistics.fileloggers.FileRecordLogger
 import org.jetbrains.kotlin.statistics.fileloggers.MetricsContainer
 import org.jetbrains.kotlin.statistics.metrics.BooleanMetrics
 import org.jetbrains.kotlin.statistics.metrics.NumericalMetrics
@@ -113,7 +112,7 @@ class BuildSessionLoggerTest {
         val startTime = System.currentTimeMillis() - 1001
         logger.startBuildSession(1, startTime)
         val reportFile = rootFolder.resolve(BuildSessionLogger.Companion.STATISTICS_FOLDER_NAME)
-            .resolve(buildId + FileRecordLogger.Companion.PROFILE_FILE_NAME_SUFFIX)
+            .resolve(buildId + BuildSessionLogger.Companion.PROFILE_FILE_NAME_SUFFIX)
 
         reportFile.createNewFile()
         reportFile.appendText("${StringMetrics.USE_FIR.name}=true\n")
