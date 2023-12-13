@@ -60,18 +60,10 @@ internal class GeneratorCoroutineImpl(val resultContinuation: Continuation<Any?>
     private inline fun getLastIterator(): JsIterator<Any?> = jsIterators[jsIterators.size - 1]
 
     @InlineOnly
-    public inline fun shouldResumeImmediately(): Boolean = fastNotEquals(unknown, savedResult)
-
-    @InlineOnly
-    @Suppress("UNUSED_PARAMETER")
-    private inline fun fastEquals(a: Result<Any?>, b: Result<Any?>): Boolean = js("a === b")
-
-    @InlineOnly
-    @Suppress("UNUSED_PARAMETER")
-    private inline fun fastNotEquals(a: Result<Any?>, b: Result<Any?>): Boolean = js("a !== b")
+    public inline fun shouldResumeImmediately(): Boolean = unknown.value !== savedResult.value
 
     override fun resumeWith(result: Result<Any?>) {
-        if (fastEquals(unknown, savedResult)) savedResult = result
+        if (unknown.value === savedResult.value) savedResult = result
         if (isRunning) return
 
         var currentResult: Any? = savedResult.getOrNull()
@@ -98,7 +90,7 @@ internal class GeneratorCoroutineImpl(val resultContinuation: Continuation<Any?>
                     currentException = null
 
                     if (step.done) current.dropLastIterator()
-                    if (fastNotEquals(unknown, savedResult)) {
+                    if (unknown.value !== savedResult.value) {
                         currentResult = savedResult.getOrNull()
                         currentException = savedResult.exceptionOrNull()
                         savedResult = unknown
