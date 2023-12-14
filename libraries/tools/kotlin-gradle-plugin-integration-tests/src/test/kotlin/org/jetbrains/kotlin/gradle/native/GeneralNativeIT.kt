@@ -18,17 +18,16 @@ import org.jetbrains.kotlin.gradle.util.capitalize
 import org.jetbrains.kotlin.gradle.util.replaceText
 import org.jetbrains.kotlin.gradle.util.runProcess
 import org.jetbrains.kotlin.konan.target.*
-import org.jetbrains.kotlin.tooling.core.KotlinToolingVersion
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.condition.OS
 import org.junit.jupiter.api.io.TempDir
 import java.nio.file.Path
-import java.util.*
-import kotlin.io.path.*
+import kotlin.io.path.absolutePathString
+import kotlin.io.path.appendText
+import kotlin.io.path.deleteIfExists
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
-import kotlin.test.fail
 
 @DisplayName("Tests for general K/N builds")
 @NativeGradlePluginTests
