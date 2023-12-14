@@ -92,7 +92,7 @@ mm::ExtraObjectData& CustomAllocator::CreateExtraObjectDataForObject(
     return *new (extraObject) mm::ExtraObjectData(baseObject, info);
 }
 
-CombinedFinalizerQueue<FinalizerQueue> CustomAllocator::ExtractFinalizerQueue() noexcept {
+FinalizerQueue CustomAllocator::ExtractFinalizerQueue() noexcept {
     return std::move(finalizerQueue_);
 }
 

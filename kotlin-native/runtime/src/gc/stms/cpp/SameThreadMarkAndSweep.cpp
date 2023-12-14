@@ -87,30 +87,15 @@ void gc::SameThreadMarkAndSweep::PerformFullGC(int64_t epoch) noexcept {
     alloc::SweepExtraObjects<alloc::DefaultSweepTraits<alloc::ObjectFactoryImpl>>(gcHandle, *extraObjectFactoryIterable);
     extraObjectFactoryIterable = std::nullopt;
     auto finalizerQueue = alloc::Sweep<alloc::DefaultSweepTraits<alloc::ObjectFactoryImpl>>(gcHandle, *objectFactoryIterable);
-    if (!mainThreadFinalizerProcessor_.available()) {
-        finalizerQueue.mergeIntoRegular();
-    }
     objectFactoryIterable = std::nullopt;
     alloc::compactObjectPoolInMainThread();
 #else
     // also sweeps extraObjects
     auto finalizerQueue = allocator_.impl().heap().Sweep(gcHandle);
-    bool mainThreadAvailable = mainThreadFinalizerProcessor_.available();
-    if (!mainThreadAvailable) {
-        finalizerQueue.mergeIntoRegular();
-    }
     for (auto& thread : kotlin::mm::ThreadRegistry::Instance().LockForIter()) {
-        auto threadQueue = thread.allocator().impl().alloc().ExtractFinalizerQueue();
-        if (!mainThreadAvailable) {
-            threadQueue.mergeIntoRegular();
-        }
-        finalizerQueue.mergeFrom(std::move(threadQueue));
+        finalizerQueue.mergeFrom(thread.allocator().impl().alloc().ExtractFinalizerQueue());
     }
-    auto globalQueue = allocator_.impl().heap().ExtractFinalizerQueue();
-    if (!mainThreadAvailable) {
-        globalQueue.mergeIntoRegular();
-    }
-    finalizerQueue.mergeFrom(std::move(globalQueue));
+    finalizerQueue.mergeFrom(allocator_.impl().heap().ExtractFinalizerQueue());
 #endif
 
     scheduler.onGCFinish(epoch, gcHandle.getKeptSizeBytes() + threadCount * allocator_.estimateOverheadPerThread());
@@ -120,6 +105,9 @@ void gc::SameThreadMarkAndSweep::PerformFullGC(int64_t epoch) noexcept {
     state_.finish(epoch);
     gcHandle.finalizersScheduled(finalizerQueue.size());
     gcHandle.finished();
+    if (!mainThreadFinalizerProcessor_.available()) {
+        finalizerQueue.mergeIntoRegular();
+    }
     finalizerProcessor_.ScheduleTasks(std::move(finalizerQueue.regular), epoch);
     mainThreadFinalizerProcessor_.schedule(std::move(finalizerQueue.mainThread), epoch);
 }

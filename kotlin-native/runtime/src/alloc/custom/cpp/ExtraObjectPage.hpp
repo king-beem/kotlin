@@ -11,28 +11,12 @@
 #include <cstdint>
 
 #include "AtomicStack.hpp"
+#include "CustomFinalizerProcessor.hpp"
+#include "ExtraObjectCell.hpp"
 #include "ExtraObjectData.hpp"
 #include "GCStatistics.hpp"
-#include "CombinedFinalizerQueue.hpp"
 
 namespace kotlin::alloc {
-
-struct ExtraObjectCell {
-    mm::ExtraObjectData* Data() { return reinterpret_cast<mm::ExtraObjectData*>(data_); }
-
-    // This is used to simultaneously build two lists: a free list and a finalizers queue.
-    // A cell cannot exist in both of them, but can be in neither when it's alive.
-    std::atomic<ExtraObjectCell*> next_;
-    struct alignas(mm::ExtraObjectData) {
-        uint8_t data_[sizeof(mm::ExtraObjectData)];
-    };
-
-    static ExtraObjectCell* fromExtraObject(mm::ExtraObjectData* extraObjectData) {
-        return reinterpret_cast<ExtraObjectCell*>(reinterpret_cast<uint8_t*>(extraObjectData) - offsetof(ExtraObjectCell, data_));
-    }
-};
-
-using FinalizerQueue = AtomicStack<ExtraObjectCell>;
 
 class alignas(8) ExtraObjectPage {
 public:
@@ -47,7 +31,7 @@ public:
     // Tries to allocate in current page, returns null if no free block in page
     mm::ExtraObjectData* TryAllocate() noexcept;
 
-    bool Sweep(GCSweepScope& sweepHandle, CombinedFinalizerQueue<FinalizerQueue>& finalizerQueue) noexcept;
+    bool Sweep(GCSweepScope& sweepHandle, FinalizerQueue& finalizerQueue) noexcept;
 
 private:
     friend class AtomicStack<ExtraObjectPage>;

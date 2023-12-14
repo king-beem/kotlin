@@ -33,8 +33,8 @@ void Heap::PrepareForGC() noexcept {
     extraObjectPages_.PrepareForGC();
 }
 
-CombinedFinalizerQueue<FinalizerQueue> Heap::Sweep(gc::GCHandle gcHandle) noexcept {
-    CombinedFinalizerQueue<FinalizerQueue> finalizerQueue;
+FinalizerQueue Heap::Sweep(gc::GCHandle gcHandle) noexcept {
+    FinalizerQueue finalizerQueue;
     CustomAllocDebug("Heap: before sweep FinalizerQueue size == %zu", finalizerQueue.size());
     CustomAllocDebug("Heap::Sweep()");
     {
@@ -58,32 +58,32 @@ CombinedFinalizerQueue<FinalizerQueue> Heap::Sweep(gc::GCHandle gcHandle) noexce
     return finalizerQueue;
 }
 
-NextFitPage* Heap::GetNextFitPage(uint32_t cellCount, CombinedFinalizerQueue<FinalizerQueue>& finalizerQueue) noexcept {
+NextFitPage* Heap::GetNextFitPage(uint32_t cellCount, FinalizerQueue& finalizerQueue) noexcept {
     CustomAllocDebug("Heap::GetNextFitPage()");
     return nextFitPages_.GetPage(cellCount, finalizerQueue, concurrentSweepersCount_);
 }
 
-FixedBlockPage* Heap::GetFixedBlockPage(uint32_t cellCount, CombinedFinalizerQueue<FinalizerQueue>& finalizerQueue) noexcept {
+FixedBlockPage* Heap::GetFixedBlockPage(uint32_t cellCount, FinalizerQueue& finalizerQueue) noexcept {
     CustomAllocDebug("Heap::GetFixedBlockPage()");
     return fixedBlockPages_[cellCount].GetPage(cellCount, finalizerQueue, concurrentSweepersCount_);
 }
 
-SingleObjectPage* Heap::GetSingleObjectPage(uint64_t cellCount, CombinedFinalizerQueue<FinalizerQueue>& finalizerQueue) noexcept {
+SingleObjectPage* Heap::GetSingleObjectPage(uint64_t cellCount, FinalizerQueue& finalizerQueue) noexcept {
     CustomAllocInfo("CustomAllocator::AllocateInSingleObjectPage(%" PRIu64 ")", cellCount);
     return singleObjectPages_.NewPage(cellCount);
 }
 
-ExtraObjectPage* Heap::GetExtraObjectPage(CombinedFinalizerQueue<FinalizerQueue>& finalizerQueue) noexcept {
+ExtraObjectPage* Heap::GetExtraObjectPage(FinalizerQueue& finalizerQueue) noexcept {
     CustomAllocInfo("CustomAllocator::GetExtraObjectPage()");
     return extraObjectPages_.GetPage(0, finalizerQueue, concurrentSweepersCount_);
 }
 
-void Heap::AddToFinalizerQueue(CombinedFinalizerQueue<FinalizerQueue> queue) noexcept {
+void Heap::AddToFinalizerQueue(FinalizerQueue queue) noexcept {
     std::unique_lock guard(pendingFinalizerQueueMutex_);
     pendingFinalizerQueue_.mergeFrom(std::move(queue));
 }
 
-CombinedFinalizerQueue<FinalizerQueue> Heap::ExtractFinalizerQueue() noexcept {
+FinalizerQueue Heap::ExtractFinalizerQueue() noexcept {
     std::unique_lock guard(pendingFinalizerQueueMutex_);
     return std::move(pendingFinalizerQueue_);
 }

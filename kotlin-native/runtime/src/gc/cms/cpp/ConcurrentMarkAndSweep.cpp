@@ -195,36 +195,24 @@ void gc::ConcurrentMarkAndSweep::PerformFullGC(int64_t epoch) noexcept {
     alloc::SweepExtraObjects<alloc::DefaultSweepTraits<alloc::ObjectFactoryImpl>>(gcHandle, *extraObjectFactoryIterable);
     extraObjectFactoryIterable = std::nullopt;
     auto finalizerQueue = alloc::Sweep<alloc::DefaultSweepTraits<alloc::ObjectFactoryImpl>>(gcHandle, *objectFactoryIterable);
-    if (!mainThreadFinalizerProcessor_.available()) {
-        finalizerQueue.mergeIntoRegular();
-    }
     objectFactoryIterable = std::nullopt;
     alloc::compactObjectPoolInMainThread();
 #else
     // also sweeps extraObjects
     auto finalizerQueue = allocator_.impl().heap().Sweep(gcHandle);
-    bool mainThreadAvailable = mainThreadFinalizerProcessor_.available();
-    if (!mainThreadAvailable) {
-        finalizerQueue.mergeIntoRegular();
-    }
     for (auto& thread : kotlin::mm::ThreadRegistry::Instance().LockForIter()) {
-        auto threadQueue = thread.allocator().impl().alloc().ExtractFinalizerQueue();
-        if (!mainThreadAvailable) {
-            threadQueue.mergeIntoRegular();
-        }
-        finalizerQueue.mergeFrom(std::move(threadQueue));
+        finalizerQueue.mergeFrom(thread.allocator().impl().alloc().ExtractFinalizerQueue());
     }
-    auto globalQueue = allocator_.impl().heap().ExtractFinalizerQueue();
-    if (!mainThreadAvailable) {
-        globalQueue.mergeIntoRegular();
-    }
-    finalizerQueue.mergeFrom(std::move(globalQueue));
+    finalizerQueue.mergeFrom(allocator_.impl().heap().ExtractFinalizerQueue());
 #endif
     scheduler.onGCFinish(epoch, gcHandle.getKeptSizeBytes() + threadCount * allocator_.estimateOverheadPerThread());
     state_.finish(epoch);
     gcHandle.finalizersScheduled(finalizerQueue.size());
     gcHandle.finished();
 
+    if (!mainThreadFinalizerProcessor_.available()) {
+        finalizerQueue.mergeIntoRegular();
+    }
     // This may start a new thread. On some pthreads implementations, this may block waiting for concurrent thread
     // destructors running. So, it must ensured that no locks are held by this point.
     // TODO: Consider having an always on sleeping finalizer thread.

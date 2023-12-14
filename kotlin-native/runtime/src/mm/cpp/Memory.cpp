@@ -456,6 +456,48 @@ extern "C" void Kotlin_native_internal_GC_setCyclicCollector(ObjHeader* gc, bool
     // Nothing to do.
 }
 
+extern "C" KLong Kotlin_native_internal_GC_getMainThreadFinalizerProcessorMaxTimeInTask(ObjHeader* gc) {
+    KLong result;
+    mm::GlobalData::Instance().gc().configureMainThreadFinalizerProcessor([&](auto& config) noexcept -> void {
+        result = std::chrono::duration_cast<std::chrono::microseconds>(config.maxTimeInTask).count();
+    });
+    return result;
+}
+
+extern "C" void Kotlin_native_internal_GC_setMainThreadFinalizerProcessorMaxTimeInTask(ObjHeader* gc, KLong value) {
+    mm::GlobalData::Instance().gc().configureMainThreadFinalizerProcessor([=](auto& config) noexcept -> void {
+        config.maxTimeInTask = std::chrono::microseconds(value);
+    });
+}
+
+extern "C" KLong Kotlin_native_internal_GC_getMainThreadFinalizerProcessorMinTimeBetweenTasks(ObjHeader* gc) {
+    KLong result;
+    mm::GlobalData::Instance().gc().configureMainThreadFinalizerProcessor([&](auto& config) noexcept -> void {
+        result = std::chrono::duration_cast<std::chrono::microseconds>(config.minTimeBetweenTasks).count();
+    });
+    return result;
+}
+
+extern "C" void Kotlin_native_internal_GC_setMainThreadFinalizerProcessorMinTimeBetweenTasks(ObjHeader* gc, KLong value) {
+    mm::GlobalData::Instance().gc().configureMainThreadFinalizerProcessor([=](auto& config) noexcept -> void {
+        config.minTimeBetweenTasks = std::chrono::microseconds(value);
+    });
+}
+
+extern "C" KULong Kotlin_native_internal_GC_getMainThreadFinalizerProcessorBatchSize(ObjHeader* gc) {
+    KULong result;
+    mm::GlobalData::Instance().gc().configureMainThreadFinalizerProcessor([&](auto& config) noexcept -> void {
+        result = config.batchSize;
+    });
+    return result;
+}
+
+extern "C" void Kotlin_native_internal_GC_setMainThreadFinalizerProcessorBatchSize(ObjHeader* gc, KULong value) {
+    mm::GlobalData::Instance().gc().configureMainThreadFinalizerProcessor([=](auto& config) noexcept -> void {
+        config.batchSize = value;
+    });
+}
+
 extern "C" bool Kotlin_Any_isShareable(ObjHeader* thiz) {
     // TODO: Remove when legacy MM is gone.
     return true;

@@ -10,8 +10,9 @@
 
 namespace kotlin::alloc {
 
+// Finalizer queue split between threads.
 template <typename FinalizerQueue>
-struct CombinedFinalizerQueue {
+struct SegregatedFinalizerQueue {
     FinalizerQueue regular;
     FinalizerQueue mainThread;
 
@@ -22,7 +23,7 @@ struct CombinedFinalizerQueue {
         mainThread = FinalizerQueue{};
     }
 
-    void mergeFrom(CombinedFinalizerQueue rhs) noexcept {
+    void mergeFrom(SegregatedFinalizerQueue rhs) noexcept {
         regular.TransferAllFrom(std::move(rhs.regular));
         mainThread.TransferAllFrom(std::move(rhs.mainThread));
     }

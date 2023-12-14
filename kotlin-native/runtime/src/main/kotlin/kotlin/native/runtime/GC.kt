@@ -321,6 +321,27 @@ public object GC {
     @Deprecated("No-op in modern GC implementation")
     external fun findCycle(root: Any): Array<Any>?
 
+    var mainThreadMaxTimeInTask: Duration
+        get() = getMainThreadFinalizerProcessorMaxTimeInTask().microseconds
+        set(value) {
+            require(!value.isNegative()) { "mainThreadMaxTimeInTask must not be negative: $value" }
+            setMainThreadFinalizerProcessorMaxTimeInTask(value.inWholeMicroseconds)
+        }
+
+    var mainThreadMinTimeBetweenTasks: Duration
+        get() = getMainThreadFinalizerProcessorMinTimeBetweenTasks().microseconds
+        set(value) {
+            require(!value.isNegative()) { "mainThreadMinTimeBetweenTasks must not be negative: $value" }
+            setMainThreadFinalizerProcessorMinTimeBetweenTasks(value.inWholeMicroseconds)
+        }
+
+    var mainThreadBatchSize: ULong
+        get() = getMainThreadFinalizerProcessorBatchSize()
+        set(value) {
+            require(value > 0U) { "mainThreadBatchSize must not be 0" }
+            setMainThreadFinalizerProcessorBatchSize(value)
+        }
+
     @GCUnsafeCall("Kotlin_native_internal_GC_getThreshold")
     private external fun getThreshold(): Int
 
@@ -392,4 +413,22 @@ public object GC {
 
     @GCUnsafeCall("Kotlin_native_internal_GC_setPauseOnTargetHeapOverflow")
     private external fun setPauseOnTargetHeapOverflow(value: Boolean)
+
+    @GCUnsafeCall("Kotlin_native_internal_GC_getMainThreadFinalizerProcessorMaxTimeInTask")
+    private external fun getMainThreadFinalizerProcessorMaxTimeInTask(): Long
+
+    @GCUnsafeCall("Kotlin_native_internal_GC_setMainThreadFinalizerProcessorMaxTimeInTask")
+    private external fun setMainThreadFinalizerProcessorMaxTimeInTask(value: Long)
+
+    @GCUnsafeCall("Kotlin_native_internal_GC_getMainThreadFinalizerProcessorMinTimeBetweenTasks")
+    private external fun getMainThreadFinalizerProcessorMinTimeBetweenTasks(): Long
+
+    @GCUnsafeCall("Kotlin_native_internal_GC_setMainThreadFinalizerProcessorMinTimeBetweenTasks")
+    private external fun setMainThreadFinalizerProcessorMinTimeBetweenTasks(value: Long)
+
+    @GCUnsafeCall("Kotlin_native_internal_GC_getMainThreadFinalizerProcessorBatchSize")
+    private external fun getMainThreadFinalizerProcessorBatchSize(): ULong
+
+    @GCUnsafeCall("Kotlin_native_internal_GC_setMainThreadFinalizerProcessorBatchSize")
+    private external fun setMainThreadFinalizerProcessorBatchSize(value: ULong)
 }

@@ -77,6 +77,10 @@ void gc::GC::WaitFinalizers(int64_t epoch) noexcept {
     impl_->gc().state().waitEpochFinalized(epoch);
 }
 
+void gc::GC::configureMainThreadFinalizerProcessor(std::function<void(alloc::RunLoopFinalizerProcessorConfig&)> f) noexcept {
+    impl_->gc().mainThreadFinalizerProcessor().withConfig(std::move(f));
+}
+
 bool gc::isMarked(ObjHeader* object) noexcept {
     return alloc::objectDataForObject(object).marked();
 }

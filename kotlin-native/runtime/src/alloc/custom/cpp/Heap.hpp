@@ -19,7 +19,6 @@
 #include "NextFitPage.hpp"
 #include "PageStore.hpp"
 #include "FixedBlockPage.hpp"
-#include "CombinedFinalizerQueue.hpp"
 
 namespace kotlin::alloc {
 
@@ -31,15 +30,15 @@ public:
     // Sweep through all remaining pages, freeing those blocks where CanReclaim
     // returns true. If multiple sweepers are active, each page will only be
     // seen by one sweeper.
-    CombinedFinalizerQueue<FinalizerQueue> Sweep(gc::GCHandle gcHandle) noexcept;
+    FinalizerQueue Sweep(gc::GCHandle gcHandle) noexcept;
 
-    FixedBlockPage* GetFixedBlockPage(uint32_t cellCount, CombinedFinalizerQueue<FinalizerQueue>& finalizerQueue) noexcept;
-    NextFitPage* GetNextFitPage(uint32_t cellCount, CombinedFinalizerQueue<FinalizerQueue>& finalizerQueue) noexcept;
-    SingleObjectPage* GetSingleObjectPage(uint64_t cellCount, CombinedFinalizerQueue<FinalizerQueue>& finalizerQueue) noexcept;
-    ExtraObjectPage* GetExtraObjectPage(CombinedFinalizerQueue<FinalizerQueue>& finalizerQueue) noexcept;
+    FixedBlockPage* GetFixedBlockPage(uint32_t cellCount, FinalizerQueue& finalizerQueue) noexcept;
+    NextFitPage* GetNextFitPage(uint32_t cellCount, FinalizerQueue& finalizerQueue) noexcept;
+    SingleObjectPage* GetSingleObjectPage(uint64_t cellCount, FinalizerQueue& finalizerQueue) noexcept;
+    ExtraObjectPage* GetExtraObjectPage(FinalizerQueue& finalizerQueue) noexcept;
 
-    void AddToFinalizerQueue(CombinedFinalizerQueue<FinalizerQueue> queue) noexcept;
-    CombinedFinalizerQueue<FinalizerQueue> ExtractFinalizerQueue() noexcept;
+    void AddToFinalizerQueue(FinalizerQueue queue) noexcept;
+    FinalizerQueue ExtractFinalizerQueue() noexcept;
     size_t EstimateOverheadPerThread() noexcept;
 
     // Test method
@@ -52,7 +51,7 @@ private:
     PageStore<SingleObjectPage> singleObjectPages_;
     PageStore<ExtraObjectPage> extraObjectPages_;
 
-    CombinedFinalizerQueue<FinalizerQueue> pendingFinalizerQueue_;
+    FinalizerQueue pendingFinalizerQueue_;
     std::mutex pendingFinalizerQueueMutex_;
 
     std::atomic<std::size_t> concurrentSweepersCount_ = 0;
