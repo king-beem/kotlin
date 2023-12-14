@@ -107,16 +107,19 @@ object AbstractExpectActualMatcher {
             }
         }
 
+        val matchedActualMembers = mutableListOf<DeclarationSymbolMarker>()
         val incompatibilityMap = mutableMapOf<ExpectActualMatchingCompatibility.Mismatch, MutableList<DeclarationSymbolMarker>>()
         for ((actualMember, compatibility) in mapping) {
             when (compatibility) {
-                ExpectActualMatchingCompatibility.MatchedSuccessfully -> {
-                    onMatchedMembers(expectMember, actualMember, expectClassSymbol, actualClassSymbol)
-                    return actualMember
-                }
-
+                ExpectActualMatchingCompatibility.MatchedSuccessfully -> matchedActualMembers.add(actualMember)
                 is ExpectActualMatchingCompatibility.Mismatch -> incompatibilityMap.getOrPut(compatibility) { SmartList() }.add(actualMember)
             }
+        }
+
+        if (matchedActualMembers.isNotEmpty()) {
+            val actualMember = chooseFromMatchedActuals(matchedActualMembers)
+            onMatchedMembers(expectMember, actualMember, expectClassSymbol, actualClassSymbol)
+            return actualMember
         }
 
         mismatchedMembers?.add(expectMember to incompatibilityMap)
@@ -203,6 +206,12 @@ object AbstractExpectActualMatcher {
         } else {
             false
         }
+    }
+
+    context(ExpectActualMatchingContext<*>)
+    private fun chooseFromMatchedActuals(matchedActualDeclarations: Collection<DeclarationSymbolMarker>): DeclarationSymbolMarker {
+        require(matchedActualDeclarations.isNotEmpty()) { "Expected non-empty actuals" }
+        return matchedActualDeclarations.first()
     }
 
     // ---------------------------------------- Utils ----------------------------------------
