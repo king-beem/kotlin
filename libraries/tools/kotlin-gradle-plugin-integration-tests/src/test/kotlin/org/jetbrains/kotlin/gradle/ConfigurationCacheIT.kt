@@ -267,7 +267,7 @@ abstract class AbstractConfigurationCacheIT : KGPBaseTest() {
         vararg taskNames: String,
         executedTaskNames: List<String>? = null,
         checkUpToDateOnRebuild: Boolean = true,
-        buildOptions: BuildOptions = this.buildOptions.copy(logLevel = LogLevel.DEBUG),
+        buildOptions: BuildOptions = this.buildOptions,
     ) {
         assertSimpleConfigurationCacheScenarioWorks(
             *taskNames,

@@ -100,7 +100,6 @@ class FusStatisticsIT : KGPDaemonsBaseTest() {
         project(
             "instantExecutionWithBuildSrc",
             gradleVersion,
-            enableGradleDebug = true
         ) {
             build("compileKotlin", "-Pkotlin.session.logger.root.path=$projectPath") {
                 assertFilesCombinedContains(
