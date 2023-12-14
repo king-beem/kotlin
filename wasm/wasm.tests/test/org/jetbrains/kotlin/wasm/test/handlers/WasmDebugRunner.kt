@@ -71,7 +71,9 @@ class WasmDebugRunner(testServices: TestServices) : AbstractWasmArtifactsCollect
             
             enableDebugger();
             setBreakpoint(box);
-            box();
+            try {
+                box();
+            } catch(e) { console.error(e) }
             disableDebugger();
             print(JSON.stringify(locations))
         """.trimIndent()

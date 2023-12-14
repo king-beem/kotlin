@@ -1,4 +1,4 @@
-// IGNORE_BACKEND: WASM
+
 
 // FILE: test.kt
 
@@ -44,3 +44,9 @@ fun nop() {}
 // test.kt:18 box
 // test.kt:21 nop
 // test.kt:10 box
+
+// EXPECTATIONS WASM
+// test.kt:1 $box
+// test.kt:13 $box
+// test.kt:7 $box
+// test.kt:18 $box

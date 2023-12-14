@@ -1,4 +1,4 @@
-// IGNORE_BACKEND: WASM
+
 // FILE: test.kt
 
 fun main(args: Array<String>) {
@@ -20,3 +20,5 @@ fun box() {
 // test.kt:5 main
 // test.kt:6 main
 // test.kt:10 box
+
+// EXPECTATIONS WASM

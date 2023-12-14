@@ -1,4 +1,4 @@
-// IGNORE_BACKEND: WASM
+
 // IGNORE_INLINER: IR
 // FILE: test.kt
 
@@ -51,3 +51,11 @@ fun baz(v:(() -> Unit)) {
 // test.kt:8 box$lambda
 // test3.kt:17 baz
 // test.kt:9 box
+
+// EXPECTATIONS WASM
+// test.kt:1 $box
+// test.kt:10 $box (10, 10, 13, 10, 10, 13)
+// test.kt:6 $box
+// test3.kt:16 $baz (4, 4)
+// test.kt:10 $box$lambda.invoke
+// test.kt:8 $box (8, 4)

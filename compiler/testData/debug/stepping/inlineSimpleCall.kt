@@ -1,4 +1,4 @@
-// IGNORE_BACKEND: WASM
+
 
 // FILE: test.kt
 
@@ -53,3 +53,8 @@ fun box() {
 
 // EXPECTATIONS JS_IR
 // test.kt:25 box
+
+// EXPECTATIONS WASM
+// test.kt:1 $box
+// test.kt:10 $box
+// test.kt:14 $box

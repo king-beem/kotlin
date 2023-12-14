@@ -1,4 +1,4 @@
-// IGNORE_BACKEND: WASM
+
 
 // FILE: test.kt
 
@@ -26,3 +26,9 @@ inline fun lookAtMe(f: () -> Int) {
 // test.kt:12 box
 // test.kt:13 box
 // test.kt:9 box
+
+// EXPECTATIONS WASM
+// test.kt:1 $box
+// test.kt:12 $box
+// test.kt:13 $box (4, 4, 4)
+// test.kt:7 $box (8, 8)

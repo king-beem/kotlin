@@ -1,4 +1,4 @@
-// IGNORE_BACKEND: WASM
+
 // FILE: test.kt
 
 fun box() {
@@ -234,3 +234,50 @@ class O<T>(i: T) {
 // test.kt:74 O_init_$Init$
 // test.kt:73 <init>
 // test.kt:18 box
+
+// EXPECTATIONS WASM
+// test.kt:1 $box
+// test.kt:5 $box (4, 4, 4)
+// test.kt:6 $box (4, 6, 4, 4)
+// test.kt:21 $C.<init>
+// test.kt:7 $box (4, 4, 4)
+// test.kt:23 $D.<init> (4, 4)
+// test.kt:8 $box (4, 6, 4, 4)
+// test.kt:26 $E.<init> (4, 4)
+// test.kt:9 $box (4, 4, 4)
+// test.kt:29 $F.<init> (4, 4)
+// test.kt:30 $F.<init> (16, 8)
+// test.kt:10 $box (4, 6, 4, 4)
+// test.kt:34 $G.<init> (4, 4)
+// test.kt:35 $G.<init> (16, 8)
+// test.kt:11 $box (4, 4, 4)
+// test.kt:40 $J.<init> (16, 8)
+// test.kt:12 $box (4, 6, 4, 4)
+// test.kt:43 $K.<init>
+// test.kt:45 $K.<init> (16, 8)
+// test.kt:13 $box (4, 4, 4)
+// test.kt:49 $L.<init> (4, 4)
+// test.kt:54 $L.<init> (16, 8)
+// test.kt:50 $L.<init> (16, 8)
+// test.kt:14 $box (4, 4, 4)
+// test.kt:58 $M.<init> (24, 19, 19)
+// test.kt:62 $M.<init> (4, 4)
+// test.kt:59 $M.<init> (16, 8)
+// test.kt:15 $box (4, 6, 4, 4)
+// test.kt:66 $N.<init> (25, 25)
+// test.kt:70 $N.<init> (4, 4)
+// test.kt:67 $N.<init> (16, 8)
+// test.kt:16 $box (4, 6, 6, 6, 6, 4, 4)
+// test.kt:17 $box (4, 6, 10, 10, 10, 10, 4, 4)
+// String.kt:141 $kotlin.stringLiteral (17, 28, 17)
+// Array.kt:59 $kotlin.Array.get (19, 26, 34, 8)
+// ThrowHelpers.kt:29 $kotlin.wasm.internal.rangeCheck (6, 14, 6, 19, 28, 19, 6, 14, 6, 19, 28, 19)
+// Array.kt:60 $kotlin.Array.get (15, 27, 23, 8)
+// String.kt:142 $kotlin.stringLiteral
+// String.kt:146 $kotlin.stringLiteral (47, 61, 16, 4)
+// String.kt:147 $kotlin.stringLiteral (20, 20, 20, 20, 27, 33, 41, 20, 4)
+// String.kt:148 $kotlin.stringLiteral (4, 15, 25, 4)
+// Array.kt:74 $kotlin.Array.set (19, 26, 34, 8)
+// Array.kt:75 $kotlin.Array.set (8, 20, 27, 16)
+// String.kt:149 $kotlin.stringLiteral (11, 4)
+// test.kt:74 $O.<init> (36, 31, 31)

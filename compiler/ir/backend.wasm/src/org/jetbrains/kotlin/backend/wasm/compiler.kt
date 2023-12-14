@@ -122,7 +122,7 @@ fun compileWasm(
 
     val os = ByteArrayOutputStream()
 
-    val sourceMapFileName = "$baseFileName.map".takeIf { generateSourceMaps }
+    val sourceMapFileName = "$baseFileName.wasm.map".takeIf { generateSourceMaps }
     val sourceLocationMappings =
         if (generateSourceMaps) mutableListOf<SourceLocationMapping>() else null
 
@@ -175,18 +175,21 @@ private fun generateSourceMap(
     val pathResolver =
         SourceFilePathResolver.create(sourceMapsInfo.sourceRoots, sourceMapsInfo.sourceMapPrefix, sourceMapsInfo.outputDir)
 
-    var prev: SourceLocation? = null
+    var prev: SourceLocation.Location? = null
 
     for (mapping in sourceLocationMappings) {
-        val location = mapping.sourceLocation as? SourceLocation.Location ?: continue
+        when (val location = mapping.sourceLocation) {
+            is SourceLocation.NoLocation -> sourceMapBuilder.addEmptyMapping(mapping.offset)
+            is SourceLocation.Location -> {
+                if (location == prev) continue
 
-        if (location == prev) continue
+                prev = location
 
-        prev = location
-
-        location.apply {
-            val relativePath = pathResolver.getPathRelativeToSourceRoots(File(file)).substringAfter("../")
-            sourceMapBuilder.addMapping(relativePath, null, { null }, line, column, null, mapping.offset)
+                location.apply {
+                    val relativePath = pathResolver.getPathRelativeToSourceRoots(File(file)).substringAfter("../")
+                    sourceMapBuilder.addMapping(relativePath, null, { null }, line, column, null, mapping.offset)
+                }
+            }
         }
     }
 

@@ -1,4 +1,4 @@
-// IGNORE_BACKEND: WASM
+
 // FILE: test.kt
 
 class A {
@@ -26,3 +26,8 @@ fun box() {
 // test.kt:12 box
 // test.kt:7 <get-prop>
 // test.kt:13 box
+
+// EXPECTATIONS WASM
+// test.kt:1 $box
+// test.kt:12 $box (4, 4, 8, 8)
+// test.kt:7 $A.<get-prop> (19, 12)
