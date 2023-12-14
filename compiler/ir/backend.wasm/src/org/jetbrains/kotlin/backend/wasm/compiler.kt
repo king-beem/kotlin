@@ -185,8 +185,7 @@ private fun generateSourceMap(
         prev = location
 
         location.apply {
-            // TODO resulting path goes too deep since temporary directory we compiled first is deeper than final destination.
-            val relativePath = pathResolver.getPathRelativeToSourceRoots(File(file)).substring(3)
+            val relativePath = pathResolver.getPathRelativeToSourceRoots(File(file)).substringAfter("../")
             sourceMapBuilder.addMapping(relativePath, null, { null }, line, column, null, mapping.offset)
         }
     }
@@ -372,6 +371,6 @@ fun writeCompilationResult(
     File(dir, "$fileNameBase.mjs").writeText(result.jsWrapper)
 
     if (result.sourceMap != null) {
-        File(dir, "$fileNameBase.map").writeText(result.sourceMap)
+        File(dir, "$fileNameBase.wasm.map").writeText(result.sourceMap)
     }
 }
