@@ -1151,6 +1151,8 @@ abstract class CInteropProcess @Inject internal constructor(params: Params) :
     fun processInterop() {
         val buildMetrics = metrics.get()
 
+        validateParameters()
+
         val args =
             mutableListOf<String>().apply {
                 addArg("-o", outputFile.absolutePath)
@@ -1195,6 +1197,16 @@ abstract class CInteropProcess @Inject internal constructor(params: Params) :
                 gradleExecutionContext = KotlinToolRunner.GradleExecutionContext.fromTaskContext(objectFactory, execOperations, logger),
                 metricsReporter = buildMetrics
             ).run(args)
+        }
+    }
+
+    private fun validateParameters() {
+        check(definitionFile.isPresent || !packageName.isNullOrBlank()) {
+            """
+            |For the Cinterop task, either the `definitionFile` or `packageName` parameter must be specified, however, neither has been provided.
+            |
+            |More info here: https://kotlinlang.org/docs/multiplatform-dsl-reference.html#cinterops 
+            """.trimMargin()
         }
     }
 }
