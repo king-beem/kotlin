@@ -104,7 +104,7 @@ class Fir2IrConfiguration private constructor(
                 compilerConfiguration,
                 compilerConfiguration.languageVersionSettings,
                 diagnosticReporter,
-                linkViaSignatures = true,
+                linkViaSignatures = false,
                 inlineConstTracker = null,
             )
     }
