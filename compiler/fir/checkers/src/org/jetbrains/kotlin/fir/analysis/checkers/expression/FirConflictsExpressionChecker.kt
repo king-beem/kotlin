@@ -12,11 +12,18 @@ import org.jetbrains.kotlin.fir.analysis.checkers.collectConflictingLocalFunctio
 import org.jetbrains.kotlin.fir.analysis.checkers.context.CheckerContext
 import org.jetbrains.kotlin.fir.analysis.checkers.getDestructuredParameter
 import org.jetbrains.kotlin.fir.analysis.diagnostics.FirErrors
+import org.jetbrains.kotlin.fir.declarations.FirVariable
 import org.jetbrains.kotlin.fir.expressions.FirBlock
+import org.jetbrains.kotlin.fir.expressions.FirStatement
 
 object FirConflictsExpressionChecker : FirBlockChecker() {
+    private fun FirStatement.isDestructuredParameter() = this is FirVariable && getDestructuredParameter() != null
+
     override fun check(expression: FirBlock, context: CheckerContext, reporter: DiagnosticReporter) {
-        checkForLocalRedeclarations(expression.statements.filter { getDestructuredParameter(it) == null }, context, reporter)
+        val elements =
+            if (expression.statements.none { it.isDestructuredParameter() }) expression.statements // optimization
+            else expression.statements.filterNot { it.isDestructuredParameter() }
+        checkForLocalRedeclarations(elements, context, reporter)
         checkForLocalConflictingFunctions(expression, context, reporter)
     }
 

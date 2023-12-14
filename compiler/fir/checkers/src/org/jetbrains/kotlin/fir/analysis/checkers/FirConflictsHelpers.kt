@@ -24,7 +24,6 @@ import org.jetbrains.kotlin.fir.declarations.utils.nameOrSpecialName
 import org.jetbrains.kotlin.fir.expressions.FirBlock
 import org.jetbrains.kotlin.fir.expressions.FirComponentCall
 import org.jetbrains.kotlin.fir.expressions.FirPropertyAccessExpression
-import org.jetbrains.kotlin.fir.expressions.FirStatement
 import org.jetbrains.kotlin.fir.references.FirResolvedNamedReference
 import org.jetbrains.kotlin.fir.resolve.fullyExpandedType
 import org.jetbrains.kotlin.fir.resolve.outerType
@@ -45,8 +44,6 @@ import org.jetbrains.kotlin.name.ClassId
 import org.jetbrains.kotlin.name.Name
 import org.jetbrains.kotlin.name.SpecialNames
 import org.jetbrains.kotlin.utils.SmartSet
-import kotlin.contracts.ExperimentalContracts
-import kotlin.contracts.contract
 
 val DEFAULT_STATUS_FOR_NORMAL_MAIN_FUNCTION = DEFAULT_STATUS_FOR_STATUSLESS_DECLARATIONS
 
@@ -521,13 +518,9 @@ private fun FirDeclarationCollector<*>.areNonConflictingCallables(
     return session.declarationOverloadabilityHelper.isOverloadable(declaration, conflicting)
 }
 
-@OptIn(SymbolInternals::class, ExperimentalContracts::class)
-fun getDestructuredParameter(statement: FirStatement): FirValueParameter? {
-    contract {
-        returnsNotNull() implies (statement is FirVariable)
-    }
-    if (statement !is FirVariable) return null
-    val initializer = statement.initializer
+@OptIn(SymbolInternals::class)
+fun FirVariable.getDestructuredParameter(): FirValueParameter? {
+    val initializer = initializer
     if (initializer !is FirComponentCall) return null
     if (initializer.source?.kind !is KtFakeSourceElementKind.DesugaredComponentFunctionCall) return null
     val receiver = initializer.dispatchReceiver ?: initializer.extensionReceiver ?: return null
