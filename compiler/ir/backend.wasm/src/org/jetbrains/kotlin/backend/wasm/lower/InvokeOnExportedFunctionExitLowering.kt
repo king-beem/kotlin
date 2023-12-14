@@ -32,12 +32,12 @@ import org.jetbrains.kotlin.js.config.WasmTarget
 //     try {
 //         println("hello world")
 //     } finally {
-//         processCoroutineEvents()
+//         invokeOnExportedFunctionExit()
 //     }
 // }
 
-internal class CoroutineEventLoopLowering(val context: WasmBackendContext) : FileLoweringPass {
-    private val processCoroutineEvents get() = context.wasmSymbols.processCoroutineEvents
+internal class InvokeOnExportedFunctionExitLowering(val context: WasmBackendContext) : FileLoweringPass {
+    private val invokeOnExportedFunctionExit get() = context.wasmSymbols.invokeOnExportedFunctionExit
     private val isWasi = context.configuration.get(JSConfigurationKeys.WASM_TARGET, WasmTarget.JS) == WasmTarget.WASI
 
     private fun processExportFunction(irFunction: IrFunction) {
@@ -63,7 +63,7 @@ internal class CoroutineEventLoopLowering(val context: WasmBackendContext) : Fil
                 type = bodyType,
                 tryResult = tryBody,
                 catches = emptyList(),
-                finallyExpression = irCall(processCoroutineEvents)
+                finallyExpression = irCall(invokeOnExportedFunctionExit)
             )
 
             when (body) {
