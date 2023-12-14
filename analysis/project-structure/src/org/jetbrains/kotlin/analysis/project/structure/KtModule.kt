@@ -250,10 +250,7 @@ public interface KtDanglingFileModule : KtModule {
  * Sessions for such modules can be cached for longer time.
  */
 public val KtDanglingFileModule.isStable: Boolean
-    get() {
-        val file = file ?: return false
-        return file.isPhysical && file.viewProvider.isEventSystemEnabled
-    }
+    get() = file.isPhysical && file.viewProvider.isEventSystemEnabled
 
 /**
  * A set of sources which live outside the project content root. E.g, testdata files or source files of some other project.
