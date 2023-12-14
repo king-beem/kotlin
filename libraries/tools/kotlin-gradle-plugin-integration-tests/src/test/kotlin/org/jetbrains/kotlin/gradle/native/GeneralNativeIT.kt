@@ -25,10 +25,7 @@ import org.junit.jupiter.api.condition.OS
 import org.junit.jupiter.api.io.TempDir
 import java.nio.file.Path
 import java.util.*
-import kotlin.io.path.absolutePathString
-import kotlin.io.path.appendText
-import kotlin.io.path.deleteIfExists
-import kotlin.io.path.readText
+import kotlin.io.path.*
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 import kotlin.test.fail
@@ -363,6 +360,19 @@ class GeneralNativeIT : KGPBaseTest() {
                 ExportApiTestData("linkMainDebugFrameworkIos", "mainDebugFramework")
             )
         )
+    }
+
+    @DisplayName("Checks generating lldbinit file")
+    @GradleTest
+    fun testGenerateLLDBInitFile(gradleVersion: GradleVersion) {
+        nativeProject("native-binaries/frameworks", gradleVersion = gradleVersion) {
+            val lldbPath = projectPath.resolve("lldbinit")
+            build(":setupLLDBScript") {
+                assertFileInProjectExists(lldbPath.absolutePathString())
+                assertFileContains(lldbPath, "command script import")
+                assertFileContains(lldbPath, "konan_lldb.py")
+            }
+        }
     }
 
     private data class ExportApiTestData(val taskName: String, val binaryName: String)
